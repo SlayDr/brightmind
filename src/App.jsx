@@ -17,6 +17,13 @@ const SUBJECTS = [
 
 const TOTAL = 20;
 
+/* ─── Difficulty / Grade Config ─────────────────────────────────────────── */
+const DIFFICULTY = {
+  easy:  { label:"Easy",   emoji:"🌱", grade:"Kindergarten",  color:"#34C76F", bg:"#EDFFF4", border:"#34C76F", desc:"Perfect starting point!" },
+  medium:{ label:"Medium", emoji:"🌟", grade:"Grade 1–2",     color:"#F6A800", bg:"#FFFBEB", border:"#F6A800", desc:"A fun challenge!"         },
+  hard:  { label:"Hard",   emoji:"🔥", grade:"Grade 3–4",     color:"#EF4444", bg:"#FEF2F2", border:"#EF4444", desc:"Show what you know!"      },
+};
+
 /* ─── Achievement Definitions ──────────────────────────────────────────── */
 const ACHIEVEMENTS = [
   { id:"first_quiz",   icon:"🎯", label:"First Steps",     desc:"Complete your first quiz!",           check:(s,h)=>h.total>=1 },
@@ -121,294 +128,295 @@ function BadgeToast({badge,onDone}){
 const BANK = {
 
   maths:[
-    {q:"What is 2 + 3?",options:["4","5","6","7"],answer:"5",hint:"Count on your fingers!"},
-    {q:"What is 4 + 4?",options:["6","7","8","9"],answer:"8",hint:"Double 4 is 8!"},
-    {q:"What is 6 + 3?",options:["8","9","10","7"],answer:"9",hint:"Start at 6 and count up 3."},
-    {q:"What is 7 + 5?",options:["10","11","12","13"],answer:"12",hint:"7+3=10, then +2 more!"},
-    {q:"What is 9 + 9?",options:["16","17","18","19"],answer:"18",hint:"Double 9 is 18!"},
-    {q:"What is 8 + 6?",options:["12","13","14","15"],answer:"14",hint:"8+2=10, then +4 more!"},
-    {q:"What is 10 − 4?",options:["5","6","7","8"],answer:"6",hint:"Count back 4 from 10."},
-    {q:"What is 15 − 6?",options:["7","8","9","10"],answer:"9",hint:"Count back 6 from 15."},
-    {q:"What is 12 − 5?",options:["5","6","7","8"],answer:"7",hint:"Count back 5 from 12."},
-    {q:"What is 2 × 3?",options:["4","5","6","7"],answer:"6",hint:"2 groups of 3: 3+3=?"},
-    {q:"What is 5 × 3?",options:["12","13","14","15"],answer:"15",hint:"Count by 5s: 5,10,15!"},
-    {q:"What is 4 × 5?",options:["15","20","25","30"],answer:"20",hint:"Count by 5s four times!"},
-    {q:"What is half of 8?",options:["2","3","4","5"],answer:"4",hint:"Split 8 into 2 equal groups!"},
-    {q:"What is half of 20?",options:["5","8","10","12"],answer:"10",hint:"Split 20 into 2 equal groups!"},
-    {q:"How many sides does a square have?",options:["3","4","5","6"],answer:"4",hint:"Count the sides!"},
-    {q:"Which shape has no corners?",options:["Square","Triangle","Circle","Rectangle"],answer:"Circle",hint:"A circle is perfectly round!"},
-    {q:"Count by 2s: 2,4,6,8,__",options:["9","10","11","12"],answer:"10",hint:"Add 2 each time!"},
-    {q:"Count by 5s: 5,10,15,__",options:["18","19","20","21"],answer:"20",hint:"Add 5 each time!"},
-    {q:"How many minutes in an hour?",options:["30","45","60","100"],answer:"60",hint:"60 minutes = 1 hour!"},
-    {q:"There are 5 birds.\n3 more arrive. How many?",options:["6","7","8","9"],answer:"8",hint:"5 + 3 = ?"},
-    {q:"A bag has 10 sweets.\nYou eat 4. How many left?",options:["4","5","6","7"],answer:"6",hint:"10 − 4 = ?"},
-    {q:"What is 10 more than 25?",options:["30","35","40","45"],answer:"35",hint:"Add 10 to 25!"},
-    {q:"What is double 7?",options:["12","13","14","15"],answer:"14",hint:"7 + 7 = ?"},
-    {q:"How many days in a week?",options:["5","6","7","8"],answer:"7",hint:"Mon, Tue, Wed, Thu, Fri, Sat, Sun!"},
-    {q:"How many months in a year?",options:["10","11","12","13"],answer:"12",hint:"January through December!"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",q:"What is 2 + 3?",options:["4","5","6","7"],answer:"5",hint:"Count on your fingers!"},
+    {level:"easy",q:"What is 4 + 4?",options:["6","7","8","9"],answer:"8",hint:"Double 4 is 8!"},
+    {level:"easy",q:"What is 6 + 3?",options:["8","9","10","7"],answer:"9",hint:"Start at 6 and count up 3."},
+    {level:"easy",q:"How many sides does a square have?",options:["3","4","5","6"],answer:"4",hint:"Count the sides!"},
+    {level:"easy",q:"Which shape has no corners?",options:["Square","Triangle","Circle","Rectangle"],answer:"Circle",hint:"A circle is perfectly round!"},
+    {level:"easy",q:"Count by 2s: 2,4,6,8,__",options:["9","10","11","12"],answer:"10",hint:"Add 2 each time!"},
+    {level:"easy",q:"There are 5 birds.\n3 more arrive. How many?",options:["6","7","8","9"],answer:"8",hint:"5 + 3 = ?"},
+    {level:"easy",q:"What is double 4?",options:["6","7","8","9"],answer:"8",hint:"4 + 4 = ?"},
+    {level:"easy",q:"How many days in a week?",options:["5","6","7","8"],answer:"7",hint:"Mon, Tue, Wed, Thu, Fri, Sat, Sun!"},
+    {level:"easy",q:"A bag has 6 sweets.\nYou eat 2. How many left?",options:["2","3","4","5"],answer:"4",hint:"6 − 2 = ?"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",q:"What is 7 + 5?",options:["10","11","12","13"],answer:"12",hint:"7+3=10, then +2 more!"},
+    {level:"medium",q:"What is 9 + 9?",options:["16","17","18","19"],answer:"18",hint:"Double 9 is 18!"},
+    {level:"medium",q:"What is 15 − 6?",options:["7","8","9","10"],answer:"9",hint:"Count back 6 from 15."},
+    {level:"medium",q:"What is 2 × 3?",options:["4","5","6","7"],answer:"6",hint:"2 groups of 3: 3+3=?"},
+    {level:"medium",q:"What is 5 × 3?",options:["12","13","14","15"],answer:"15",hint:"Count by 5s: 5,10,15!"},
+    {level:"medium",q:"What is half of 20?",options:["5","8","10","12"],answer:"10",hint:"Split 20 into 2 equal groups!"},
+    {level:"medium",q:"Count by 5s: 5,10,15,__",options:["18","19","20","21"],answer:"20",hint:"Add 5 each time!"},
+    {level:"medium",q:"How many minutes in an hour?",options:["30","45","60","100"],answer:"60",hint:"60 minutes = 1 hour!"},
+    {level:"medium",q:"What is 10 more than 25?",options:["30","35","40","45"],answer:"35",hint:"Add 10 to 25!"},
+    {level:"medium",q:"How many months in a year?",options:["10","11","12","13"],answer:"12",hint:"January through December!"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",q:"What is 8 × 7?",options:["54","56","58","63"],answer:"56",hint:"8×7: think 8×5=40, 8×2=16, add!"},
+    {level:"hard",q:"What is 144 ÷ 12?",options:["10","11","12","13"],answer:"12",hint:"12 × 12 = 144"},
+    {level:"hard",q:"What is 25% of 80?",options:["15","20","25","30"],answer:"20",hint:"25% = ¼. What is 80 ÷ 4?"},
+    {level:"hard",q:"A rectangle is 8cm × 5cm.\nWhat is its area?",options:["26cm²","36cm²","40cm²","45cm²"],answer:"40cm²",hint:"Area = length × width"},
+    {level:"hard",q:"What is 3² + 4²?",options:["14","24","25","49"],answer:"25",hint:"3²=9, 4²=16, 9+16=?"},
+    {level:"hard",q:"Round 347 to the nearest 10.",options:["340","345","350","400"],answer:"350",hint:"Look at the units digit: 7 rounds up!"},
+    {level:"hard",q:"What is the next prime number after 7?",options:["8","9","10","11"],answer:"11",hint:"A prime has only 2 factors: 1 and itself!"},
+    {level:"hard",q:"A train travels 60km/h.\nHow far in 2.5 hours?",options:["120km","130km","150km","160km"],answer:"150km",hint:"60 × 2.5 = 60×2 + 60×0.5"},
+    {level:"hard",q:"What is ³⁄₄ + ¹⁄₂?",options:["1","1¼","1½","2"],answer:"1¼",hint:"Convert: ¾ + ²⁄₄ = ?"},
+    {level:"hard",q:"What is the perimeter of a regular hexagon\nwith sides of 4cm?",options:["20cm","24cm","28cm","32cm"],answer:"24cm",hint:"Hexagon has 6 sides: 6 × 4 = ?"},
   ],
 
   english:[
-    {q:"Which word is a noun?",options:["jump","blue","table","quickly"],answer:"table",hint:"A noun is a thing you can touch!"},
-    {q:"Which word is a verb?",options:["house","blue","swim","tree"],answer:"swim",hint:"A verb is something you DO!"},
-    {q:"Which word is an adjective?",options:["jump","fluffy","cat","run"],answer:"fluffy",hint:"An adjective describes a noun!"},
-    {q:"Pick the correct spelling:",options:["becaus","because","becorse","becuase"],answer:"because",hint:"b-e-c-a-u-s-e!"},
-    {q:"Pick the correct spelling:",options:["peopel","peeple","people","peaple"],answer:"people",hint:"p-e-o-p-l-e!"},
-    {q:"Which sentence is correct?",options:["the cat sat.","The cat sat.","The Cat sat","the cat Sat."],answer:"The cat sat.",hint:"Start with capital, end with full stop!"},
-    {q:"What punctuation ends a question?",options:[".","!","?",","],answer:"?",hint:"Questions end with a question mark!"},
-    {q:"What does 'enormous' mean?",options:["Very small","Very fast","Very big","Very loud"],answer:"Very big",hint:"Enormous means really, really big!"},
-    {q:"Which word means the same as 'happy'?",options:["sad","angry","joyful","tired"],answer:"joyful",hint:"Joyful = full of joy = happy!"},
-    {q:"Which word is the opposite of 'fast'?",options:["quick","slow","speed","run"],answer:"slow",hint:"Fast and slow are opposites!"},
-    {q:"Which word is a pronoun?",options:["dog","run","she","blue"],answer:"she",hint:"She, he, it, they replace names!"},
-    {q:"Pick the conjunction:",options:["run","blue","and","fast"],answer:"and",hint:"And joins two things together!"},
-    {q:"Which word rhymes with 'cat'?",options:["dog","car","mat","cup"],answer:"mat",hint:"Cat... mat... both end in -at!"},
-    {q:"How many syllables in 'elephant'?",options:["1","2","3","4"],answer:"3",hint:"El-e-phant = 3 claps!"},
-    {q:"Pick the verb:\n'The dog runs fast.'",options:["dog","runs","fast","The"],answer:"runs",hint:"What is the dog doing?"},
-    {q:"Which uses apostrophe correctly?",options:["the dogs bone","the dog's bone","the dogs' bone","the dogs bone'"],answer:"the dog's bone",hint:"The bone belongs to the dog!"},
-    {q:"What does 'furious' mean?",options:["Very happy","Very angry","Very tired","Very scared"],answer:"Very angry",hint:"Furious means really angry!"},
-    {q:"Which is a complete sentence?",options:["The big brown","Running fast","The cat sat.","Jumped high"],answer:"The cat sat.",hint:"A sentence needs a subject and verb!"},
-    {q:"Which word means the same as 'scared'?",options:["brave","frightened","excited","happy"],answer:"frightened",hint:"Frightened = scared!"},
-    {q:"Which word is an adverb?",options:["dog","happy","quickly","run"],answer:"quickly",hint:"Adverbs describe HOW — often end in -ly!"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",q:"Which word rhymes with 'cat'?",options:["dog","car","mat","cup"],answer:"mat",hint:"Cat... mat... both end in -at!"},
+    {level:"easy",q:"What letter does 'apple' start with?",options:["B","A","E","O"],answer:"A",hint:"A is for Apple!"},
+    {level:"easy",q:"Which word is an animal?",options:["jump","blue","dog","run"],answer:"dog",hint:"An animal is a living creature!"},
+    {level:"easy",q:"What punctuation ends a sentence?",options:[",",".","?","!"],answer:".",hint:"Sentences end with a full stop!"},
+    {level:"easy",q:"Which word rhymes with 'big'?",options:["bat","pig","run","cat"],answer:"pig",hint:"Big... pig... both end in -ig!"},
+    {level:"easy",q:"How many letters in 'cat'?",options:["2","3","4","5"],answer:"3",hint:"C-A-T — count them!"},
+    {level:"easy",q:"Which word names a colour?",options:["jump","red","swim","fast"],answer:"red",hint:"Colours describe how things look!"},
+    {level:"easy",q:"Which word is a number?",options:["dog","run","five","hot"],answer:"five",hint:"Numbers count things!"},
+    {level:"easy",q:"What sound does 'sh' make?\n(as in ship)",options:["s sound","ch sound","sh sound","th sound"],answer:"sh sound",hint:"Ship, shop, shell — all start with sh!"},
+    {level:"easy",q:"Which is a fruit?",options:["carrot","potato","apple","onion"],answer:"apple",hint:"Fruits are sweet and grow on trees!"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",q:"Which word is a noun?",options:["jump","blue","table","quickly"],answer:"table",hint:"A noun is a thing you can touch!"},
+    {level:"medium",q:"Which word is a verb?",options:["house","blue","swim","tree"],answer:"swim",hint:"A verb is something you DO!"},
+    {level:"medium",q:"Which word is an adjective?",options:["jump","fluffy","cat","run"],answer:"fluffy",hint:"An adjective describes a noun!"},
+    {level:"medium",q:"Which sentence is correct?",options:["the cat sat.","The cat sat.","The Cat sat","the cat Sat."],answer:"The cat sat.",hint:"Start with capital, end with full stop!"},
+    {level:"medium",q:"What does 'enormous' mean?",options:["Very small","Very fast","Very big","Very loud"],answer:"Very big",hint:"Enormous means really, really big!"},
+    {level:"medium",q:"Which word means the same as 'happy'?",options:["sad","angry","joyful","tired"],answer:"joyful",hint:"Joyful = full of joy = happy!"},
+    {level:"medium",q:"Which word is the opposite of 'fast'?",options:["quick","slow","speed","run"],answer:"slow",hint:"Fast and slow are opposites!"},
+    {level:"medium",q:"Which word is a pronoun?",options:["dog","run","she","blue"],answer:"she",hint:"She, he, it, they replace names!"},
+    {level:"medium",q:"How many syllables in 'elephant'?",options:["1","2","3","4"],answer:"3",hint:"El-e-phant = 3 claps!"},
+    {level:"medium",q:"Which uses apostrophe correctly?",options:["the dogs bone","the dog's bone","the dogs' bone","the dogs bone'"],answer:"the dog's bone",hint:"The bone belongs to the dog!"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",q:"Which sentence uses a semicolon correctly?",options:["I like cats; and dogs.","I like cats; they are friendly.","I like; cats and dogs.","I; like cats and dogs."],answer:"I like cats; they are friendly.",hint:"A semicolon joins two related complete sentences!"},
+    {level:"hard",q:"What is the plural of 'cactus'?",options:["cactuses","cactuss","cacti","cactis"],answer:"cacti",hint:"Latin origin words often use -i for plural!"},
+    {level:"hard",q:"Which word is a conjunction?",options:["quickly","beautiful","although","jumped"],answer:"although",hint:"Conjunctions join clauses — although, because, since..."},
+    {level:"hard",q:"What is an antonym of 'benevolent'?",options:["kind","generous","malevolent","helpful"],answer:"malevolent",hint:"Benevolent = kind. Its opposite starts with mal-!"},
+    {level:"hard",q:"Which is a compound sentence?",options:["The dog ran.","Because it rained.","I like dogs and I have two.","Running fast."],answer:"I like dogs and I have two.",hint:"A compound sentence has two independent clauses joined by a conjunction!"},
+    {level:"hard",q:"What does the prefix 'mis-' mean?",options:["again","not","wrongly","before"],answer:"wrongly",hint:"Misbehave, misread, mistake — all mean doing something wrongly!"},
+    {level:"hard",q:"Which sentence is in the passive voice?",options:["The cat ate the fish.","The fish was eaten by the cat.","The cat is eating.","Cats eat fish."],answer:"The fish was eaten by the cat.",hint:"Passive: the subject receives the action!"},
+    {level:"hard",q:"What is an 'oxymoron'?",options:["A very long word","Two contradictory words together","A word that sounds like its meaning","A word borrowed from another language"],answer:"Two contradictory words together",hint:"'Deafening silence' and 'bitter sweet' are oxymorons!"},
+    {level:"hard",q:"Which word is spelled correctly?",options:["recieve","neice","achieve","beleive"],answer:"achieve",hint:"i before e except after c — ach-i-e-ve!"},
+    {level:"hard",q:"What literary device is used in:\n'The wind whispered through the trees'?",options:["Simile","Metaphor","Personification","Alliteration"],answer:"Personification",hint:"Giving human qualities (whispered) to non-human things!"},
   ],
 
   reading:[
-    {passage:"Lily loves the rain. She puts on her yellow boots and splashes in puddles. Her dog Max jumps in too! They both get very wet but they are very happy.",q:"What colour are Lily's boots?",options:["Red","Blue","Yellow","Green"],answer:"Yellow",hint:"Read the second sentence!"},
-    {passage:"Tom found a tiny seed in the garden. He planted it in the soil and watered it every day. After two weeks, a small green shoot appeared. Tom was so excited!",q:"How did Tom feel when the shoot appeared?",options:["Sad","Excited","Tired","Angry"],answer:"Excited",hint:"Look at the last sentence!"},
-    {passage:"The library is a quiet place. People go there to read books and learn new things. You must whisper so you don't disturb others. Sam loves visiting every Saturday.",q:"Why must you whisper in the library?",options:["It is dark","The librarian says so","To not disturb others","Books are fragile"],answer:"To not disturb others",hint:"The passage explains the reason!"},
-    {passage:"Mia has three pets: a fluffy rabbit called Snowball, a goldfish called Bubbles, and a parrot named Polly. Polly can say 'hello' and 'goodnight'. Mia feeds them every morning.",q:"Which pet can talk?",options:["Snowball","Bubbles","Polly","All of them"],answer:"Polly",hint:"Which animal is known for talking?"},
-    {passage:"Jack loved space. He had posters of planets on his walls and could name all eight of them. His favourite was Saturn because of its beautiful rings. He wanted to be an astronaut one day.",q:"What was Jack's favourite planet?",options:["Jupiter","Mars","Saturn","Earth"],answer:"Saturn",hint:"Find the sentence with 'favourite'!"},
-    {passage:"Jack loved space. He had posters of planets on his walls and could name all eight of them. His favourite was Saturn because of its beautiful rings. He wanted to be an astronaut one day.",q:"What did Jack want to be?",options:["A scientist","A pilot","An astronaut","A teacher"],answer:"An astronaut",hint:"Look at the last sentence!"},
-    {passage:"Every morning, Rosa helped her grandmother make breakfast. They made toast with butter and a big pot of tea. Rosa liked this time because her grandmother told her funny stories.",q:"Why did Rosa like breakfast time?",options:["The food was yummy","She got to watch TV","Her grandmother told funny stories","She could sleep in"],answer:"Her grandmother told funny stories",hint:"Look at the last sentence!"},
-    {passage:"The old lighthouse stood on a rocky cliff. Every night its light flashed to warn ships of the dangerous rocks below. Without it, many ships might have crashed.",q:"Why did the lighthouse flash its light?",options:["To look pretty","To wake people up","To warn ships of rocks","To attract fish"],answer:"To warn ships of rocks",hint:"Read the second sentence!"},
-    {passage:"Penguins cannot fly but they are excellent swimmers. They use their wings as flippers to zoom through the water. A penguin can swim as fast as 25 kilometres per hour!",q:"What do penguins use as flippers?",options:["Their feet","Their tails","Their wings","Their beaks"],answer:"Their wings",hint:"Read the second sentence!"},
-    {passage:"The giant tortoise is one of the longest-living animals on Earth. Some tortoises have lived for over 150 years! They move very slowly and eat plants.",q:"What do giant tortoises eat?",options:["Fish","Insects","Plants","Meat"],answer:"Plants",hint:"Find the sentence about what they eat!"},
-    {passage:"Maya wanted to make a card for her mum's birthday. She got out glitter, stickers, coloured paper and felt-tip pens. She spent an hour cutting and sticking.",q:"Why did Maya make the card?",options:["For Christmas","For her teacher","For her mum's birthday","For a school project"],answer:"For her mum's birthday",hint:"Read the first sentence!"},
-    {passage:"The sun was setting and the sky turned orange and pink. Birds flew home to their nests. The flowers closed their petals. It was the end of a perfect day.",q:"What happened to the flowers?",options:["They grew taller","They closed their petals","They changed colour","They fell off"],answer:"They closed their petals",hint:"Find the sentence about flowers!"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",passage:"Lily loves the rain. She puts on her yellow boots and splashes in puddles. Her dog Max jumps in too! They both get very wet but they are very happy.",q:"What colour are Lily's boots?",options:["Red","Blue","Yellow","Green"],answer:"Yellow",hint:"Read the second sentence!"},
+    {level:"easy",passage:"Tom found a tiny seed in the garden. He planted it in the soil and watered it every day. After two weeks, a small green shoot appeared. Tom was so excited!",q:"How did Tom feel when the shoot appeared?",options:["Sad","Excited","Tired","Angry"],answer:"Excited",hint:"Look at the last sentence!"},
+    {level:"easy",passage:"Mia has three pets: a fluffy rabbit called Snowball, a goldfish called Bubbles, and a parrot named Polly. Polly can say 'hello' and 'goodnight'. Mia feeds them every morning.",q:"Which pet can talk?",options:["Snowball","Bubbles","Polly","All of them"],answer:"Polly",hint:"Which animal is known for talking?"},
+    {level:"easy",passage:"Every morning, Rosa helped her grandmother make breakfast. They made toast with butter and a big pot of tea. Rosa liked this time because her grandmother told her funny stories.",q:"Why did Rosa like breakfast time?",options:["The food was yummy","She got to watch TV","Her grandmother told funny stories","She could sleep in"],answer:"Her grandmother told funny stories",hint:"Look at the last sentence!"},
+    {level:"easy",passage:"Maya wanted to make a card for her mum's birthday. She got out glitter, stickers, coloured paper and felt-tip pens. She spent an hour cutting and sticking.",q:"Why did Maya make the card?",options:["For Christmas","For her teacher","For her mum's birthday","For a school project"],answer:"For her mum's birthday",hint:"Read the first sentence!"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",passage:"The library is a quiet place. People go there to read books and learn new things. You must whisper so you don't disturb others. Sam loves visiting every Saturday.",q:"Why must you whisper in the library?",options:["It is dark","The librarian says so","To not disturb others","Books are fragile"],answer:"To not disturb others",hint:"The passage explains the reason!"},
+    {level:"medium",passage:"Jack loved space. He had posters of planets on his walls and could name all eight of them. His favourite was Saturn because of its beautiful rings. He wanted to be an astronaut one day.",q:"What was Jack's favourite planet?",options:["Jupiter","Mars","Saturn","Earth"],answer:"Saturn",hint:"Find the sentence with 'favourite'!"},
+    {level:"medium",passage:"Jack loved space. He had posters of planets on his walls and could name all eight of them. His favourite was Saturn because of its beautiful rings. He wanted to be an astronaut one day.",q:"What did Jack want to be?",options:["A scientist","A pilot","An astronaut","A teacher"],answer:"An astronaut",hint:"Look at the last sentence!"},
+    {level:"medium",passage:"The old lighthouse stood on a rocky cliff. Every night its light flashed to warn ships of the dangerous rocks below. Without it, many ships might have crashed.",q:"Why did the lighthouse flash its light?",options:["To look pretty","To wake people up","To warn ships of rocks","To attract fish"],answer:"To warn ships of rocks",hint:"Read the second sentence!"},
+    {level:"medium",passage:"Penguins cannot fly but they are excellent swimmers. They use their wings as flippers to zoom through the water. A penguin can swim as fast as 25 kilometres per hour!",q:"What do penguins use as flippers?",options:["Their feet","Their tails","Their wings","Their beaks"],answer:"Their wings",hint:"Read the second sentence!"},
+    {level:"medium",passage:"The sun was setting and the sky turned orange and pink. Birds flew home to their nests. The flowers closed their petals. It was the end of a perfect day.",q:"What happened to the flowers?",options:["They grew taller","They closed their petals","They changed colour","They fell off"],answer:"They closed their petals",hint:"Find the sentence about flowers!"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",passage:"The giant tortoise is one of the longest-living animals on Earth. Some tortoises have lived for over 150 years! They move very slowly and eat plants. Scientists believe their slow metabolism is key to their long lives.",q:"Why do scientists think tortoises live so long?",options:["They eat plants","They move slowly","Their slow metabolism","They live on islands"],answer:"Their slow metabolism",hint:"Find the sentence about what scientists believe!"},
+    {level:"hard",passage:"In 1969, astronaut Neil Armstrong became the first human to walk on the moon. He described the surface as 'magnificent desolation'. The mission, called Apollo 11, lasted eight days in total.",q:"What did Armstrong call the moon's surface?",options:["Beautiful wilderness","Magnificent desolation","Lunar paradise","Silent emptiness"],answer:"Magnificent desolation",hint:"Find his direct quote in the passage!"},
+    {level:"hard",passage:"Bees communicate by dancing. The 'waggle dance' tells other bees the direction and distance of flowers. The longer the waggle, the farther away the flowers are. Scientists spent decades decoding this language.",q:"What does the length of the waggle tell other bees?",options:["The type of flower","The direction of flowers","How far the flowers are","How many flowers there are"],answer:"How far the flowers are",hint:"Read the sentence about the 'longer the waggle'!"},
+    {level:"hard",passage:"The Amazon rainforest produces about 20% of the world's oxygen and is home to 10% of all species on Earth. Despite covering only 5% of Earth's surface, it plays a critical role in regulating the global climate.",q:"What percentage of the world's oxygen does the Amazon produce?",options:["5%","10%","15%","20%"],answer:"20%",hint:"Find the statistic about oxygen in the first sentence!"},
   ],
 
   verbal:[
-    {q:"Which word doesn't belong?\n🍎 Apple  🍌 Banana  🥕 Carrot  🍇 Grape",options:["Apple","Banana","Carrot","Grape"],answer:"Carrot",hint:"Three are fruits. One is a vegetable!"},
-    {q:"Which word doesn't belong?\n🐶 Dog  🐱 Cat  🐟 Fish  🌹 Rose",options:["Dog","Cat","Fish","Rose"],answer:"Rose",hint:"Three are animals. One is a plant!"},
-    {q:"Which word doesn't belong?\n⚽ Football  🎾 Tennis  🏊 Swimming  🏀 Basketball",options:["Football","Tennis","Swimming","Basketball"],answer:"Swimming",hint:"Three use a ball. One doesn't!"},
-    {q:"Which word doesn't belong?\n🚗 Car  🚌 Bus  🚂 Train  ✈️ Plane",options:["Car","Bus","Train","Plane"],answer:"Plane",hint:"Three travel on the ground. One travels in the air!"},
-    {q:"Cat is to kitten as\ndog is to...?",options:["kennel","puppy","bark","leash"],answer:"puppy",hint:"A baby cat is a kitten. A baby dog is...?"},
-    {q:"Sun is to day as\nmoon is to...?",options:["sky","star","night","cloud"],answer:"night",hint:"The sun is out in the day. The moon is out at..."},
-    {q:"Bird is to nest as\nbee is to...?",options:["flower","honey","hive","wing"],answer:"hive",hint:"A bird lives in a nest. A bee lives in a..."},
-    {q:"Book is to read as\npencil is to...?",options:["draw","eat","sleep","jump"],answer:"draw",hint:"You use a pencil to..."},
-    {q:"Hot is to cold as\nfast is to...?",options:["quick","speed","slow","run"],answer:"slow",hint:"Opposites! Hot↔cold, fast↔?"},
-    {q:"Doctor is to hospital as\nteacher is to...?",options:["office","library","school","home"],answer:"school",hint:"Where does a teacher work?"},
-    {q:"What comes next?\nMonday, Tuesday, Wednesday, __",options:["Friday","Saturday","Thursday","Sunday"],answer:"Thursday",hint:"Days of the week in order!"},
-    {q:"What comes next?\nSpring, Summer, Autumn, __",options:["January","Winter","Monday","Morning"],answer:"Winter",hint:"The four seasons in order!"},
-    {q:"What comes next?\n10, 20, 30, 40, __",options:["45","48","50","55"],answer:"50",hint:"Count up by 10!"},
-    {q:"Which word means the same as 'brave'?",options:["scared","funny","courageous","clumsy"],answer:"courageous",hint:"Brave = courageous!"},
-    {q:"Which word means the same as 'big'?",options:["tiny","huge","fast","cold"],answer:"huge",hint:"Huge means really big!"},
-    {q:"Sam is taller than Ella.\nElla is taller than Ben.\nWho is shortest?",options:["Sam","Ella","Ben","They're the same"],answer:"Ben",hint:"Sam > Ella > Ben. Who's last?"},
-    {q:"Which word doesn't belong?\n🌞 Summer ❄️ Winter 🍂 Autumn 🌙 Night",options:["Summer","Winter","Autumn","Night"],answer:"Night",hint:"Three are seasons. One is a time of day!"},
-    {q:"Eye is to see as\near is to...?",options:["smell","taste","hear","touch"],answer:"hear",hint:"Eyes see. Ears...?"},
-    {q:"Which word goes with\n'shoes, boots, sandals'?",options:["hat","gloves","trainers","scarf"],answer:"trainers",hint:"All worn on your FEET!"},
-    {q:"Cow is to milk as\nhen is to...?",options:["wool","meat","eggs","feathers"],answer:"eggs",hint:"A cow gives milk. A hen gives...?"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",q:"Which word doesn't belong?\n🍎 Apple  🍌 Banana  🥕 Carrot  🍇 Grape",options:["Apple","Banana","Carrot","Grape"],answer:"Carrot",hint:"Three are fruits. One is a vegetable!"},
+    {level:"easy",q:"Which word doesn't belong?\n🐶 Dog  🐱 Cat  🐟 Fish  🌹 Rose",options:["Dog","Cat","Fish","Rose"],answer:"Rose",hint:"Three are animals. One is a plant!"},
+    {level:"easy",q:"Cat is to kitten as\ndog is to...?",options:["kennel","puppy","bark","leash"],answer:"puppy",hint:"A baby cat is a kitten. A baby dog is...?"},
+    {level:"easy",q:"What comes next?\nMonday, Tuesday, Wednesday, __",options:["Friday","Saturday","Thursday","Sunday"],answer:"Thursday",hint:"Days of the week in order!"},
+    {level:"easy",q:"Eye is to see as\near is to...?",options:["smell","taste","hear","touch"],answer:"hear",hint:"Eyes see. Ears...?"},
+    {level:"easy",q:"Which word goes with\n'shoes, boots, sandals'?",options:["hat","gloves","trainers","scarf"],answer:"trainers",hint:"All worn on your FEET!"},
+    {level:"easy",q:"Hot is to cold as\nfast is to...?",options:["quick","speed","slow","run"],answer:"slow",hint:"Opposites! Hot↔cold, fast↔?"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",q:"Which word doesn't belong?\n⚽ Football  🎾 Tennis  🏊 Swimming  🏀 Basketball",options:["Football","Tennis","Swimming","Basketball"],answer:"Swimming",hint:"Three use a ball. One doesn't!"},
+    {level:"medium",q:"Sun is to day as\nmoon is to...?",options:["sky","star","night","cloud"],answer:"night",hint:"The sun is out in the day. The moon is out at..."},
+    {level:"medium",q:"Bird is to nest as\nbee is to...?",options:["flower","honey","hive","wing"],answer:"hive",hint:"A bird lives in a nest. A bee lives in a..."},
+    {level:"medium",q:"What comes next?\nSpring, Summer, Autumn, __",options:["January","Winter","Monday","Morning"],answer:"Winter",hint:"The four seasons in order!"},
+    {level:"medium",q:"Sam is taller than Ella.\nElla is taller than Ben.\nWho is shortest?",options:["Sam","Ella","Ben","They're the same"],answer:"Ben",hint:"Sam > Ella > Ben. Who's last?"},
+    {level:"medium",q:"Which word means the same as 'brave'?",options:["scared","funny","courageous","clumsy"],answer:"courageous",hint:"Brave = courageous!"},
+    {level:"medium",q:"Doctor is to hospital as\nteacher is to...?",options:["office","library","school","home"],answer:"school",hint:"Where does a teacher work?"},
+    {level:"medium",q:"Cow is to milk as\nhen is to...?",options:["wool","meat","eggs","feathers"],answer:"eggs",hint:"A cow gives milk. A hen gives...?"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",q:"Which word doesn't belong?\nNovella  Biography  Autobiography  Memoir",options:["Novella","Biography","Autobiography","Memoir"],answer:"Novella",hint:"Three are types of non-fiction. One is fiction!"},
+    {level:"hard",q:"Architect is to building as\nchoreographer is to...?",options:["music","dance","theatre","painting"],answer:"dance",hint:"An architect designs buildings. A choreographer designs...?"},
+    {level:"hard",q:"Which is the odd one out?\nTriangle  Pentagon  Hexagon  Oval",options:["Triangle","Pentagon","Hexagon","Oval"],answer:"Oval",hint:"Three have straight sides and angles. One is curved!"},
+    {level:"hard",q:"If all Bloops are Razzles,\nand all Razzles are Lazzles,\nare all Bloops definitely Lazzles?",options:["Yes","No","Sometimes","Can't tell"],answer:"Yes",hint:"If A=B and B=C, then A=C! Logical chain!"},
+    {level:"hard",q:"Optimist is to pessimist as\ngenerous is to...?",options:["kind","stingy","wealthy","honest"],answer:"stingy",hint:"Optimist and pessimist are opposites. What's the opposite of generous?"},
+    {level:"hard",q:"What comes next?\n1, 1, 2, 3, 5, 8, __",options:["11","12","13","14"],answer:"13",hint:"Each number is the sum of the two before it! (Fibonacci)"},
   ],
 
   /* ── QUANTITATIVE REASONING ─────────────────────────────────────────── */
   quant:[
-    // Number patterns
-    {q:"What comes next?\n2, 4, 6, 8, __",options:["9","10","11","12"],answer:"10",hint:"Add 2 each time! ➕"},
-    {q:"What comes next?\n1, 3, 5, 7, __",options:["8","9","10","11"],answer:"9",hint:"Add 2 each time — odd numbers!"},
-    {q:"What comes next?\n5, 10, 15, 20, __",options:["22","24","25","30"],answer:"25",hint:"Count by 5s!"},
-    {q:"What comes next?\n3, 6, 9, 12, __",options:["13","14","15","16"],answer:"15",hint:"Count by 3s!"},
-    {q:"What comes next?\n1, 2, 4, 8, __",options:["10","12","16","18"],answer:"16",hint:"Each number is doubled!"},
-    {q:"What comes next?\n100, 90, 80, 70, __",options:["50","55","60","65"],answer:"60",hint:"Count backwards by 10!"},
-    {q:"What comes next?\n1, 4, 9, 16, __",options:["20","22","25","28"],answer:"25",hint:"1×1=1, 2×2=4, 3×3=9, 4×4=16, 5×5=?"},
-    {q:"What comes next?\n2, 6, 18, 54, __",options:["108","126","162","180"],answer:"162",hint:"Multiply by 3 each time!"},
-    // Number puzzles / missing numbers
-    {q:"🔲 + 3 = 7\nWhat is 🔲?",options:["2","3","4","5"],answer:"4",hint:"What number plus 3 equals 7?"},
-    {q:"🔲 − 4 = 6\nWhat is 🔲?",options:["8","9","10","11"],answer:"10",hint:"What number minus 4 equals 6?"},
-    {q:"🔲 × 2 = 10\nWhat is 🔲?",options:["3","4","5","6"],answer:"5",hint:"What number times 2 equals 10?"},
-    {q:"12 ÷ 🔲 = 4\nWhat is 🔲?",options:["2","3","4","5"],answer:"3",hint:"12 divided by what equals 4?"},
-    {q:"3 + 🔲 = 3 × 4\nWhat is 🔲?",options:["6","7","8","9"],answer:"9",hint:"First find 3×4, then subtract 3!"},
-    {q:"🔲 + 🔲 = 14\nWhat is 🔲?",options:["5","6","7","8"],answer:"7",hint:"A number plus itself equals 14. Half of 14?"},
-    // Comparison & logic
-    {q:"Which is greatest?\n3+5,  4+3,  6+1,  2+6",options:["3+5","4+3","6+1","2+6"],answer:"3+5",hint:"Work out each sum: 8, 7, 7, 8. Which appears first?"},
-    {q:"Which is smallest?\n10−3,  5+1,  4×2,  15−8",options:["10−3","5+1","4×2","15−8"],answer:"5+1",hint:"Work out each: 7, 6, 8, 7. Which is smallest?"},
-    {q:"If 🍎=3 and 🍌=2,\nwhat is 🍎+🍎+🍌?",options:["6","7","8","9"],answer:"8",hint:"3+3+2=?"},
-    {q:"If ⭐=5 and 🌙=2,\nwhat is ⭐×🌙?",options:["7","8","10","12"],answer:"10",hint:"5×2=?"},
-    // Visual/spatial quantities
-    {q:"A rectangle has 2 long sides\nand 2 short sides.\nHow many sides total?",options:["2","3","4","6"],answer:"4",hint:"Count all sides: 2+2=?"},
-    {q:"How many corners does\na triangle have?",options:["2","3","4","5"],answer:"3",hint:"Tri means three!"},
-    {q:"There are 4 boxes.\nEach has 3 balls.\nHow many balls total?",options:["7","10","12","14"],answer:"12",hint:"4 groups of 3: 3+3+3+3=?"},
-    {q:"A number is between 10 and 20.\nIt is even.\nIt has a 4 in it.\nWhat is it?",options:["12","14","16","18"],answer:"14",hint:"Even numbers between 10-20 with a 4: 14!"},
-    {q:"What fraction of this shape\nis shaded?\n⬛⬜⬜⬜",options:["1/2","1/3","1/4","1/5"],answer:"1/4",hint:"1 square out of 4 total = 1/4!"},
-    {q:"Which number is both\ngreater than 5\nand less than 9?",options:["4","5","7","9"],answer:"7",hint:"Greater than 5 AND less than 9!"},
-    {q:"A snail moves 3cm\nevery minute.\nHow far in 4 minutes?",options:["7cm","10cm","12cm","15cm"],answer:"12cm",hint:"3×4=?"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",q:"What comes next?\n2, 4, 6, 8, __",options:["9","10","11","12"],answer:"10",hint:"Add 2 each time! ➕"},
+    {level:"easy",q:"What comes next?\n5, 10, 15, 20, __",options:["22","24","25","30"],answer:"25",hint:"Count by 5s!"},
+    {level:"easy",q:"🔲 + 3 = 7\nWhat is 🔲?",options:["2","3","4","5"],answer:"4",hint:"What number plus 3 equals 7?"},
+    {level:"easy",q:"How many corners does\na triangle have?",options:["2","3","4","5"],answer:"3",hint:"Tri means three!"},
+    {level:"easy",q:"Which number is both\ngreater than 5\nand less than 9?",options:["4","5","7","9"],answer:"7",hint:"Greater than 5 AND less than 9!"},
+    {level:"easy",q:"If 🍎=3 and 🍌=2,\nwhat is 🍎+🍎+🍌?",options:["6","7","8","9"],answer:"8",hint:"3+3+2=?"},
+    {level:"easy",q:"What comes next?\n1, 3, 5, 7, __",options:["8","9","10","11"],answer:"9",hint:"Add 2 each time — odd numbers!"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",q:"What comes next?\n3, 6, 9, 12, __",options:["13","14","15","16"],answer:"15",hint:"Count by 3s!"},
+    {level:"medium",q:"What comes next?\n100, 90, 80, 70, __",options:["50","55","60","65"],answer:"60",hint:"Count backwards by 10!"},
+    {level:"medium",q:"🔲 × 2 = 10\nWhat is 🔲?",options:["3","4","5","6"],answer:"5",hint:"What number times 2 equals 10?"},
+    {level:"medium",q:"12 ÷ 🔲 = 4\nWhat is 🔲?",options:["2","3","4","5"],answer:"3",hint:"12 divided by what equals 4?"},
+    {level:"medium",q:"There are 4 boxes.\nEach has 3 balls.\nHow many balls total?",options:["7","10","12","14"],answer:"12",hint:"4 groups of 3: 3+3+3+3=?"},
+    {level:"medium",q:"What fraction of this shape\nis shaded?\n⬛⬜⬜⬜",options:["1/2","1/3","1/4","1/5"],answer:"1/4",hint:"1 square out of 4 total = 1/4!"},
+    {level:"medium",q:"🔲 + 🔲 = 14\nWhat is 🔲?",options:["5","6","7","8"],answer:"7",hint:"A number plus itself equals 14. Half of 14?"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",q:"What comes next?\n1, 2, 4, 8, __",options:["10","12","16","18"],answer:"16",hint:"Each number is doubled!"},
+    {level:"hard",q:"What comes next?\n1, 4, 9, 16, __",options:["20","22","25","28"],answer:"25",hint:"1×1=1, 2×2=4, 3×3=9, 4×4=16, 5×5=?"},
+    {level:"hard",q:"What comes next?\n2, 6, 18, 54, __",options:["108","126","162","180"],answer:"162",hint:"Multiply by 3 each time!"},
+    {level:"hard",q:"3 + 🔲 = 3 × 4\nWhat is 🔲?",options:["6","7","8","9"],answer:"9",hint:"First find 3×4, then subtract 3!"},
+    {level:"hard",q:"If ⭐=5 and 🌙=2,\nwhat is ⭐×🌙?",options:["7","8","10","12"],answer:"10",hint:"5×2=?"},
+    {level:"hard",q:"A snail moves 3cm\nevery minute.\nHow far in 4 minutes?",options:["7cm","10cm","12cm","15cm"],answer:"12cm",hint:"3×4=?"},
+    {level:"hard",q:"A number is between 10 and 20.\nIt is even.\nIt has a 4 in it.\nWhat is it?",options:["12","14","16","18"],answer:"14",hint:"Even numbers between 10-20 with a 4: 14!"},
   ],
 
   /* ── SPANISH ─────────────────────────────────────────────────────────── */
   spanish:[
-    // Greetings
-    {q:"How do you say 'Hello' in Spanish? 👋",options:["Adiós","Hola","Gracias","Por favor"],answer:"Hola",hint:"Hola sounds like 'Oh-la'!"},
-    {q:"How do you say 'Goodbye' in Spanish?",options:["Hola","Buenas","Adiós","Gracias"],answer:"Adiós",hint:"Adiós sounds like 'Ad-ee-os'!"},
-    {q:"How do you say 'Thank you' in Spanish?",options:["De nada","Por favor","Hola","Gracias"],answer:"Gracias",hint:"Gracias sounds like 'Gra-see-as'!"},
-    {q:"How do you say 'Please' in Spanish?",options:["Gracias","Por favor","Adiós","Hola"],answer:"Por favor",hint:"Por favor means 'for favour'!"},
-    {q:"How do you say 'Yes' in Spanish?",options:["No","Sí","Hola","Bien"],answer:"Sí",hint:"Sí sounds just like 'see'!"},
-    {q:"How do you say 'No' in Spanish?",options:["Sí","Bien","No","Mal"],answer:"No",hint:"No is the same in English and Spanish!"},
-    // Numbers
-    {q:"How do you say '1' in Spanish?",options:["Dos","Tres","Uno","Cuatro"],answer:"Uno",hint:"Uno — like the card game!"},
-    {q:"How do you say '2' in Spanish?",options:["Uno","Dos","Tres","Cuatro"],answer:"Dos",hint:"Dos sounds like 'dose'!"},
-    {q:"How do you say '3' in Spanish?",options:["Uno","Dos","Tres","Cuatro"],answer:"Tres",hint:"Tres sounds like 'trace' without the -ace!"},
-    {q:"How do you say '5' in Spanish?",options:["Cuatro","Cinco","Seis","Siete"],answer:"Cinco",hint:"Cinco sounds like 'Seen-co'!"},
-    {q:"How do you say '10' in Spanish?",options:["Ocho","Nueve","Diez","Once"],answer:"Diez",hint:"Diez sounds like 'dee-eth'!"},
-    // Colours
-    {q:"How do you say 'Red' in Spanish? 🔴",options:["Azul","Verde","Rojo","Amarillo"],answer:"Rojo",hint:"Rojo sounds like 'Ro-ho'!"},
-    {q:"How do you say 'Blue' in Spanish? 🔵",options:["Rojo","Azul","Verde","Negro"],answer:"Azul",hint:"Azul sounds like 'Ah-zool'!"},
-    {q:"How do you say 'Green' in Spanish? 🟢",options:["Rojo","Azul","Verde","Blanco"],answer:"Verde",hint:"Verde sounds like 'Vair-day'!"},
-    {q:"How do you say 'Yellow' in Spanish? 🟡",options:["Rojo","Azul","Amarillo","Verde"],answer:"Amarillo",hint:"Amarillo sounds like 'Am-a-ree-yo'!"},
-    {q:"How do you say 'White' in Spanish? ⬜",options:["Negro","Blanco","Rojo","Azul"],answer:"Blanco",hint:"Blanco sounds like 'Blan-co'!"},
-    // Animals
-    {q:"How do you say 'Cat' in Spanish? 🐱",options:["Perro","Gato","Pájaro","Pez"],answer:"Gato",hint:"Gato sounds like 'Gah-toe'!"},
-    {q:"How do you say 'Dog' in Spanish? 🐶",options:["Gato","Pájaro","Perro","Caballo"],answer:"Perro",hint:"Perro sounds like 'Peh-ro'!"},
-    {q:"How do you say 'Bird' in Spanish? 🐦",options:["Pez","Gato","Perro","Pájaro"],answer:"Pájaro",hint:"Pájaro sounds like 'Pa-ha-ro'!"},
-    {q:"How do you say 'Fish' in Spanish? 🐟",options:["Perro","Pez","Gato","Caballo"],answer:"Pez",hint:"Pez sounds like 'Peth'!"},
-    // Food
-    {q:"How do you say 'Apple' in Spanish? 🍎",options:["Naranja","Manzana","Plátano","Uva"],answer:"Manzana",hint:"Manzana sounds like 'Man-sah-na'!"},
-    {q:"How do you say 'Water' in Spanish? 💧",options:["Leche","Jugo","Agua","Pan"],answer:"Agua",hint:"Agua sounds like 'Ah-gwa'!"},
-    {q:"How do you say 'Bread' in Spanish? 🍞",options:["Leche","Pan","Agua","Queso"],answer:"Pan",hint:"Pan sounds like 'pahn' — not the cooking pan!"},
-    // Family
-    {q:"How do you say 'Mother' in Spanish? 👩",options:["Padre","Hermano","Madre","Abuela"],answer:"Madre",hint:"Madre sounds like 'Mah-dray'!"},
-    {q:"How do you say 'Father' in Spanish? 👨",options:["Madre","Padre","Hermana","Abuelo"],answer:"Padre",hint:"Padre sounds like 'Pah-dray'!"},
-    // Simple sentences
-    {q:"What does '¿Cómo te llamas?' mean?",options:["How are you?","What is your name?","Where do you live?","How old are you?"],answer:"What is your name?",hint:"Llamas comes from llamarse = to be called!"},
-    {q:"What does 'Me llamo...' mean?",options:["I live in...","I am... years old","My name is...","I like..."],answer:"My name is...",hint:"Me llamo = I call myself!"},
-    {q:"What does '¿Cómo estás?' mean?",options:["What is your name?","How old are you?","How are you?","Where are you?"],answer:"How are you?",hint:"Estás comes from estar = to be!"},
-    {q:"What does 'Muy bien' mean?",options:["Very bad","Very big","Very well","Very small"],answer:"Very well",hint:"Bien means good/well, muy means very!"},
-    {q:"What does 'Me gusta' mean?",options:["I don't like","I like","I want","I have"],answer:"I like",hint:"Me gusta = it pleases me = I like!"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",q:"How do you say 'Hello' in Spanish? 👋",options:["Adiós","Hola","Gracias","Por favor"],answer:"Hola",hint:"Hola sounds like 'Oh-la'!"},
+    {level:"easy",q:"How do you say 'Yes' in Spanish?",options:["No","Sí","Hola","Bien"],answer:"Sí",hint:"Sí sounds just like 'see'!"},
+    {level:"easy",q:"How do you say '1' in Spanish?",options:["Dos","Tres","Uno","Cuatro"],answer:"Uno",hint:"Uno — like the card game!"},
+    {level:"easy",q:"How do you say 'Cat' in Spanish? 🐱",options:["Perro","Gato","Pájaro","Pez"],answer:"Gato",hint:"Gato sounds like 'Gah-toe'!"},
+    {level:"easy",q:"How do you say 'Red' in Spanish? 🔴",options:["Azul","Verde","Rojo","Amarillo"],answer:"Rojo",hint:"Rojo sounds like 'Ro-ho'!"},
+    {level:"easy",q:"How do you say 'Thank you' in Spanish?",options:["De nada","Por favor","Hola","Gracias"],answer:"Gracias",hint:"Gracias sounds like 'Gra-see-as'!"},
+    {level:"easy",q:"How do you say 'Dog' in Spanish? 🐶",options:["Gato","Pájaro","Perro","Caballo"],answer:"Perro",hint:"Perro sounds like 'Peh-ro'!"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",q:"How do you say 'Goodbye' in Spanish?",options:["Hola","Buenas","Adiós","Gracias"],answer:"Adiós",hint:"Adiós sounds like 'Ad-ee-os'!"},
+    {level:"medium",q:"How do you say '5' in Spanish?",options:["Cuatro","Cinco","Seis","Siete"],answer:"Cinco",hint:"Cinco sounds like 'Seen-co'!"},
+    {level:"medium",q:"How do you say 'Blue' in Spanish? 🔵",options:["Rojo","Azul","Verde","Negro"],answer:"Azul",hint:"Azul sounds like 'Ah-zool'!"},
+    {level:"medium",q:"How do you say 'Apple' in Spanish? 🍎",options:["Naranja","Manzana","Plátano","Uva"],answer:"Manzana",hint:"Manzana sounds like 'Man-sah-na'!"},
+    {level:"medium",q:"How do you say 'Mother' in Spanish? 👩",options:["Padre","Hermano","Madre","Abuela"],answer:"Madre",hint:"Madre sounds like 'Mah-dray'!"},
+    {level:"medium",q:"What does '¿Cómo te llamas?' mean?",options:["How are you?","What is your name?","Where do you live?","How old are you?"],answer:"What is your name?",hint:"Llamas comes from llamarse = to be called!"},
+    {level:"medium",q:"How do you say 'Water' in Spanish? 💧",options:["Leche","Jugo","Agua","Pan"],answer:"Agua",hint:"Agua sounds like 'Ah-gwa'!"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",q:"How do you say '10' in Spanish?",options:["Ocho","Nueve","Diez","Once"],answer:"Diez",hint:"Diez sounds like 'dee-eth'!"},
+    {level:"hard",q:"What does 'Me llamo...' mean?",options:["I live in...","I am... years old","My name is...","I like..."],answer:"My name is...",hint:"Me llamo = I call myself!"},
+    {level:"hard",q:"What does '¿Cómo estás?' mean?",options:["What is your name?","How old are you?","How are you?","Where are you?"],answer:"How are you?",hint:"Estás comes from estar = to be!"},
+    {level:"hard",q:"How do you say 'Father' in Spanish? 👨",options:["Madre","Padre","Hermana","Abuelo"],answer:"Padre",hint:"Padre sounds like 'Pah-dray'!"},
+    {level:"hard",q:"What does 'Me gusta' mean?",options:["I don't like","I like","I want","I have"],answer:"I like",hint:"Me gusta = it pleases me = I like!"},
+    {level:"hard",q:"How do you say 'Green' in Spanish? 🟢",options:["Rojo","Azul","Verde","Blanco"],answer:"Verde",hint:"Verde sounds like 'Vair-day'!"},
+    {level:"hard",q:"What does 'Muy bien' mean?",options:["Very bad","Very big","Very well","Very small"],answer:"Very well",hint:"Bien means good/well, muy means very!"},
   ],
 
   /* ── CogAT ───────────────────────────────────────────────────────────── */
   cogat:[
-    // === VERBAL BATTERY ===
-    {type:"CogAT Verbal",q:"SENTENCE COMPLETION:\nThe boy was very tired so he went to ___.",options:["school","bed","swim","run"],answer:"bed",hint:"When you are very tired, what do you do?"},
-    {type:"CogAT Verbal",q:"SENTENCE COMPLETION:\nA bird uses its wings to ___.",options:["swim","dig","fly","bark"],answer:"fly",hint:"What do birds do with their wings?"},
-    {type:"CogAT Verbal",q:"VERBAL ANALOGY:\nFish is to water as\nbird is to ___.",options:["nest","worm","air","feather"],answer:"air",hint:"Fish lives in water. Bird lives in/flies through...?"},
-    {type:"CogAT Verbal",q:"VERBAL ANALOGY:\nHot is to cold as\nday is to ___.",options:["sun","bright","night","morning"],answer:"night",hint:"Hot and cold are opposites. Day and ___ are opposites!"},
-    {type:"CogAT Verbal",q:"VERBAL ANALOGY:\nPuppy is to dog as\nkitten is to ___.",options:["lion","rabbit","cat","tiger"],answer:"cat",hint:"A puppy grows into a dog. A kitten grows into a...?"},
-    {type:"CogAT Verbal",q:"VERBAL CLASSIFICATION:\nWhich word belongs with\n'rose, tulip, daisy'?",options:["oak","sunflower","grass","fern"],answer:"sunflower",hint:"Rose, tulip, daisy are all...?"},
-    {type:"CogAT Verbal",q:"VERBAL CLASSIFICATION:\nWhich word belongs with\n'happy, joyful, cheerful'?",options:["sad","angry","delighted","tired"],answer:"delighted",hint:"Happy, joyful, cheerful all mean feeling...?"},
-    {type:"CogAT Verbal",q:"VERBAL CLASSIFICATION:\nWhich word belongs with\n'hammer, saw, drill'?",options:["spoon","wrench","plate","cup"],answer:"wrench",hint:"Hammer, saw, drill are all...?"},
-    {type:"CogAT Verbal",q:"SENTENCE COMPLETION:\nWe put on our coats because\nit was very ___.",options:["hot","sunny","cold","bright"],answer:"cold",hint:"Why do you wear a coat?"},
-    {type:"CogAT Verbal",q:"VERBAL ANALOGY:\nLibrary is to books as\nmuseum is to ___.",options:["paintings","music","food","sport"],answer:"paintings",hint:"A library contains books. A museum contains...?"},
-
-    // === QUANTITATIVE BATTERY ===
-    {type:"CogAT Quantitative",q:"NUMBER SERIES:\n2, 4, 6, 8, 10, __",options:["11","12","13","14"],answer:"12",hint:"Add 2 each time!"},
-    {type:"CogAT Quantitative",q:"NUMBER SERIES:\n1, 2, 4, 7, 11, __",options:["14","15","16","17"],answer:"16",hint:"Add 1, then 2, then 3, then 4, then 5!"},
-    {type:"CogAT Quantitative",q:"NUMBER SERIES:\n3, 6, 9, 12, __",options:["13","14","15","16"],answer:"15",hint:"Count by 3s!"},
-    {type:"CogAT Quantitative",q:"NUMBER PUZZLES:\nIf 🍎 + 🍎 = 10,\nwhat does 🍎 equal?",options:["3","4","5","6"],answer:"5",hint:"Half of 10 is...?"},
-    {type:"CogAT Quantitative",q:"NUMBER PUZZLES:\nIf 🌟 × 3 = 15,\nwhat does 🌟 equal?",options:["3","4","5","6"],answer:"5",hint:"What times 3 equals 15?"},
-    {type:"CogAT Quantitative",q:"NUMBER PUZZLES:\n🔲 + 4 = 2 × 6\nWhat is 🔲?",options:["6","7","8","9"],answer:"8",hint:"First find 2×6=12, then 12−4=?"},
-    {type:"CogAT Quantitative",q:"EQUATION BUILDING:\nWhich makes this TRUE?\n5 __ 3 = 8",options:["×","÷","−","+"],answer:"+",hint:"5 plus 3 equals 8!"},
-    {type:"CogAT Quantitative",q:"EQUATION BUILDING:\nWhich makes this TRUE?\n10 __ 2 = 5",options:["+","−","×","÷"],answer:"÷",hint:"10 divided by 2 equals 5!"},
-    {type:"CogAT Quantitative",q:"NUMBER SERIES:\n20, 17, 14, 11, __",options:["7","8","9","10"],answer:"8",hint:"Subtract 3 each time!"},
-    {type:"CogAT Quantitative",q:"NUMBER PUZZLES:\nIf ▲ + ▲ + ▲ = 12,\nwhat does ▲ equal?",options:["3","4","5","6"],answer:"4",hint:"3 triangles equal 12. 12 ÷ 3 = ?"},
-
-    // === NON-VERBAL BATTERY ===
-    {type:"CogAT Non-Verbal",q:"FIGURE CLASSIFICATION:\nWhich shape belongs with\n🔺 🔺 🔺 (triangles)?",options:["⬛ Square","⭕ Circle","🔻 Triangle","💎 Diamond"],answer:"🔻 Triangle",hint:"Find the shape that matches the group!"},
-    {type:"CogAT Non-Verbal",q:"FIGURE CLASSIFICATION:\n⬛ ⬜ 🟫 are all squares.\nWhich also belongs?",options:["⭕ Circle","🔷 Diamond","🟥 Square","🔺 Triangle"],answer:"🟥 Square",hint:"Look for the same type of shape!"},
-    {type:"CogAT Non-Verbal",q:"FIGURE MATRICES:\nBig → Small :: Dark → ___",options:["Bigger","Darker","Light","Heavy"],answer:"Light",hint:"Big and small are opposites. Dark and ___ are opposites!"},
-    {type:"CogAT Non-Verbal",q:"PATTERN REASONING:\n🔴🔵🔴🔵🔴 __",options:["🔴","🔵","🟢","🟡"],answer:"🔵",hint:"Red, blue, red, blue... what's next?"},
-    {type:"CogAT Non-Verbal",q:"PATTERN REASONING:\n⭐⭐🌙⭐⭐🌙 __",options:["🌙","⭐","☀️","💫"],answer:"⭐",hint:"Star, star, moon, star, star, moon, ...?"},
-    {type:"CogAT Non-Verbal",q:"PAPER FOLDING:\nA square paper is folded in half.\nHow many layers are there?",options:["1","2","3","4"],answer:"2",hint:"Fold once = 2 layers!"},
-    {type:"CogAT Non-Verbal",q:"PAPER FOLDING:\nA square is folded in half TWICE.\nHow many layers?",options:["2","3","4","5"],answer:"4",hint:"Fold once=2, fold again=4!"},
-    {type:"CogAT Non-Verbal",q:"FIGURE MATRICES:\nIf 🔺 rotated = 🔻,\nwhat does ➡️ rotated become?",options:["⬆️","⬇️","⬅️","↗️"],answer:"⬇️",hint:"Rotating 90° clockwise: right arrow points down!"},
-    {type:"CogAT Non-Verbal",q:"SPATIAL REASONING:\nHow many small squares make\none big 2×2 square?",options:["2","3","4","6"],answer:"4",hint:"2 rows × 2 columns = ?"},
-    {type:"CogAT Non-Verbal",q:"FIGURE CLASSIFICATION:\nWhich has EXACTLY 4 sides?",options:["Triangle","Circle","Rectangle","Pentagon"],answer:"Rectangle",hint:"Count the sides of each shape!"},
+    // === VERBAL BATTERY (Easy) ===
+    {level:"easy",type:"CogAT Verbal",q:"SENTENCE COMPLETION:\nA bird uses its wings to ___.",options:["swim","dig","fly","bark"],answer:"fly",hint:"What do birds do with their wings?"},
+    {level:"easy",type:"CogAT Verbal",q:"VERBAL ANALOGY:\nPuppy is to dog as\nkitten is to ___.",options:["lion","rabbit","cat","tiger"],answer:"cat",hint:"A puppy grows into a dog. A kitten grows into a...?"},
+    {level:"easy",type:"CogAT Verbal",q:"VERBAL CLASSIFICATION:\nWhich word belongs with\n'rose, tulip, daisy'?",options:["oak","sunflower","grass","fern"],answer:"sunflower",hint:"Rose, tulip, daisy are all...?"},
+    {level:"easy",type:"CogAT Verbal",q:"SENTENCE COMPLETION:\nWe put on our coats because\nit was very ___.",options:["hot","sunny","cold","bright"],answer:"cold",hint:"Why do you wear a coat?"},
+    // === VERBAL BATTERY (Medium) ===
+    {level:"medium",type:"CogAT Verbal",q:"SENTENCE COMPLETION:\nThe boy was very tired so he went to ___.",options:["school","bed","swim","run"],answer:"bed",hint:"When you are very tired, what do you do?"},
+    {level:"medium",type:"CogAT Verbal",q:"VERBAL ANALOGY:\nFish is to water as\nbird is to ___.",options:["nest","worm","air","feather"],answer:"air",hint:"Fish lives in water. Bird lives in/flies through...?"},
+    {level:"medium",type:"CogAT Verbal",q:"VERBAL CLASSIFICATION:\nWhich word belongs with\n'happy, joyful, cheerful'?",options:["sad","angry","delighted","tired"],answer:"delighted",hint:"Happy, joyful, cheerful all mean feeling...?"},
+    {level:"medium",type:"CogAT Verbal",q:"VERBAL ANALOGY:\nLibrary is to books as\nmuseum is to ___.",options:["paintings","music","food","sport"],answer:"paintings",hint:"A library contains books. A museum contains...?"},
+    // === VERBAL BATTERY (Hard) ===
+    {level:"hard",type:"CogAT Verbal",q:"VERBAL ANALOGY:\nHot is to cold as\nday is to ___.",options:["sun","bright","night","morning"],answer:"night",hint:"Hot and cold are opposites. Day and ___ are opposites!"},
+    {level:"hard",type:"CogAT Verbal",q:"VERBAL CLASSIFICATION:\nWhich word belongs with\n'hammer, saw, drill'?",options:["spoon","wrench","plate","cup"],answer:"wrench",hint:"Hammer, saw, drill are all...?"},
+    // === QUANTITATIVE BATTERY (Easy) ===
+    {level:"easy",type:"CogAT Quantitative",q:"NUMBER SERIES:\n2, 4, 6, 8, 10, __",options:["11","12","13","14"],answer:"12",hint:"Add 2 each time!"},
+    {level:"easy",type:"CogAT Quantitative",q:"NUMBER SERIES:\n3, 6, 9, 12, __",options:["13","14","15","16"],answer:"15",hint:"Count by 3s!"},
+    {level:"easy",type:"CogAT Quantitative",q:"NUMBER PUZZLES:\nIf 🍎 + 🍎 = 10,\nwhat does 🍎 equal?",options:["3","4","5","6"],answer:"5",hint:"Half of 10 is...?"},
+    // === QUANTITATIVE BATTERY (Medium) ===
+    {level:"medium",type:"CogAT Quantitative",q:"NUMBER SERIES:\n1, 2, 4, 7, 11, __",options:["14","15","16","17"],answer:"16",hint:"Add 1, then 2, then 3, then 4, then 5!"},
+    {level:"medium",type:"CogAT Quantitative",q:"NUMBER PUZZLES:\nIf 🌟 × 3 = 15,\nwhat does 🌟 equal?",options:["3","4","5","6"],answer:"5",hint:"What times 3 equals 15?"},
+    {level:"medium",type:"CogAT Quantitative",q:"EQUATION BUILDING:\nWhich makes this TRUE?\n5 __ 3 = 8",options:["×","÷","−","+"],answer:"+",hint:"5 plus 3 equals 8!"},
+    {level:"medium",type:"CogAT Quantitative",q:"NUMBER SERIES:\n20, 17, 14, 11, __",options:["7","8","9","10"],answer:"8",hint:"Subtract 3 each time!"},
+    // === QUANTITATIVE BATTERY (Hard) ===
+    {level:"hard",type:"CogAT Quantitative",q:"NUMBER PUZZLES:\n🔲 + 4 = 2 × 6\nWhat is 🔲?",options:["6","7","8","9"],answer:"8",hint:"First find 2×6=12, then 12−4=?"},
+    {level:"hard",type:"CogAT Quantitative",q:"EQUATION BUILDING:\nWhich makes this TRUE?\n10 __ 2 = 5",options:["+","−","×","÷"],answer:"÷",hint:"10 divided by 2 equals 5!"},
+    {level:"hard",type:"CogAT Quantitative",q:"NUMBER PUZZLES:\nIf ▲ + ▲ + ▲ = 12,\nwhat does ▲ equal?",options:["3","4","5","6"],answer:"4",hint:"3 triangles equal 12. 12 ÷ 3 = ?"},
+    // === NON-VERBAL BATTERY (Easy) ===
+    {level:"easy",type:"CogAT Non-Verbal",q:"PATTERN REASONING:\n🔴🔵🔴🔵🔴 __",options:["🔴","🔵","🟢","🟡"],answer:"🔵",hint:"Red, blue, red, blue... what's next?"},
+    {level:"easy",type:"CogAT Non-Verbal",q:"FIGURE CLASSIFICATION:\nWhich shape belongs with\n🔺 🔺 🔺 (triangles)?",options:["⬛ Square","⭕ Circle","🔻 Triangle","💎 Diamond"],answer:"🔻 Triangle",hint:"Find the shape that matches the group!"},
+    {level:"easy",type:"CogAT Non-Verbal",q:"SPATIAL REASONING:\nHow many small squares make\none big 2×2 square?",options:["2","3","4","6"],answer:"4",hint:"2 rows × 2 columns = ?"},
+    // === NON-VERBAL BATTERY (Medium) ===
+    {level:"medium",type:"CogAT Non-Verbal",q:"PATTERN REASONING:\n⭐⭐🌙⭐⭐🌙 __",options:["🌙","⭐","☀️","💫"],answer:"⭐",hint:"Star, star, moon, star, star, moon, ...?"},
+    {level:"medium",type:"CogAT Non-Verbal",q:"PAPER FOLDING:\nA square paper is folded in half.\nHow many layers are there?",options:["1","2","3","4"],answer:"2",hint:"Fold once = 2 layers!"},
+    {level:"medium",type:"CogAT Non-Verbal",q:"FIGURE CLASSIFICATION:\nWhich has EXACTLY 4 sides?",options:["Triangle","Circle","Rectangle","Pentagon"],answer:"Rectangle",hint:"Count the sides of each shape!"},
+    // === NON-VERBAL BATTERY (Hard) ===
+    {level:"hard",type:"CogAT Non-Verbal",q:"FIGURE MATRICES:\nBig → Small :: Dark → ___",options:["Bigger","Darker","Light","Heavy"],answer:"Light",hint:"Big and small are opposites. Dark and ___ are opposites!"},
+    {level:"hard",type:"CogAT Non-Verbal",q:"PAPER FOLDING:\nA square is folded in half TWICE.\nHow many layers?",options:["2","3","4","5"],answer:"4",hint:"Fold once=2, fold again=4!"},
+    {level:"hard",type:"CogAT Non-Verbal",q:"FIGURE MATRICES:\nIf 🔺 rotated = 🔻,\nwhat does ➡️ rotated become?",options:["⬆️","⬇️","⬅️","↗️"],answer:"⬇️",hint:"Rotating 90° clockwise: right arrow points down!"},
   ],
 
   /* ── SPELLING ────────────────────────────────────────────────────────── */
-  /* Each question: word to spell shown + spoken, pick correct spelling    */
   spelling:[
-    // The 'word' field = the correct word shown/spoken before options appear
-    {word:"because",q:"Which is the correct spelling?",options:["becaus","because","becorse","becuase"],answer:"because",hint:"b-e-c-a-u-s-e"},
-    {word:"people",q:"Which is the correct spelling?",options:["peopel","peeple","people","peaple"],answer:"people",hint:"p-e-o-p-l-e"},
-    {word:"which",q:"Which is the correct spelling?",options:["wich","whitch","which","wihch"],answer:"which",hint:"starts with wh- like where and when"},
-    {word:"there",q:"Which is the correct spelling?",options:["thier","there","thear","theyr"],answer:"there",hint:"like 'here' with a T in front"},
-    {word:"would",q:"Which is the correct spelling?",options:["woud","wood","wuld","would"],answer:"would",hint:"has a silent L: w-o-u-l-d"},
-    {word:"really",q:"Which is the correct spelling?",options:["realy","relly","realla","really"],answer:"really",hint:"double L: r-e-a-l-l-y"},
-    {word:"beautiful",q:"Which is the correct spelling?",options:["beutiful","beautifull","beautiful","butiful"],answer:"beautiful",hint:"b-e-a-u-t-i-f-u-l"},
-    {word:"friend",q:"Which is the correct spelling?",options:["freind","frend","friend","friand"],answer:"friend",hint:"i before e in friend!"},
-    {word:"school",q:"Which is the correct spelling?",options:["scool","shcool","school","skhool"],answer:"school",hint:"sch- then -ool"},
-    {word:"again",q:"Which is the correct spelling?",options:["agen","agian","agin","again"],answer:"again",hint:"a-g-a-i-n"},
-    {word:"different",q:"Which is the correct spelling?",options:["diferent","diffrent","different","diferrent"],answer:"different",hint:"double f: d-i-f-f-e-r-e-n-t"},
-    {word:"garden",q:"Which is the correct spelling?",options:["gardin","garden","gaarden","gardan"],answer:"garden",hint:"g-a-r-d-e-n"},
-    {word:"answer",q:"Which is the correct spelling?",options:["anser","answar","asnwer","answer"],answer:"answer",hint:"silent w: a-n-s-w-e-r"},
-    {word:"every",q:"Which is the correct spelling?",options:["evry","every","evrey","everry"],answer:"every",hint:"e-v-e-r-y"},
-    {word:"thought",q:"Which is the correct spelling?",options:["thort","thougt","thought","thougth"],answer:"thought",hint:"th-ough-t — tricky ough!"},
-    {word:"enough",q:"Which is the correct spelling?",options:["enuf","enouf","enougth","enough"],answer:"enough",hint:"e-n-o-u-g-h — tricky ough!"},
-    {word:"through",q:"Which is the correct spelling?",options:["threw","throgh","through","throo"],answer:"through",hint:"thr-ough — another ough word!"},
-    {word:"might",q:"Which is the correct spelling?",options:["mite","migt","myght","might"],answer:"might",hint:"m-i-g-h-t — silent gh!"},
-    {word:"night",q:"Which is the correct spelling?",options:["nite","nigt","nyght","night"],answer:"night",hint:"n-i-g-h-t — like light and right!"},
-    {word:"light",q:"Which is the correct spelling?",options:["lite","lght","lyght","light"],answer:"light",hint:"l-i-g-h-t — silent gh!"},
-    {word:"caught",q:"Which is the correct spelling?",options:["cort","caght","cawght","caught"],answer:"caught",hint:"c-a-u-g-h-t — tricky aught!"},
-    {word:"taught",q:"Which is the correct spelling?",options:["tort","taght","tawght","taught"],answer:"taught",hint:"t-a-u-g-h-t — like caught!"},
-    {word:"island",q:"Which is the correct spelling?",options:["iland","eiland","ilsand","island"],answer:"island",hint:"silent s: i-s-l-a-n-d"},
-    {word:"climb",q:"Which is the correct spelling?",options:["clim","clime","climm","climb"],answer:"climb",hint:"silent b at the end: c-l-i-m-b"},
-    {word:"knee",q:"Which is the correct spelling?",options:["nee","kne","knea","knee"],answer:"knee",hint:"silent k: k-n-e-e"},
-    {word:"whole",q:"Which is the correct spelling?",options:["hole","whol","wole","whole"],answer:"whole",hint:"silent wh-: w-h-o-l-e"},
-    {word:"daughter",q:"Which is the correct spelling?",options:["darter","doughter","dawter","daughter"],answer:"daughter",hint:"d-a-u-g-h-t-e-r — tricky!"},
-    {word:"favourite",q:"Which is the correct spelling?",options:["favorit","favrite","favourite","faverite"],answer:"favourite",hint:"f-a-v-o-u-r-i-t-e"},
-    {word:"chocolate",q:"Which is the correct spelling?",options:["choclate","chokolate","chockolate","chocolate"],answer:"chocolate",hint:"choc-o-late — three syllables!"},
-    {word:"surprise",q:"Which is the correct spelling?",options:["suprise","surpise","surprize","surprise"],answer:"surprise",hint:"sur-prise: s-u-r-p-r-i-s-e"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",word:"cat",q:"Which is the correct spelling?",options:["kat","cat","cet","cot"],answer:"cat",hint:"c-a-t"},
+    {level:"easy",word:"dog",q:"Which is the correct spelling?",options:["dag","dug","dog","dof"],answer:"dog",hint:"d-o-g"},
+    {level:"easy",word:"run",q:"Which is the correct spelling?",options:["rnn","ran","ren","run"],answer:"run",hint:"r-u-n"},
+    {level:"easy",word:"big",q:"Which is the correct spelling?",options:["bag","bug","beg","big"],answer:"big",hint:"b-i-g"},
+    {level:"easy",word:"sun",q:"Which is the correct spelling?",options:["san","son","sun","sin"],answer:"sun",hint:"s-u-n"},
+    {level:"easy",word:"red",q:"Which is the correct spelling?",options:["rad","rid","rod","red"],answer:"red",hint:"r-e-d"},
+    {level:"easy",word:"hop",q:"Which is the correct spelling?",options:["hap","hep","hip","hop"],answer:"hop",hint:"h-o-p"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",word:"because",q:"Which is the correct spelling?",options:["becaus","because","becorse","becuase"],answer:"because",hint:"b-e-c-a-u-s-e"},
+    {level:"medium",word:"people",q:"Which is the correct spelling?",options:["peopel","peeple","people","peaple"],answer:"people",hint:"p-e-o-p-l-e"},
+    {level:"medium",word:"again",q:"Which is the correct spelling?",options:["agen","agian","agin","again"],answer:"again",hint:"a-g-a-i-n"},
+    {level:"medium",word:"every",q:"Which is the correct spelling?",options:["evry","every","evrey","everry"],answer:"every",hint:"e-v-e-r-y"},
+    {level:"medium",word:"garden",q:"Which is the correct spelling?",options:["gardin","garden","gaarden","gardan"],answer:"garden",hint:"g-a-r-d-e-n"},
+    {level:"medium",word:"night",q:"Which is the correct spelling?",options:["nite","nigt","nyght","night"],answer:"night",hint:"n-i-g-h-t — silent gh!"},
+    {level:"medium",word:"friend",q:"Which is the correct spelling?",options:["freind","frend","friend","friand"],answer:"friend",hint:"i before e in friend!"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",word:"beautiful",q:"Which is the correct spelling?",options:["beutiful","beautifull","beautiful","butiful"],answer:"beautiful",hint:"b-e-a-u-t-i-f-u-l"},
+    {level:"hard",word:"thought",q:"Which is the correct spelling?",options:["thort","thougt","thought","thougth"],answer:"thought",hint:"th-ough-t — tricky ough!"},
+    {level:"hard",word:"through",q:"Which is the correct spelling?",options:["threw","throgh","through","throo"],answer:"through",hint:"thr-ough — another ough word!"},
+    {level:"hard",word:"daughter",q:"Which is the correct spelling?",options:["darter","doughter","dawter","daughter"],answer:"daughter",hint:"d-a-u-g-h-t-e-r — tricky!"},
+    {level:"hard",word:"favourite",q:"Which is the correct spelling?",options:["favorit","favrite","favourite","faverite"],answer:"favourite",hint:"f-a-v-o-u-r-i-t-e"},
+    {level:"hard",word:"chocolate",q:"Which is the correct spelling?",options:["choclate","chokolate","chockolate","chocolate"],answer:"chocolate",hint:"choc-o-late — three syllables!"},
+    {level:"hard",word:"surprise",q:"Which is the correct spelling?",options:["suprise","surpise","surprize","surprise"],answer:"surprise",hint:"sur-prise: s-u-r-p-r-i-s-e"},
   ],
 
   /* ── FILL THE GAP ────────────────────────────────────────────────────── */
   gaps:[
-    // type:"sentence" = full sentence with ___ | type:"word" = missing letters
-    {type:"sentence",q:"The cat sat on the ___.",options:["mat","dog","run","blue"],answer:"mat",hint:"Cats like to sit on flat things!"},
-    {type:"sentence",q:"She put on her coat because\nit was ___.",options:["sunny","hot","cold","funny"],answer:"cold",hint:"Why do you wear a coat?"},
-    {type:"sentence",q:"The children played in the ___ after school.",options:["bed","park","book","spoon"],answer:"park",hint:"Where do children go to play outside?"},
-    {type:"sentence",q:"He was very ___ so he drank\na glass of water.",options:["hungry","tired","thirsty","happy"],answer:"thirsty",hint:"When you need water, you feel...?"},
-    {type:"sentence",q:"We use a ___ to cut paper.",options:["spoon","pen","scissors","pillow"],answer:"scissors",hint:"What has two blades and cuts?"},
-    {type:"sentence",q:"Birds fly with their ___.",options:["legs","tails","wings","beaks"],answer:"wings",hint:"What do birds flap to fly?"},
-    {type:"sentence",q:"The sun rises in the ___ and sets in the west.",options:["north","south","east","sky"],answer:"east",hint:"The sun comes up in the east!"},
-    {type:"sentence",q:"A baby cat is called a ___.",options:["puppy","calf","kitten","foal"],answer:"kitten",hint:"A baby dog is a puppy. A baby cat is a...?"},
-    {type:"sentence",q:"We read and write at ___.",options:["home","school","hospital","shop"],answer:"school",hint:"Where do you go to learn?"},
-    {type:"sentence",q:"Fish live in ___ water.",options:["hot","dry","salty","rocky"],answer:"salty",hint:"The sea tastes salty — and fish live there!"},
-    {type:"sentence",q:"A doctor works in a ___.",options:["school","shop","hospital","library"],answer:"hospital",hint:"Where do sick people go for help?"},
-    {type:"sentence",q:"We use an ___ when it rains.",options:["hat","umbrella","coat","boot"],answer:"umbrella",hint:"It keeps rain off your head!"},
-    {type:"sentence",q:"The opposite of hot is ___.",options:["warm","cold","big","fast"],answer:"cold",hint:"Hot and ___ are opposites!"},
-    {type:"sentence",q:"A spider has ___ legs.",options:["4","6","8","10"],answer:"8",hint:"Count the legs on a spider!"},
-    {type:"sentence",q:"We plant seeds in the ___ to grow flowers.",options:["sea","soil","sky","snow"],answer:"soil",hint:"Seeds go into the ground — into the...?"},
-    // Word gap questions — missing letters shown with underscores
-    {type:"word",q:"Complete the word:\nc _ t",display:"c _ t",options:["a","e","i","o"],answer:"a",hint:"This animal says meow! c_a_t"},
-    {type:"word",q:"Complete the word:\nd _ g",display:"d _ g",options:["a","e","i","o"],answer:"o",hint:"This animal barks! d_o_g"},
-    {type:"word",q:"Complete the word:\ns _ n",display:"s _ n",options:["a","e","i","o","u"],answer:"u",hint:"It shines in the sky! s_u_n"},
-    {type:"word",q:"Complete the word:\nb _ d",display:"b _ d",options:["a","e","i","o","u"],answer:"e",hint:"You sleep in it! b_e_d"},
-    {type:"word",q:"Complete the word:\nt _ ee",display:"t _ ee",options:["a","e","r","n"],answer:"r",hint:"It has leaves and branches! t_r_ee"},
-    {type:"word",q:"Complete the word:\nfl _ wer",display:"fl _ wer",options:["a","e","o","u"],answer:"o",hint:"It blooms in the garden! fl_o_wer"},
-    {type:"word",q:"Complete the word:\nf _ sh",display:"f _ sh",options:["a","e","i","o"],answer:"i",hint:"It lives in water and swims! f_i_sh"},
-    {type:"word",q:"Complete the word:\nfr _ g",display:"fr _ g",options:["a","e","o","u"],answer:"o",hint:"It hops and says ribbit! fr_o_g"},
-    {type:"word",q:"Complete the word:\ndr _ gon",display:"dr _ gon",options:["a","e","i","o"],answer:"a",hint:"A mythical fire-breathing creature! dr_a_gon"},
-    {type:"word",q:"Complete the word:\nj _ mp",display:"j _ mp",options:["a","e","i","u"],answer:"u",hint:"What you do on a trampoline! j_u_mp"},
-    {type:"word",q:"Complete the word:\nst _ r",display:"st _ r",options:["a","e","i","o"],answer:"a",hint:"It twinkles in the night sky! st_a_r"},
-    {type:"word",q:"Complete the word:\nch _ ir",display:"ch _ ir",options:["a","e","i","o"],answer:"a",hint:"You sit on it! ch_a_ir"},
-    {type:"word",q:"Complete the word:\ntr _ in",display:"tr _ in",options:["a","e","i","o"],answer:"a",hint:"It runs on railway tracks! tr_a_in"},
-    {type:"word",q:"Complete the word:\nsp _ der",display:"sp _ der",options:["a","e","i","o"],answer:"i",hint:"It has 8 legs and spins webs! sp_i_der"},
-    {type:"word",q:"Complete the word:\ncl _ ud",display:"cl _ ud",options:["a","e","o","u"],answer:"o",hint:"Fluffy white things in the sky! cl_o_ud"},
+    // ── EASY (Kindergarten) ──
+    {level:"easy",type:"sentence",q:"The cat sat on the ___.",options:["mat","dog","run","blue"],answer:"mat",hint:"Cats like to sit on flat things!"},
+    {level:"easy",type:"sentence",q:"The children played in the ___ after school.",options:["bed","park","book","spoon"],answer:"park",hint:"Where do children go to play outside?"},
+    {level:"easy",type:"word",q:"Complete the word:\nc _ t",display:"c _ t",options:["a","e","i","o"],answer:"a",hint:"This animal says meow! c_a_t"},
+    {level:"easy",type:"word",q:"Complete the word:\nd _ g",display:"d _ g",options:["a","e","i","o"],answer:"o",hint:"This animal barks! d_o_g"},
+    {level:"easy",type:"word",q:"Complete the word:\ns _ n",display:"s _ n",options:["a","e","i","o","u"],answer:"u",hint:"It shines in the sky! s_u_n"},
+    {level:"easy",type:"word",q:"Complete the word:\nb _ d",display:"b _ d",options:["a","e","i","o","u"],answer:"e",hint:"You sleep in it! b_e_d"},
+    {level:"easy",type:"word",q:"Complete the word:\nf _ sh",display:"f _ sh",options:["a","e","i","o"],answer:"i",hint:"It lives in water and swims! f_i_sh"},
+    // ── MEDIUM (Grade 1–2) ──
+    {level:"medium",type:"sentence",q:"She put on her coat because\nit was ___.",options:["sunny","hot","cold","funny"],answer:"cold",hint:"Why do you wear a coat?"},
+    {level:"medium",type:"sentence",q:"He was very ___ so he drank\na glass of water.",options:["hungry","tired","thirsty","happy"],answer:"thirsty",hint:"When you need water, you feel...?"},
+    {level:"medium",type:"sentence",q:"Birds fly with their ___.",options:["legs","tails","wings","beaks"],answer:"wings",hint:"What do birds flap to fly?"},
+    {level:"medium",type:"sentence",q:"A baby cat is called a ___.",options:["puppy","calf","kitten","foal"],answer:"kitten",hint:"A baby dog is a puppy. A baby cat is a...?"},
+    {level:"medium",type:"word",q:"Complete the word:\nt _ ee",display:"t _ ee",options:["a","e","r","n"],answer:"r",hint:"It has leaves and branches! t_r_ee"},
+    {level:"medium",type:"word",q:"Complete the word:\nfl _ wer",display:"fl _ wer",options:["a","e","o","u"],answer:"o",hint:"It blooms in the garden! fl_o_wer"},
+    {level:"medium",type:"word",q:"Complete the word:\nfr _ g",display:"fr _ g",options:["a","e","o","u"],answer:"o",hint:"It hops and says ribbit! fr_o_g"},
+    // ── HARD (Grade 3–4) ──
+    {level:"hard",type:"sentence",q:"The sun rises in the ___ and sets in the west.",options:["north","south","east","sky"],answer:"east",hint:"The sun comes up in the east!"},
+    {level:"hard",type:"sentence",q:"We use an ___ when it rains.",options:["hat","umbrella","coat","boot"],answer:"umbrella",hint:"It keeps rain off your head!"},
+    {level:"hard",type:"sentence",q:"Fish live in ___ water.",options:["hot","dry","salty","rocky"],answer:"salty",hint:"The sea tastes salty — and fish live there!"},
+    {level:"hard",type:"sentence",q:"A spider has ___ legs.",options:["4","6","8","10"],answer:"8",hint:"Count the legs on a spider!"},
+    {level:"hard",type:"word",q:"Complete the word:\ndr _ gon",display:"dr _ gon",options:["a","e","i","o"],answer:"a",hint:"A mythical fire-breathing creature! dr_a_gon"},
+    {level:"hard",type:"word",q:"Complete the word:\nsp _ der",display:"sp _ der",options:["a","e","i","o"],answer:"i",hint:"It has 8 legs and spins webs! sp_i_der"},
+    {level:"hard",type:"word",q:"Complete the word:\nch _ ir",display:"ch _ ir",options:["a","e","i","o"],answer:"a",hint:"You sit on it! ch_a_ir"},
   ],
 };
 
-async function fetchAIQ(subject){
+async function fetchAIQ(subject, level="medium"){
+  const grade={easy:"Kindergarten",medium:"Grade 1-2",hard:"Grade 3-4"}[level];
   const prompts={
-    maths:"Generate 1 simple maths question for a 5-7 year old. Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    english:"Generate 1 English question for a 5-7 year old. Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    reading:"Generate a 3-sentence story for ages 5-7 with 1 question. Return ONLY valid JSON: {\"passage\":\"...\",\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    verbal:"Generate 1 verbal reasoning question for ages 5-7. Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    quant:"Generate 1 quantitative reasoning question for ages 5-7 (number patterns, missing numbers, or puzzles). Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    spanish:"Generate 1 beginner Spanish vocabulary question for ages 5-7. Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    cogat:"Generate 1 CogAT-style question for ages 5-7 (verbal analogy, number series, or pattern recognition). Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    spelling:"Generate 1 spelling question for ages 5-7. Pick a common English word and give 4 spellings (1 correct, 3 plausible misspellings). Return ONLY valid JSON: {\"word\":\"...\",\"q\":\"Which is the correct spelling?\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
-    gaps:"Generate 1 fill-in-the-gap sentence for ages 5-7 with one missing word. Return ONLY valid JSON: {\"type\":\"sentence\",\"q\":\"sentence with ___ for the gap\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
+    maths:`Generate 1 maths question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    english:`Generate 1 English question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    reading:`Generate a short passage with 1 question for ${grade}. Return ONLY valid JSON: {"passage":"...","q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    verbal:`Generate 1 verbal reasoning question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    quant:`Generate 1 quantitative reasoning question for ${grade} (number patterns or puzzles). Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    spanish:`Generate 1 Spanish vocabulary question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    cogat:`Generate 1 CogAT-style question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    spelling:`Generate 1 spelling question for ${grade}. Return ONLY valid JSON: {"word":"...","q":"Which is the correct spelling?","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    gaps:`Generate 1 fill-in-the-gap sentence for ${grade}. Return ONLY valid JSON: {"type":"sentence","q":"sentence with ___ gap","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
   };
   try{
-    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:"You are a friendly teacher for children aged 5-7. Respond ONLY with valid JSON, no markdown.",messages:[{role:"user",content:prompts[subject]}]})});
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:"You are a friendly teacher. Respond ONLY with valid JSON, no markdown.",messages:[{role:"user",content:prompts[subject]}]})});
     const d=await r.json();
     const txt=(d.content?.[0]?.text||"").replace(/```json|```/g,"").trim();
     return JSON.parse(txt);
@@ -549,14 +557,31 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 .tt-array-wrap{display:flex;flex-direction:column;gap:3px;align-items:center}
 .tt-array-row{display:flex;gap:3px}
 .tt-array-cell{font-size:clamp(12px,3vw,18px);line-height:1}
+
+/* ── Difficulty Picker ── */
+.diff-card{border-radius:20px;padding:16px 14px;cursor:pointer;border:3px solid transparent;transition:all 0.18s;text-align:center;user-select:none;touch-action:manipulation;position:relative;overflow:hidden}
+.diff-card:active{transform:scale(0.96)}
+.diff-card.selected{box-shadow:0 6px 24px rgba(0,0,0,0.15);transform:scale(1.03)}
+.diff-emoji{font-size:36px;margin-bottom:6px}
+.diff-label{font-family:'Boogaloo',cursive;font-size:22px;margin-bottom:2px}
+.diff-grade{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:0.75;margin-bottom:4px}
+.diff-desc{font-size:12px;font-weight:700;opacity:0.65}
+.diff-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:900;padding:3px 8px;border-radius:99px;background:rgba(0,0,0,0.1)}
 `;
 
 /* ─── Home ─────────────────────────────────────────────────────────────── */
-function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setTab}){
+function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setTab,defaultLevel,onSetDefaultLevel}){
   return(
     <div>
       <div className="home-hero">
-        <div style={{display:"flex",justifyContent:"flex-end",gap:6,marginBottom:4}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,marginBottom:4}}>
+          <div style={{display:"flex",alignItems:"center",gap:5}}>
+            <span style={{fontSize:10,fontWeight:800,color:"#6b7280"}}>Default level:</span>
+            {["easy","medium","hard"].map(lv=>{
+              const d=DIFFICULTY[lv];
+              return<button key={lv} onClick={()=>onSetDefaultLevel(lv)} style={{border:`2px solid ${defaultLevel===lv?d.color:"#e5e7eb"}`,background:defaultLevel===lv?d.bg:"white",borderRadius:99,padding:"3px 9px",fontSize:10,fontWeight:800,color:defaultLevel===lv?d.color:"#9ca3af",cursor:"pointer",transition:"all 0.15s"}}>{d.emoji} {d.label}</button>;
+            })}
+          </div>
           <button className="icon-btn" onClick={toggleMute}>{muted?"🔇":"🔊"}</button>
         </div>
         <div className="logo">🌿 BrightMind 🌿</div>
@@ -572,12 +597,15 @@ function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setT
         <div className="subject-grid">
           {SUBJECTS.map((s,i)=>{
             const p=progress[s.id]||{};
+            const d=DIFFICULTY[defaultLevel];
+            const levelBest=p[`best_${defaultLevel}`]||0;
             return(
               <div key={s.id} className="subject-card slide-up" style={{background:s.bg,borderColor:s.border,animationDelay:`${i*0.07}s`}} onClick={()=>{sounds.tap();onSelect(s.id);}}>
-                {p.best>0&&<div className="badge-best" style={{color:s.dark}}>Best {p.best}/{TOTAL}</div>}
+                {levelBest>0&&<div className="badge-best" style={{color:s.dark}}>{d.emoji} {levelBest}/{TOTAL}</div>}
                 {s.id==="cogat"&&<div className="cogat-badge">GIFTED</div>}
                 {s.id==="spelling"&&<div className="cogat-badge" style={{background:"#F59E0B"}}>🐝 SPELL</div>}
                 {s.id==="gaps"&&<div className="cogat-badge" style={{background:"#8B5CF6"}}>🧩 GAPS</div>}
+                {s.id==="times"&&<div className="cogat-badge" style={{background:"#10B981"}}>✖️ TABLES</div>}
                 <div style={{marginBottom:4}}><Mascot type={s.mascot} size={46} animate/></div>
                 <div className="card-label" style={{color:s.dark}}>{s.label}</div>
                 <div className="card-desc" style={{color:s.dark}}>{s.desc}</div>
@@ -653,17 +681,81 @@ function ParentDash({progress,history,earned}){
   );
 }
 
-/* ─── Quiz ─────────────────────────────────────────────────────────────── */
+/* ─── Difficulty Picker ─────────────────────────────────────────────────── */
+function DifficultyPicker({subject, defaultLevel, onStart, onBack, sounds, progress}){
+  const s=SUBJECTS.find(x=>x.id===subject);
+  const [sel,setSel]=useState(defaultLevel||"medium");
+  const levels=["easy","medium","hard"];
+  const subjectProgress=progress[subject]||{};
+  return(
+    <div>
+      <div className="topbar">
+        <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Home</button>
+        <div className="topbar-label" style={{color:s.btn}}>{s.emoji} {s.label}</div>
+      </div>
+      <div style={{background:"white",borderRadius:20,padding:"16px",marginBottom:12,boxShadow:"0 4px 20px rgba(0,0,0,0.07)"}}>
+        <div style={{textAlign:"center",marginBottom:14}}>
+          <Mascot type={s.mascot} size={52} animate/>
+          <div style={{fontFamily:"'Boogaloo',cursive",fontSize:20,color:s.dark,marginTop:6}}>Choose your level!</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#6b7280"}}>Pick the grade that's right for you</div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:14}}>
+          {levels.map(lv=>{
+            const d=DIFFICULTY[lv];
+            const isSelected=sel===lv;
+            const bestAtLevel=subjectProgress[`best_${lv}`]||0;
+            return(
+              <div key={lv} className={`diff-card${isSelected?" selected":""}`}
+                style={{background:d.bg,borderColor:isSelected?d.color:"transparent"}}
+                onClick={()=>{sounds.tap();setSel(lv);}}>
+                {bestAtLevel>0&&<div className="diff-badge" style={{color:d.color}}>Best {bestAtLevel}</div>}
+                <div className="diff-emoji">{d.emoji}</div>
+                <div className="diff-label" style={{color:d.color}}>{d.label}</div>
+                <div className="diff-grade" style={{color:d.color}}>{d.grade}</div>
+                <div className="diff-desc" style={{color:d.color}}>{d.desc}</div>
+              </div>
+            );
+          })}
+        </div>
+        <button className="next-btn" style={{background:DIFFICULTY[sel].color,maxWidth:280,margin:"0 auto",display:"block"}}
+          onClick={()=>{sounds.tap();onStart(sel);}}>
+          Start {DIFFICULTY[sel].label}! {DIFFICULTY[sel].emoji}
+        </button>
+      </div>
+      <div style={{background:"white",borderRadius:16,padding:"12px 14px",boxShadow:"0 2px 10px rgba(0,0,0,0.05)"}}>
+        <div style={{fontFamily:"'Boogaloo',cursive",fontSize:15,color:s.dark,marginBottom:8}}>📊 Your Progress</div>
+        {levels.map(lv=>{
+          const d=DIFFICULTY[lv];
+          const best=subjectProgress[`best_${lv}`]||0;
+          const pct=Math.round((best/TOTAL)*100);
+          return(
+            <div key={lv} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0"}}>
+              <div style={{width:20,textAlign:"center",fontSize:14}}>{d.emoji}</div>
+              <div style={{width:60,fontSize:11,fontWeight:800,color:d.color}}>{d.label}</div>
+              <div style={{flex:1,height:7,background:"#f3f4f6",borderRadius:99,overflow:"hidden"}}>
+                <div style={{width:`${pct}%`,height:"100%",background:d.color,borderRadius:99,transition:"width 0.5s"}}/>
+              </div>
+              <div style={{width:44,fontSize:10,fontWeight:800,color:"#6b7280",textAlign:"right"}}>{best>0?`${best}/${TOTAL}`:"-"}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
 const CHEERS=["Amazing! 🎉","Brilliant! 🌟","Super star! ⭐","Wow! 🏆","Great job! 🎊","Fantastic! 🦁","You got it! 🎯","Excellent! 🌈","¡Muy bien! 🇪🇸","Bravo! 🎺"];
 
 const BATTERY_COLORS={"CogAT Verbal":"#10B981","CogAT Quantitative":"#F59E0B","CogAT Non-Verbal":"#6366F1"};
 
 const clampWord="clamp(22px,6vw,34px)";
 
-function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
+function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
   const s=SUBJECTS.find(x=>x.id===subjectId);
   const isSpelling=subjectId==="spelling";
   const isGaps=subjectId==="gaps";
+  const d=DIFFICULTY[level]||DIFFICULTY.medium;
   const [qs,setQs]=useState([]);
   const [idx,setIdx]=useState(0);
   const [sel,setSel]=useState(null);
@@ -680,13 +772,16 @@ function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
 
   const build=useCallback(async()=>{
     setLoading(true);
-    const bank=[...BANK[subjectId]].sort(()=>Math.random()-0.5);
-    const aiResults=await Promise.all([fetchAIQ(subjectId),fetchAIQ(subjectId),fetchAIQ(subjectId)]);
-    const aiQs=aiResults.filter(q=>q?.q&&q?.options&&q?.answer).map(q=>({...q,isAI:true}));
+    // Filter bank by level, fallback to all if too few
+    const all=BANK[subjectId];
+    const levelled=all.filter(q=>q.level===level);
+    const bank=[...(levelled.length>=10?levelled:all)].sort(()=>Math.random()-0.5);
+    const aiResults=await Promise.all([fetchAIQ(subjectId,level),fetchAIQ(subjectId,level),fetchAIQ(subjectId,level)]);
+    const aiQs=aiResults.filter(q=>q?.q&&q?.options&&q?.answer).map(q=>({...q,isAI:true,level}));
     const fixed=bank.slice(0,TOTAL-aiQs.length);
     const combined=[...fixed,...aiQs].sort(()=>Math.random()-0.5).slice(0,TOTAL);
     setQs(combined);setLoading(false);
-  },[subjectId]);
+  },[subjectId,level]);
 
   useEffect(()=>{build();},[build]);
   useEffect(()=>{return()=>stopSpeaking();},[]);
@@ -738,6 +833,7 @@ function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
       <div className="topbar">
         <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Back</button>
         <div className="topbar-label" style={{color:s.btn}}>{s.emoji} {s.label}</div>
+        <div style={{background:d.bg,border:`2px solid ${d.color}`,borderRadius:99,padding:"3px 9px",fontSize:10,fontWeight:800,color:d.color,whiteSpace:"nowrap"}}>{d.emoji} {d.grade}</div>
         <button className="icon-btn" onClick={toggleMute}>{muted?"🔇":"🔊"}</button>
       </div>
       <div className="loading">
@@ -1184,12 +1280,14 @@ function clamp(min,vw,max){return`clamp(${min}px,${vw}vw,${max}px)`;}
 export default function App(){
   const [screen,setScreen]=useState("home");
   const [subject,setSubject]=useState(null);
-  const [ttTable,setTtTable]=useState(null); // which times table is active
+  const [quizLevel,setQuizLevel]=useState("medium");
+  const [ttTable,setTtTable]=useState(null);
   const [muted,setMuted]=useState(false);
   const [tab,setTab]=useState(0);
   const [toastQueue,setToastQueue]=useState([]);
-  const [ttMastery,setTtMastery]=useState({}); // {2: bestScore, 3: bestScore, ...}
-  const [progress,setProgress]=useState(()=>{const p={};SUBJECTS.forEach(s=>{p[s.id]={stars:0,best:0};});return p;});
+  const [ttMastery,setTtMastery]=useState({});
+  const [defaultLevel,setDefaultLevel]=useState("medium"); // parent default
+  const [progress,setProgress]=useState(()=>{const p={};SUBJECTS.forEach(s=>{p[s.id]={stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};});return p;});
   const [history,setHistory]=useState({total:0,perfectScores:0,bestStreak:0,improvements:0,spellPerfect:0,timesPerfect:0});
   const [earned,setEarned]=useState([]);
 
@@ -1210,9 +1308,23 @@ export default function App(){
   const done=(score,streak)=>{
     const pct=score/TOTAL;
     const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
-    const oldBest=progress[subject]?.best||0;
-    const newProgress={...progress,[subject]:{stars:Math.max(progress[subject].stars,stars),best:Math.max(oldBest,score)}};
-    const newHistory={total:history.total+1,perfectScores:history.perfectScores+(score===TOTAL?1:0),bestStreak:Math.max(history.bestStreak,streak||0),improvements:history.improvements+(score>oldBest&&oldBest>0?1:0),spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0),timesPerfect:history.timesPerfect||0};
+    const old=progress[subject]||{stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};
+    const levelKey=`best_${quizLevel}`;
+    const newSubjectProgress={
+      ...old,
+      stars:Math.max(old.stars,stars),
+      best:Math.max(old.best,score),
+      [levelKey]:Math.max(old[levelKey]||0,score),
+    };
+    const newProgress={...progress,[subject]:newSubjectProgress};
+    const newHistory={
+      total:history.total+1,
+      perfectScores:history.perfectScores+(score===TOTAL?1:0),
+      bestStreak:Math.max(history.bestStreak,streak||0),
+      improvements:history.improvements+(score>(old.best||0)&&(old.best||0)>0?1:0),
+      spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0),
+      timesPerfect:history.timesPerfect||0,
+    };
     setProgress(newProgress);setHistory(newHistory);
     const newBadges=checkAchievements(newProgress,newHistory,earned);
     if(newBadges.length>0){
@@ -1228,8 +1340,8 @@ export default function App(){
     setTtMastery(newMastery);
     const pct=score/TT_QUESTIONS_PER_SESSION;
     const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
-    const oldTimesProgress=progress.times||{stars:0,best:0};
-    const newProgress={...progress,times:{stars:Math.max(oldTimesProgress.stars,stars),best:Math.max(oldTimesProgress.best,score)}};
+    const oldTimes=progress.times||{stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};
+    const newProgress={...progress,times:{...oldTimes,stars:Math.max(oldTimes.stars,stars),best:Math.max(oldTimes.best,score)}};
     const newHistory={...history,total:history.total+1,timesPerfect:(history.timesPerfect||0)+(score===TT_QUESTIONS_PER_SESSION?1:0)};
     setProgress(newProgress);setHistory(newHistory);
     const newBadges=checkAchievements(newProgress,newHistory,earned);
@@ -1247,13 +1359,22 @@ export default function App(){
       {toastQueue.length>0&&<BadgeToast badge={toastQueue[0]} onDone={()=>setToastQueue(q=>q.slice(1))}/>}
       <div className="app">
         {screen==="home"&&<Home progress={progress} history={history} earned={earned}
+          defaultLevel={defaultLevel} onSetDefaultLevel={lv=>{sounds.tap();setDefaultLevel(lv);}}
           onSelect={id=>{
             sounds.tap();
             if(id==="times"){setScreen("times-pick");setSubject("times");}
-            else{setSubject(id);setScreen("quiz");}
+            else{setSubject(id);setScreen("diff-pick");}
           }}
           sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)} tab={tab} setTab={setTab}/>}
-        {screen==="quiz"&&subject&&<Quiz subjectId={subject} onBack={()=>{setScreen("home");setSubject(null);}} onDone={done} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
+        {screen==="diff-pick"&&subject&&<DifficultyPicker
+          subject={subject} defaultLevel={defaultLevel} progress={progress}
+          onStart={lv=>{setQuizLevel(lv);setScreen("quiz");}}
+          onBack={()=>{setScreen("home");setSubject(null);}}
+          sounds={sounds}/>}
+        {screen==="quiz"&&subject&&<Quiz
+          subjectId={subject} level={quizLevel}
+          onBack={()=>{setScreen("diff-pick");}}
+          onDone={done} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
         {screen==="times-pick"&&<TimesTablePicker
           onStart={t=>{setTtTable(t);setScreen("times-quiz");}}
           onBack={()=>{setScreen("home");setSubject(null);}}
