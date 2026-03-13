@@ -685,6 +685,26 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 .av-color-opt{width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all 0.15s;touch-action:manipulation}
 .av-color-opt.selected{border-color:#1a1a1a;transform:scale(1.15);box-shadow:0 0 0 2px white,0 0 0 4px #1a1a1a}
 .av-preview{background:linear-gradient(135deg,#F0FDF4,#EFF6FF);border-radius:20px;padding:20px;text-align:center;border:3px solid #e5e7eb;margin-bottom:14px}
+
+/* ── Welcome / Profile screens ── */
+.welcome-wrap{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center}
+.welcome-logo{font-family:'Boogaloo',cursive;font-size:clamp(36px,9vw,54px);background:linear-gradient(135deg,#16a34a,#F6A800,#D45EBC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.welcome-sub{font-size:clamp(13px,3vw,16px);font-weight:700;color:#6b7280;margin-bottom:28px}
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:380px;margin-bottom:24px}
+.who-card{border-radius:22px;padding:22px 14px;cursor:pointer;border:3px solid transparent;transition:all 0.18s;text-align:center;user-select:none;touch-action:manipulation}
+.who-card:active{transform:scale(0.96)}
+.who-icon{font-size:46px;margin-bottom:8px}
+.who-label{font-family:'Boogaloo',cursive;font-size:22px}
+.who-desc{font-size:11px;font-weight:700;opacity:0.65;margin-top:3px}
+.profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%;max-width:400px;margin-bottom:18px}
+.profile-card{border-radius:20px;padding:16px 10px;cursor:pointer;border:3px solid #e5e7eb;background:white;text-align:center;transition:all 0.18s;position:relative;touch-action:manipulation;user-select:none}
+.profile-card:active{transform:scale(0.96)}
+.profile-card.active-profile{border-color:#F6A800;background:#FFFBEB;box-shadow:0 4px 16px rgba(246,168,0,0.2)}
+.profile-card.add-profile{border-style:dashed;border-color:#d1d5db;background:#f9fafb}
+.profile-name{font-family:'Boogaloo',cursive;font-size:15px;color:#111;margin-top:5px}
+.profile-stats{font-size:10px;font-weight:700;color:#9ca3af;margin-top:2px}
+.profile-delete{position:absolute;top:6px;right:6px;background:#fee2e2;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#ef4444}
+.setup-card{background:white;border-radius:24px;padding:24px 20px;width:100%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,0.1)}
 `;
 
 /* ─── Home ─────────────────────────────────────────────────────────────── */
@@ -1643,119 +1663,128 @@ function TimesTableQuiz({table,onBack,onDone,sounds,muted,toggleMute}){
 function clamp(min,vw,max){return`clamp(${min}px,${vw}vw,${max}px)`;}
 
 /* ─── Root ─────────────────────────────────────────────────────────────── */
-export default function App(){
-  const [screen,setScreen]=useState("home");
-  const [subject,setSubject]=useState(null);
-  const [quizLevel,setQuizLevel]=useState("medium");
-  const [ttTable,setTtTable]=useState(null);
-  const [muted,setMuted]=useState(false);
-  const [tab,setTab]=useState(0);
-  const [toastQueue,setToastQueue]=useState([]);
-  const [ttMastery,setTtMastery]=useState({});
-  const [defaultLevel,setDefaultLevel]=useState("medium");
-  const [avatar,setAvatar]=useState(DEFAULT_AVATAR); // parent default
-  const [progress,setProgress]=useState(()=>{const p={};SUBJECTS.forEach(s=>{p[s.id]={stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};});return p;});
-  const [history,setHistory]=useState({total:0,perfectScores:0,bestStreak:0,improvements:0,spellPerfect:0,timesPerfect:0});
-  const [earned,setEarned]=useState([]);
+/* ─── Profile Helpers ───────────────────────────────────────────────────── */
+const makeEmptyProgress=()=>{const p={};SUBJECTS.forEach(s=>{p[s.id]={stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};});return p;};
+const makeProfile=(name,avatar)=>({
+  id:Date.now()+Math.random(),
+  name,
+  avatar:{...DEFAULT_AVATAR,...avatar,name},
+  progress:makeEmptyProgress(),
+  history:{total:0,perfectScores:0,bestStreak:0,improvements:0,spellPerfect:0,timesPerfect:0},
+  earned:[],
+  defaultLevel:"easy",
+  ttMastery:{},
+});
 
-  const rawSounds=useRef(null);
-  if(!rawSounds.current)rawSounds.current=createSounds();
-  const sounds={
-    tap:()=>{if(!muted)rawSounds.current.tap();},
-    correct:()=>{if(!muted)rawSounds.current.correct();},
-    wrong:()=>{if(!muted)rawSounds.current.wrong();},
-    fanfare:()=>{if(!muted)rawSounds.current.fanfare();},
-    badge:()=>{if(!muted)rawSounds.current.badge();},
+/* ─── Welcome Screen ────────────────────────────────────────────────────── */
+function WelcomeScreen({profiles,activeId,onSelectProfile,onAddProfile,onDeleteProfile,sounds}){
+  const [showAdd,setShowAdd]=useState(profiles.length===0);
+  const [whoType,setWhoType]=useState(null); // "kid" | "parent"
+  const [name,setName]=useState("");
+  const [nameError,setNameError]=useState("");
+
+  const startAdd=(type)=>{sounds.tap();setWhoType(type);setName("");setNameError("");};
+  const cancelAdd=()=>{sounds.tap();setShowAdd(false);setWhoType(null);if(profiles.length===0)setShowAdd(true);};
+
+  const submitProfile=()=>{
+    const trimmed=name.trim();
+    if(!trimmed){setNameError("Please enter a name!");return;}
+    if(trimmed.length<2){setNameError("Name needs at least 2 letters!");return;}
+    sounds.fanfare();
+    onAddProfile(trimmed,whoType);
+    setShowAdd(false);setWhoType(null);setName("");
   };
 
-  const checkAchievements=(newProgress,newHistory,currentEarned)=>{
-    return ACHIEVEMENTS.filter(a=>!currentEarned.includes(a.id)&&a.check(newProgress,newHistory));
-  };
-
-  const done=(score,streak)=>{
-    const pct=score/TOTAL;
-    const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
-    const old=progress[subject]||{stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};
-    const levelKey=`best_${quizLevel}`;
-    const newSubjectProgress={
-      ...old,
-      stars:Math.max(old.stars,stars),
-      best:Math.max(old.best,score),
-      [levelKey]:Math.max(old[levelKey]||0,score),
-    };
-    const newProgress={...progress,[subject]:newSubjectProgress};
-    const newHistory={
-      total:history.total+1,
-      perfectScores:history.perfectScores+(score===TOTAL?1:0),
-      bestStreak:Math.max(history.bestStreak,streak||0),
-      improvements:history.improvements+(score>(old.best||0)&&(old.best||0)>0?1:0),
-      spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0),
-      timesPerfect:history.timesPerfect||0,
-    };
-    setProgress(newProgress);setHistory(newHistory);
-    const newBadges=checkAchievements(newProgress,newHistory,earned);
-    if(newBadges.length>0){
-      const newEarned=[...earned,...newBadges.map(b=>b.id)];
-      setEarned(newEarned);
-      newBadges.forEach((b,i)=>{setTimeout(()=>{sounds.badge();setToastQueue(q=>[...q,b]);},i*3400);});
-    }
-  };
-
-  const doneTimesTable=(score)=>{
-    const oldBest=ttMastery[ttTable]||0;
-    const newMastery={...ttMastery,[ttTable]:Math.max(oldBest,score)};
-    setTtMastery(newMastery);
-    const pct=score/TT_QUESTIONS_PER_SESSION;
-    const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
-    const oldTimes=progress.times||{stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};
-    const newProgress={...progress,times:{...oldTimes,stars:Math.max(oldTimes.stars,stars),best:Math.max(oldTimes.best,score)}};
-    const newHistory={...history,total:history.total+1,timesPerfect:(history.timesPerfect||0)+(score===TT_QUESTIONS_PER_SESSION?1:0)};
-    setProgress(newProgress);setHistory(newHistory);
-    const newBadges=checkAchievements(newProgress,newHistory,earned);
-    if(newBadges.length>0){
-      const newEarned=[...earned,...newBadges.map(b=>b.id)];
-      setEarned(newEarned);
-      newBadges.forEach((b,i)=>{setTimeout(()=>{sounds.badge();setToastQueue(q=>[...q,b]);},i*3400);});
-    }
-  };
+  if(showAdd){
+    return(
+      <div className="welcome-wrap">
+        <JungleBg/>
+        <div style={{position:"relative",zIndex:1,width:"100%",display:"flex",flexDirection:"column",alignItems:"center"}}>
+          <div className="welcome-logo">🌿 BrightMind</div>
+          {!whoType?(
+            <>
+              <div className="welcome-sub">Who's learning today?</div>
+              <div className="who-grid">
+                <div className="who-card" style={{background:"#EFF6FF",borderColor:"#4A9EE0"}} onClick={()=>startAdd("kid")}>
+                  <div className="who-icon">🧒</div>
+                  <div className="who-label" style={{color:"#2272b5"}}>It's me!</div>
+                  <div className="who-desc" style={{color:"#2272b5"}}>I want to learn</div>
+                </div>
+                <div className="who-card" style={{background:"#F0FDF4",borderColor:"#34C76F"}} onClick={()=>startAdd("parent")}>
+                  <div className="who-icon">👨‍👩‍👧</div>
+                  <div className="who-label" style={{color:"#1e9c53"}}>Parent</div>
+                  <div className="who-desc" style={{color:"#1e9c53"}}>Set up my child</div>
+                </div>
+              </div>
+              {profiles.length>0&&(
+                <button onClick={cancelAdd} style={{background:"none",border:"2px solid #e5e7eb",borderRadius:14,padding:"10px 22px",fontFamily:"'Quicksand',sans-serif",fontWeight:800,fontSize:14,color:"#6b7280",cursor:"pointer"}}>
+                  ← Back to profiles
+                </button>
+              )}
+            </>
+          ):(
+            <div className="setup-card">
+              <div style={{fontSize:40,marginBottom:8,textAlign:"center"}}>{whoType==="kid"?"🧒":"👨‍👩‍👧"}</div>
+              <div style={{fontFamily:"'Boogaloo',cursive",fontSize:22,color:"#111",marginBottom:4,textAlign:"center"}}>
+                {whoType==="kid"?"What's your name?":"Child's name?"}
+              </div>
+              <div style={{fontSize:12,fontWeight:700,color:"#9ca3af",marginBottom:16,textAlign:"center"}}>
+                {whoType==="kid"?"We'll personalise BrightMind just for you!":"We'll create a profile for your child"}
+              </div>
+              <input
+                autoFocus
+                value={name}
+                onChange={e=>{setName(e.target.value);setNameError("");}}
+                onKeyDown={e=>e.key==="Enter"&&submitProfile()}
+                maxLength={14}
+                placeholder={whoType==="kid"?"e.g. Lily":"e.g. James"}
+                style={{width:"100%",padding:"12px 14px",fontSize:18,fontFamily:"'Boogaloo',cursive",border:`2.5px solid ${nameError?"#ef4444":"#e5e7eb"}`,borderRadius:14,outline:"none",marginBottom:6,textAlign:"center",color:"#111"}}
+              />
+              {nameError&&<div style={{color:"#ef4444",fontSize:12,fontWeight:700,marginBottom:8,textAlign:"center"}}>{nameError}</div>}
+              <button className="next-btn" style={{background:"#16a34a",marginTop:10}} onClick={submitProfile}>
+                {whoType==="kid"?"Let's go! 🚀":"Create profile 🌟"}
+              </button>
+              <button onClick={()=>{sounds.tap();setWhoType(null);}} style={{display:"block",margin:"10px auto 0",background:"none",border:"none",color:"#9ca3af",fontWeight:700,fontSize:13,cursor:"pointer"}}>
+                ← Back
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return(
-    <>
-      <style>{CSS}</style>
+    <div className="welcome-wrap">
       <JungleBg/>
-      {toastQueue.length>0&&<BadgeToast badge={toastQueue[0]} onDone={()=>setToastQueue(q=>q.slice(1))}/>}
-      <div className="app">
-        {screen==="home"&&<Home progress={progress} history={history} earned={earned}
-          defaultLevel={defaultLevel} onSetDefaultLevel={lv=>{sounds.tap();setDefaultLevel(lv);}}
-          avatar={avatar} onEditAvatar={()=>{sounds.tap();setScreen("avatar");}}
-          onSelect={id=>{
-            sounds.tap();
-            if(id==="times"){setScreen("times-pick");setSubject("times");}
-            else{setSubject(id);setScreen("diff-pick");}
-          }}
-          sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)} tab={tab} setTab={setTab}/>}
-        {screen==="avatar"&&<AvatarBuilder avatar={avatar}
-          onSave={av=>{setAvatar(av);setScreen("home");}}
-          onBack={()=>setScreen("home")} sounds={sounds}/>}
-        {screen==="diff-pick"&&subject&&<DifficultyPicker
-          subject={subject} defaultLevel={defaultLevel} progress={progress}
-          onStart={lv=>{setQuizLevel(lv);setScreen("quiz");}}
-          onBack={()=>{setScreen("home");setSubject(null);}}
-          sounds={sounds}/>}
-        {screen==="quiz"&&subject&&<Quiz
-          subjectId={subject} level={quizLevel}
-          onBack={()=>{setScreen("diff-pick");}}
-          onDone={done} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
-        {screen==="times-pick"&&<TimesTablePicker
-          onStart={t=>{setTtTable(t);setScreen("times-quiz");}}
-          onBack={()=>{setScreen("home");setSubject(null);}}
-          sounds={sounds} mastery={ttMastery}/>}
-        {screen==="times-quiz"&&ttTable&&<TimesTableQuiz
-          table={ttTable}
-          onBack={()=>setScreen("times-pick")}
-          onDone={doneTimesTable}
-          sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
+      <div style={{position:"relative",zIndex:1,width:"100%",display:"flex",flexDirection:"column",alignItems:"center"}}>
+        <div className="welcome-logo">🌿 BrightMind</div>
+        <div className="welcome-sub">Who's learning today? 👇</div>
+        <div className="profile-grid">
+          {profiles.map(p=>(
+            <div key={p.id} className={`profile-card${p.id===activeId?" active-profile":""}`}
+              onClick={()=>{sounds.tap();onSelectProfile(p.id);}}>
+              {profiles.length>1&&(
+                <button className="profile-delete" onClick={e=>{e.stopPropagation();onDeleteProfile(p.id);}}>✕</button>
+              )}
+              <AvatarSVG av={p.avatar} size={64}/>
+              <div className="profile-name">{p.name}</div>
+              <div className="profile-stats">
+                {p.history.total} quizzes · {p.earned.length} badges
+              </div>
+              {p.id===activeId&&<div style={{fontSize:10,fontWeight:900,color:"#F6A800",marginTop:3}}>● Active</div>}
+            </div>
+          ))}
+          {profiles.length<4&&(
+            <div className="profile-card add-profile" onClick={()=>{sounds.tap();setShowAdd(true);}}>
+              <div style={{fontSize:36,color:"#d1d5db",marginBottom:4}}>＋</div>
+              <div className="profile-name" style={{color:"#9ca3af"}}>Add child</div>
+              <div className="profile-stats">up to 4 profiles</div>
+            </div>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
+
