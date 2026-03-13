@@ -708,7 +708,7 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 `;
 
 /* ─── Home ─────────────────────────────────────────────────────────────── */
-function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setTab,defaultLevel,onSetDefaultLevel,avatar,onEditAvatar}){
+function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setTab,defaultLevel,onSetDefaultLevel,avatar,onEditAvatar,onSwitchProfile}){
   const [openGroup,setOpenGroup]=useState("literacy"); // first group open by default
 
   const toggleGroup=(id)=>{
@@ -735,7 +735,10 @@ function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setT
               return<button key={lv} onClick={()=>onSetDefaultLevel(lv)} style={{border:`2px solid ${defaultLevel===lv?d.color:"#e5e7eb"}`,background:defaultLevel===lv?d.bg:"white",borderRadius:99,padding:"3px 9px",fontSize:10,fontWeight:800,color:defaultLevel===lv?d.color:"#9ca3af",cursor:"pointer",transition:"all 0.15s"}}>{d.emoji} {d.label}</button>;
             })}
           </div>
-          <button className="icon-btn" onClick={toggleMute}>{muted?"🔇":"🔊"}</button>
+          <div style={{display:"flex",gap:5}}>
+            <button className="icon-btn" onClick={toggleMute}>{muted?"🔇":"🔊"}</button>
+            <button className="icon-btn" onClick={onSwitchProfile} title="Switch profile">👥</button>
+          </div>
         </div>
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:14,marginBottom:4}}>
           <div style={{position:"relative",cursor:"pointer"}} onClick={onEditAvatar}>
@@ -1058,6 +1061,7 @@ function AvatarBuilder({avatar,onSave,onBack,sounds}){
 /* ─── Difficulty Picker ─────────────────────────────────────────────────── */
 function DifficultyPicker({subject, defaultLevel, onStart, onBack, sounds, progress}){
   const s=SUBJECTS.find(x=>x.id===subject);
+  if(!s)return null;
   const [sel,setSel]=useState(defaultLevel||"medium");
   const levels=["easy","medium","hard"];
   const subjectProgress=progress[subject]||{};
@@ -1127,6 +1131,7 @@ const clampWord="clamp(22px,6vw,34px)";
 
 function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
   const s=SUBJECTS.find(x=>x.id===subjectId);
+  if(!s)return null;
   const isSpelling=subjectId==="spelling";
   const isGaps=subjectId==="gaps";
   const d=DIFFICULTY[level]||DIFFICULTY.medium;
