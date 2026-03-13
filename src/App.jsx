@@ -1,4 +1,21 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Component } from "react";
+
+class ErrorBoundary extends Component{
+  constructor(p){super(p);this.state={err:null};}
+  static getDerivedStateFromError(e){return{err:e};}
+  componentDidCatch(e,info){console.error("BrightMind crash:",e,info);}
+  render(){
+    if(this.state.err)return(
+      <div style={{padding:24,fontFamily:"sans-serif",maxWidth:400,margin:"40px auto",background:"#FEF2F2",borderRadius:16,border:"2px solid #EF4444"}}>
+        <div style={{fontSize:24,marginBottom:8}}>⚠️ Oops!</div>
+        <div style={{fontWeight:700,marginBottom:8,color:"#7F1D1D"}}>Something went wrong</div>
+        <div style={{fontSize:13,color:"#991B1B",marginBottom:16,wordBreak:"break-all"}}>{this.state.err.message}</div>
+        <button onClick={()=>this.setState({err:null})} style={{background:"#EF4444",color:"white",border:"none",borderRadius:10,padding:"10px 20px",fontWeight:700,cursor:"pointer"}}>Try again</button>
+      </div>
+    );
+    return this.props.children;
+  }
+}
 
 const FONTS = "https://fonts.googleapis.com/css2?family=Boogaloo&family=Quicksand:wght@500;600;700&display=swap";
 
@@ -1859,7 +1876,7 @@ export default function App(){
     if(nb.length>0)nb.forEach((b,i)=>{setTimeout(()=>{sounds.badge();setToastQueue(q=>[...q,b]);},i*3400);});
   };
   return(
-    <>
+    <ErrorBoundary>
       <style>{CSS}</style>
       <JungleBg/>
       {toastQueue.length>0&&<BadgeToast badge={toastQueue[0]} onDone={()=>setToastQueue(q=>q.slice(1))}/>}
@@ -1872,6 +1889,6 @@ export default function App(){
         {screen==="times-pick"&&<TimesTablePicker onStart={t=>{setTtTable(t);setScreen("times-quiz");}} onBack={()=>{setScreen("home");setSubject(null);}} sounds={sounds} mastery={ttMastery}/>}
         {screen==="times-quiz"&&ttTable&&<TimesTableQuiz table={ttTable} onBack={()=>setScreen("times-pick")} onDone={doneTT} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
       </div>
-    </>
+    </ErrorBoundary>
   );
 }
