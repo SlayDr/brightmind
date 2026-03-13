@@ -12,6 +12,7 @@ const SUBJECTS = [
   { id:"cogat",   label:"CogAT",       emoji:"🧠", mascot:"eagle",  bg:"#F0F0FF", border:"#6366F1", btn:"#6366F1", dark:"#4338CA", desc:"Gifted test prep"  },
   { id:"spelling",label:"Spelling",    emoji:"🔤", mascot:"bee",    bg:"#FFFDE7", border:"#F59E0B", btn:"#F59E0B", dark:"#B45309", desc:"Hear it, spell it!" },
   { id:"gaps",    label:"Fill the Gap",emoji:"🧩", mascot:"hedgehog",bg:"#F3F0FF",border:"#8B5CF6", btn:"#8B5CF6", dark:"#6D28D9", desc:"Complete the words!" },
+  { id:"times",   label:"Times Tables",emoji:"✖️", mascot:"panda",   bg:"#F0FFF4", border:"#10B981", btn:"#10B981", dark:"#065F46", desc:"2× to 12× with visuals!"},
 ];
 
 const TOTAL = 20;
@@ -39,6 +40,9 @@ const ACHIEVEMENTS = [
   { id:"spelling_star",icon:"🔤", label:"Spelling Bee",    desc:"Score 15+ in Spelling!",              check:(s,h)=>(s.spelling?.best||0)>=15 },
   { id:"gaps_star",    icon:"🧩", label:"Gap Filler",      desc:"Score 15+ in Fill the Gap!",          check:(s,h)=>(s.gaps?.best||0)>=15 },
   { id:"spell_perfect",icon:"🐝", label:"Queen Bee",       desc:"Perfect score in Spelling!",          check:(s,h)=>h.spellPerfect>=1 },
+  { id:"times_first",  icon:"✖️", label:"Table Starter",   desc:"Complete your first Times Tables quiz!",check:(s,h)=>(s.times?.best||0)>0 },
+  { id:"times_star",   icon:"🌠", label:"Times Champ",     desc:"Score 15+ in Times Tables!",           check:(s,h)=>(s.times?.best||0)>=15 },
+  { id:"times_perfect",icon:"🐼", label:"Panda Perfect",   desc:"Perfect score in Times Tables!",        check:(s,h)=>h.timesPerfect>=1 },
 ];
 
 /* ─── Sound Engine ─────────────────────────────────────────────────────── */
@@ -71,6 +75,7 @@ const Mascot=({type,size=80,animate=false})=>{
   if(type==="eagle")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><path d="M10 35 Q5 20 20 25 L35 38"fill="#8B4513"/><path d="M70 35 Q75 20 60 25 L45 38"fill="#8B4513"/><ellipse cx="40"cy="46"rx="18"ry="20"fill="#6B3A10"/><circle cx="40"cy="30"r="18"fill="#8B4513"/><ellipse cx="40"cy="28"rx="12"ry="8"fill="white"/><ellipse cx="33"cy="26"rx="5"ry="6"fill="#1a1a1a"/><ellipse cx="47"cy="26"rx="5"ry="6"fill="#1a1a1a"/><circle cx="33"cy="25"r="2"fill="#FFD700"/><circle cx="47"cy="25"r="2"fill="#FFD700"/><circle cx="33"cy="25"r="1"fill="#1a1a1a"/><circle cx="47"cy="25"r="1"fill="#1a1a1a"/><path d="M35 34 L40 40 L45 34"fill="#F59E0B"/><path d="M36 36 Q40 42 44 36"stroke="#E07B00"strokeWidth="1"fill="none"/></svg>;
   if(type==="bee")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="40"cy="44"rx="16"ry="20"fill="#F59E0B"/><ellipse cx="40"cy="34"rx="10"ry="8"fill="#1a1a1a"/><rect x="28"y="40"width="24"height="5"rx="2"fill="#1a1a1a"/><rect x="28"y="49"width="24"height="5"rx="2"fill="#1a1a1a"/><rect x="28"y="58"width="24"height="4"rx="2"fill="#1a1a1a"/><ellipse cx="35"cy="31"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="45"cy="31"rx="4"ry="5"fill="#1a1a1a"/><circle cx="35"cy="30"r="2"fill="white"/><circle cx="45"cy="30"r="2"fill="white"/><path d="M26 38 Q14 28 18 18"stroke="#D1FAE5"strokeWidth="8"fill="none"strokeLinecap="round"opacity="0.8"/><path d="M54 38 Q66 28 62 18"stroke="#D1FAE5"strokeWidth="8"fill="none"strokeLinecap="round"opacity="0.8"/><ellipse cx="40"cy="26"rx="6"ry="4"fill="#1a1a1a"/><path d="M38 22 L40 16 L42 22"fill="#1a1a1a"/></svg>;
   if(type==="hedgehog")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="40"cy="52"rx="24"ry="18"fill="#92400E"/>{[{x:26,y:28},{x:32,y:22},{x:40,y:20},{x:48,y:22},{x:54,y:28},{x:22,y:36},{x:58,y:36},{x:28,y:42},{x:52,y:42}].map((p,i)=><ellipse key={i}cx={p.x}cy={p.y}rx="3"ry="7"fill="#1a1a1a"transform={`rotate(${(p.x-40)*2} ${p.x} ${p.y})`}/>)}<ellipse cx="40"cy="48"rx="18"ry="14"fill="#D97706"/><ellipse cx="32"cy="44"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="48"cy="44"rx="4"ry="5"fill="#1a1a1a"/><circle cx="32"cy="43"r="1.5"fill="white"/><circle cx="48"cy="43"r="1.5"fill="white"/><ellipse cx="40"cy="50"rx="5"ry="3.5"fill="#92400E"/><path d="M36 52 Q40 56 44 52"stroke="#92400E"strokeWidth="1.5"fill="none"strokeLinecap="round"/></svg>;
+  if(type==="panda")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><circle cx="40"cy="40"r="24"fill="white"/><ellipse cx="28"cy="22"rx="10"ry="10"fill="#1a1a1a"/><ellipse cx="52"cy="22"rx="10"ry="10"fill="#1a1a1a"/><ellipse cx="32"cy="36"rx="7"ry="8"fill="#1a1a1a"/><ellipse cx="48"cy="36"rx="7"ry="8"fill="#1a1a1a"/><circle cx="32"cy="35"r="3"fill="white"/><circle cx="48"cy="35"r="3"fill="white"/><circle cx="32"cy="35"r="1.5"fill="#1a1a1a"/><circle cx="48"cy="35"r="1.5"fill="#1a1a1a"/><ellipse cx="40"cy="46"rx="7"ry="5"fill="#f9a8d4"/><path d="M35 48 Q40 53 45 48"stroke="#1a1a1a"strokeWidth="1.5"fill="none"strokeLinecap="round"/><ellipse cx="20"cy="48"rx="9"ry="8"fill="#1a1a1a"/><ellipse cx="60"cy="48"rx="9"ry="8"fill="#1a1a1a"/></svg>;
   return<span style={{fontSize:size*0.6}}>🐾</span>;
 };
 
@@ -523,6 +528,27 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 .stat-box{background:#F0FDF4;border-radius:14px;padding:11px;text-align:center}
 .stat-num{font-family:'Boogaloo',cursive;font-size:26px;color:#16a34a}
 .stat-label{font-size:10px;font-weight:800;color:#6b7280}
+
+/* ── Times Tables ── */
+.tt-table-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+@media(min-width:400px){.tt-table-grid{grid-template-columns:repeat(6,1fr)}}
+.tt-table-btn{border-radius:14px;padding:10px 4px;font-family:'Boogaloo',cursive;font-size:18px;border:3px solid #10B981;background:white;color:#065F46;cursor:pointer;transition:all 0.15s;text-align:center;touch-action:manipulation;min-height:52px}
+.tt-table-btn.selected{background:#10B981;color:white;transform:scale(1.06)}
+.tt-table-btn:active{transform:scale(0.95)}
+.tt-table-btn.mastered{border-color:#F6A800;background:#FFFBEB}
+.tt-visual{border-radius:16px;padding:12px;margin:10px 0;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2.5px solid #10B981;background:#F0FFF4}
+.tt-visual-label{font-size:10px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.tt-dot-row{display:flex;gap:4px;margin:2px 0;flex-wrap:wrap;justify-content:center}
+.tt-dot{width:14px;height:14px;border-radius:50%;background:#10B981;display:inline-block;transition:transform 0.2s}
+.tt-nl-wrap{width:100%;overflow-x:auto;padding:4px 0}
+.tt-nl-track{display:flex;align-items:center;gap:0;position:relative;padding:0 8px}
+.tt-nl-seg{display:flex;flex-direction:column;align-items:center}
+.tt-nl-hop{width:36px;height:20px;border-top:3px solid #10B981;border-radius:50% 50% 0 0;margin-bottom:2px}
+.tt-nl-line{height:4px;background:#10B981;flex:1;min-width:20px}
+.tt-nl-num{font-size:10px;font-weight:800;color:#065F46;margin-top:2px}
+.tt-array-wrap{display:flex;flex-direction:column;gap:3px;align-items:center}
+.tt-array-row{display:flex;gap:3px}
+.tt-array-cell{font-size:clamp(12px,3vw,18px);line-height:1}
 `;
 
 /* ─── Home ─────────────────────────────────────────────────────────────── */
@@ -878,15 +904,293 @@ function Results({score,total,subject:s,onBack,onRetry,sounds}){
   );
 }
 
+/* ─── Times Tables ──────────────────────────────────────────────────────── */
+const TIMES_EMOJIS=["🐼","🦁","🐸","🌟","🍕","🚀","🎈","🦋","🐠","🍎","⚽","🎯"];
+const TT_QUESTIONS_PER_SESSION=20;
+
+function DotGrid({a,b}){
+  const rows=Math.min(a,12),cols=Math.min(b,12);
+  return(
+    <div className="tt-visual">
+      <div className="tt-visual-label">🟢 {a} rows of {b} dots = {a*b}</div>
+      <div>{Array.from({length:rows}).map((_,r)=>(
+        <div key={r} className="tt-dot-row">
+          {Array.from({length:cols}).map((_,c)=>(
+            <div key={c} className="tt-dot" style={{animationDelay:`${(r*cols+c)*0.03}s`}}/>
+          ))}
+        </div>
+      ))}</div>
+    </div>
+  );
+}
+
+function NumberLine({a,b}){
+  const product=a*b;
+  const steps=Math.min(a,8);
+  const stepSize=b;
+  const points=Array.from({length:steps+1},(_,i)=>i*stepSize);
+  return(
+    <div className="tt-visual">
+      <div className="tt-visual-label">📏 Hop by {b}, {a} times = {product}</div>
+      <div className="tt-nl-wrap">
+        <div className="tt-nl-track">
+          {points.map((p,i)=>(
+            <div key={i} className="tt-nl-seg">
+              {i>0&&<div className="tt-nl-hop" style={{borderColor:i<=steps?"#10B981":"#d1fae5"}}/>}
+              {i===0&&<div style={{height:20}}/>}
+              <div style={{width:i<points.length-1?36:4,height:4,background:i<steps?"#10B981":"#d1fae5",borderRadius:99}}/>
+              <div className="tt-nl-num" style={{color:i===steps?"#F6A800":"#065F46",fontWeight:i===steps?900:700}}>{p}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ArrayViz({a,b}){
+  const rows=Math.min(a,8),cols=Math.min(b,8);
+  const emoji=TIMES_EMOJIS[(a+b)%TIMES_EMOJIS.length];
+  return(
+    <div className="tt-visual">
+      <div className="tt-visual-label">🎯 {a}×{b} array = {a*b} {emoji}</div>
+      <div className="tt-array-wrap">
+        {Array.from({length:rows}).map((_,r)=>(
+          <div key={r} className="tt-array-row">
+            {Array.from({length:cols}).map((_,c)=>(
+              <span key={c} className="tt-array-cell">{emoji}</span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Visual({a,b,type}){
+  if(type==="dot")return<DotGrid a={a} b={b}/>;
+  if(type==="line")return<NumberLine a={a} b={b}/>;
+  return<ArrayViz a={a} b={b}/>;
+}
+
+function TimesTablePicker({onStart,onBack,sounds,mastery}){
+  const [selected,setSelected]=useState(null);
+  const tables=Array.from({length:11},(_,i)=>i+2); // 2–12
+  return(
+    <div>
+      <div className="topbar">
+        <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Home</button>
+        <div className="topbar-label" style={{color:"#10B981"}}>✖️ Times Tables</div>
+      </div>
+      <div style={{background:"white",borderRadius:20,padding:"16px",marginBottom:12,boxShadow:"0 4px 20px rgba(0,0,0,0.07)"}}>
+        <div style={{textAlign:"center",marginBottom:10}}>
+          <Mascot type="panda" size={56} animate/>
+          <div style={{fontFamily:"'Boogaloo',cursive",fontSize:20,color:"#065F46",marginTop:6}}>Pick a times table!</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#6b7280"}}>Then practice all 20 questions with cool visuals</div>
+        </div>
+        <div className="tt-table-grid">
+          {tables.map(t=>{
+            const m=mastery[t]||0;
+            const isMastered=m>=20;
+            return(
+              <button key={t}
+                className={`tt-table-btn${selected===t?" selected":""}${isMastered?" mastered":""}`}
+                onClick={()=>{sounds.tap();setSelected(t);}}
+              >
+                {t}×
+                {isMastered&&<div style={{fontSize:9,fontWeight:900,color:selected===t?"white":"#F6A800"}}>⭐</div>}
+              </button>
+            );
+          })}
+        </div>
+        {selected&&(
+          <div style={{textAlign:"center",marginTop:4}}>
+            <div style={{fontSize:13,fontWeight:700,color:"#6b7280",marginBottom:10}}>
+              The <strong style={{color:"#10B981"}}>{selected}× table</strong> — ready? Let's go!
+            </div>
+            <button className="next-btn" style={{background:"#10B981",maxWidth:260,margin:"0 auto",display:"block"}}
+              onClick={()=>{sounds.tap();onStart(selected);}}>
+              Start {selected}× table! 🐼
+            </button>
+          </div>
+        )}
+        {!selected&&<div style={{textAlign:"center",fontSize:13,fontWeight:700,color:"#9ca3af",marginTop:4}}>Tap a table above to begin</div>}
+      </div>
+      <div style={{background:"white",borderRadius:16,padding:"12px 14px",boxShadow:"0 2px 10px rgba(0,0,0,0.05)"}}>
+        <div style={{fontFamily:"'Boogaloo',cursive",fontSize:16,color:"#065F46",marginBottom:8}}>📊 Your Mastery</div>
+        {tables.map(t=>{
+          const m=mastery[t]||0;
+          const pct=Math.round((m/20)*100);
+          return(
+            <div key={t} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0"}}>
+              <div style={{width:28,fontFamily:"'Boogaloo',cursive",fontSize:14,color:"#10B981"}}>{t}×</div>
+              <div style={{flex:1,height:7,background:"#f3f4f6",borderRadius:99,overflow:"hidden"}}>
+                <div style={{width:`${pct}%`,height:"100%",background:pct===100?"#F6A800":"#10B981",borderRadius:99,transition:"width 0.5s"}}/>
+              </div>
+              <div style={{width:36,fontSize:10,fontWeight:800,color:"#6b7280",textAlign:"right"}}>{pct===100?"⭐":pct+"%"}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const VISUAL_TYPES=["dot","line","array"];
+
+function TimesTableQuiz({table,onBack,onDone,sounds,muted,toggleMute}){
+  // Generate 20 questions: all 12 facts × some repeated, shuffled
+  const buildQs=useCallback(()=>{
+    const all=Array.from({length:12},(_,i)=>({a:table,b:i+1,answer:table*(i+1)}));
+    const extra=Array.from({length:8},()=>all[Math.floor(Math.random()*12)]);
+    return [...all,...extra].sort(()=>Math.random()-0.5).slice(0,TT_QUESTIONS_PER_SESSION).map((q,i)=>({
+      ...q,
+      visualType:VISUAL_TYPES[i%3],
+      options:shuffle4(q.answer,table),
+    }));
+  },[table]);
+
+  function shuffle4(correct,tbl){
+    const wrongs=new Set();
+    while(wrongs.size<3){
+      const b=Math.floor(Math.random()*12)+1;
+      const w=tbl*b;
+      if(w!==correct)wrongs.add(w);
+    }
+    return [...wrongs,correct].sort(()=>Math.random()-0.5);
+  }
+
+  const [qs]=useState(buildQs);
+  const [idx,setIdx]=useState(0);
+  const [sel,setSel]=useState(null);
+  const [score,setScore]=useState(0);
+  const [done,setDone]=useState(false);
+  const [confetti,setConfetti]=useState(false);
+  const [streak,setStreak]=useState(0);
+  const [showVisual,setShowVisual]=useState(true);
+
+  const cur=qs[idx];
+  const correct=sel===cur?.answer;
+
+  const pick=(opt)=>{
+    if(sel!==null)return;
+    setSel(opt);
+    if(opt===cur.answer){
+      setScore(n=>n+1);setStreak(s=>s+1);
+      setConfetti(true);setTimeout(()=>setConfetti(false),1200);sounds.correct();
+    }else{setStreak(0);sounds.wrong();}
+  };
+
+  const next=()=>{
+    sounds.tap();
+    if(idx+1>=TT_QUESTIONS_PER_SESSION){onDone(score);setDone(true);}
+    else{setIdx(i=>i+1);setSel(null);setShowVisual(true);}
+  };
+
+  if(done){
+    const pct=score/TT_QUESTIONS_PER_SESSION;
+    const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
+    const msgs=["Keep practising! 💪","Good try! 🌱","Great work! 🌟","Table master! 🏆"];
+    return(
+      <div>
+        <div className="topbar">
+          <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Tables</button>
+          <div className="topbar-label" style={{color:"#10B981"}}>✖️ {table}× Table</div>
+        </div>
+        <div className="results">
+          <Mascot type="panda" size={76} animate/>
+          <div className="results-title" style={{color:"#10B981"}}>{table}× done!</div>
+          <Stars count={stars} max={3} size={30}/>
+          <div className="results-score" style={{color:"#10B981"}}>{score}/{TT_QUESTIONS_PER_SESSION}</div>
+          <div className="results-msg">{msgs[stars]}</div>
+          <div style={{background:"#F0FFF4",borderRadius:14,padding:"12px 16px",margin:"10px 0",textAlign:"left"}}>
+            <div style={{fontFamily:"'Boogaloo',cursive",fontSize:15,color:"#065F46",marginBottom:8}}>📋 {table}× Table</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"3px 16px"}}>
+              {Array.from({length:12},(_,i)=>(
+                <div key={i} style={{fontSize:13,fontWeight:700,color:"#065F46"}}>{table} × {i+1} = <strong style={{color:"#10B981"}}>{table*(i+1)}</strong></div>
+              ))}
+            </div>
+          </div>
+          <div className="results-btns">
+            <button className="res-btn" style={{background:"#10B981"}} onClick={()=>{sounds.tap();onBack();}}>Try another! 🔄</button>
+            <button className="res-btn" style={{background:"#6b7280"}} onClick={()=>{sounds.tap();onBack();}}>Home 🏠</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return(
+    <div>
+      <Confetti active={confetti}/>
+      <div className="topbar">
+        <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Tables</button>
+        <div className="topbar-label" style={{color:"#10B981"}}>✖️ {table}× Table</div>
+        <div className="score-chip" style={{color:"#10B981"}}>{score} ⭐</div>
+        <button className="icon-btn" onClick={toggleMute}>{muted?"🔇":"🔊"}</button>
+      </div>
+      <div className="prog-row">
+        {Array.from({length:TT_QUESTIONS_PER_SESSION}).map((_,i)=>(
+          <div key={i} className={`prog-dot ${i<idx?"done":i===idx?"active":""}`} style={i===idx?{background:"#10B981"}:{}}/>
+        ))}
+        <div className="prog-track"><div className="prog-fill" style={{width:`${(idx/TT_QUESTIONS_PER_SESSION)*100}%`,background:"#10B981"}}/></div>
+        <span style={{fontSize:10,fontWeight:800,color:"#9ca3af"}}>{idx+1}/{TT_QUESTIONS_PER_SESSION}</span>
+      </div>
+      {streak>=3&&sel===null&&<div className="streak-banner">🔥 {streak} in a row! You're on fire!</div>}
+      <div className="q-wrap" key={idx}>
+        <div className="q-card" style={{borderColor:"#10B981"}}>
+          <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:6}}>
+            <Mascot type="panda" size={38} animate={sel!==null&&correct}/>
+            <div style={{flex:1}}>
+              <div style={{fontSize:9,fontWeight:800,color:"#9ca3af",letterSpacing:".06em",textTransform:"uppercase"}}>Question {idx+1} of {TT_QUESTIONS_PER_SESSION}</div>
+              <div style={{fontFamily:"'Boogaloo',cursive",fontSize:clamp(18,5,26),color:"#065F46"}}>{table}× Table</div>
+            </div>
+            <button onClick={()=>setShowVisual(v=>!v)} style={{background:"#F0FFF4",border:"2px solid #10B981",borderRadius:10,padding:"5px 10px",fontSize:11,fontWeight:800,color:"#065F46",cursor:"pointer"}}>
+              {showVisual?"Hide visual":"Show visual"}
+            </button>
+          </div>
+          {showVisual&&sel===null&&<Visual a={Math.min(cur.a,8)} b={Math.min(cur.b,8)} type={cur.visualType}/>}
+          {sel!==null&&correct&&<Visual a={Math.min(cur.a,8)} b={Math.min(cur.b,8)} type={cur.visualType}/>}
+          <div style={{fontSize:clamp(22,6,32),fontWeight:900,color:"#111",margin:"10px 0 4px",textAlign:"center",fontFamily:"'Boogaloo',cursive"}}>
+            {cur.a} × {cur.b} = ?
+          </div>
+          <div className="options">
+            {cur.options.map(opt=>{
+              let cls="opt opt-default";
+              if(sel!==null){if(opt===cur.answer)cls="opt opt-correct";else if(opt===sel)cls="opt opt-wrong";}
+              return<button key={opt} className={cls} disabled={sel!==null} onClick={()=>pick(opt)} style={sel===null?{borderColor:"#10B98166",fontSize:"clamp(16px,4vw,22px)",fontFamily:"'Boogaloo',cursive"}:{fontSize:"clamp(16px,4vw,22px)",fontFamily:"'Boogaloo',cursive"}}>{opt}</button>;
+            })}
+          </div>
+          {sel!==null&&(
+            <>
+              <div className={`feedback ${correct?"fb-correct":"fb-wrong"}`}>
+                {correct?`✅ ${cur.a} × ${cur.b} = ${cur.answer}! ${["Amazing!","Brilliant!","Nailed it!","Super!","Yes!"][Math.floor(Math.random()*5)]}`:`❌ ${cur.a} × ${cur.b} = ${cur.answer}`}
+              </div>
+              <button className="next-btn" style={{background:"#10B981"}} onClick={next}>
+                {idx+1>=TT_QUESTIONS_PER_SESSION?"See my results! 🎉":"Next question →"}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// tiny helper used inline in TimesTableQuiz
+function clamp(min,vw,max){return`clamp(${min}px,${vw}vw,${max}px)`;}
+
 /* ─── Root ─────────────────────────────────────────────────────────────── */
 export default function App(){
   const [screen,setScreen]=useState("home");
   const [subject,setSubject]=useState(null);
+  const [ttTable,setTtTable]=useState(null); // which times table is active
   const [muted,setMuted]=useState(false);
   const [tab,setTab]=useState(0);
   const [toastQueue,setToastQueue]=useState([]);
+  const [ttMastery,setTtMastery]=useState({}); // {2: bestScore, 3: bestScore, ...}
   const [progress,setProgress]=useState(()=>{const p={};SUBJECTS.forEach(s=>{p[s.id]={stars:0,best:0};});return p;});
-  const [history,setHistory]=useState({total:0,perfectScores:0,bestStreak:0,improvements:0});
+  const [history,setHistory]=useState({total:0,perfectScores:0,bestStreak:0,improvements:0,spellPerfect:0,timesPerfect:0});
   const [earned,setEarned]=useState([]);
 
   const rawSounds=useRef(null);
@@ -908,7 +1212,25 @@ export default function App(){
     const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
     const oldBest=progress[subject]?.best||0;
     const newProgress={...progress,[subject]:{stars:Math.max(progress[subject].stars,stars),best:Math.max(oldBest,score)}};
-    const newHistory={total:history.total+1,perfectScores:history.perfectScores+(score===TOTAL?1:0),bestStreak:Math.max(history.bestStreak,streak||0),improvements:history.improvements+(score>oldBest&&oldBest>0?1:0),spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0)};
+    const newHistory={total:history.total+1,perfectScores:history.perfectScores+(score===TOTAL?1:0),bestStreak:Math.max(history.bestStreak,streak||0),improvements:history.improvements+(score>oldBest&&oldBest>0?1:0),spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0),timesPerfect:history.timesPerfect||0};
+    setProgress(newProgress);setHistory(newHistory);
+    const newBadges=checkAchievements(newProgress,newHistory,earned);
+    if(newBadges.length>0){
+      const newEarned=[...earned,...newBadges.map(b=>b.id)];
+      setEarned(newEarned);
+      newBadges.forEach((b,i)=>{setTimeout(()=>{sounds.badge();setToastQueue(q=>[...q,b]);},i*3400);});
+    }
+  };
+
+  const doneTimesTable=(score)=>{
+    const oldBest=ttMastery[ttTable]||0;
+    const newMastery={...ttMastery,[ttTable]:Math.max(oldBest,score)};
+    setTtMastery(newMastery);
+    const pct=score/TT_QUESTIONS_PER_SESSION;
+    const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
+    const oldTimesProgress=progress.times||{stars:0,best:0};
+    const newProgress={...progress,times:{stars:Math.max(oldTimesProgress.stars,stars),best:Math.max(oldTimesProgress.best,score)}};
+    const newHistory={...history,total:history.total+1,timesPerfect:(history.timesPerfect||0)+(score===TT_QUESTIONS_PER_SESSION?1:0)};
     setProgress(newProgress);setHistory(newHistory);
     const newBadges=checkAchievements(newProgress,newHistory,earned);
     if(newBadges.length>0){
@@ -924,8 +1246,23 @@ export default function App(){
       <JungleBg/>
       {toastQueue.length>0&&<BadgeToast badge={toastQueue[0]} onDone={()=>setToastQueue(q=>q.slice(1))}/>}
       <div className="app">
-        {screen==="home"&&<Home progress={progress} history={history} earned={earned} onSelect={id=>{setSubject(id);setScreen("quiz");}} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)} tab={tab} setTab={setTab}/>}
+        {screen==="home"&&<Home progress={progress} history={history} earned={earned}
+          onSelect={id=>{
+            sounds.tap();
+            if(id==="times"){setScreen("times-pick");setSubject("times");}
+            else{setSubject(id);setScreen("quiz");}
+          }}
+          sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)} tab={tab} setTab={setTab}/>}
         {screen==="quiz"&&subject&&<Quiz subjectId={subject} onBack={()=>{setScreen("home");setSubject(null);}} onDone={done} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
+        {screen==="times-pick"&&<TimesTablePicker
+          onStart={t=>{setTtTable(t);setScreen("times-quiz");}}
+          onBack={()=>{setScreen("home");setSubject(null);}}
+          sounds={sounds} mastery={ttMastery}/>}
+        {screen==="times-quiz"&&ttTable&&<TimesTableQuiz
+          table={ttTable}
+          onBack={()=>setScreen("times-pick")}
+          onDone={doneTimesTable}
+          sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
       </div>
     </>
   );
