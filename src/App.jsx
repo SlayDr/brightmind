@@ -13,6 +13,8 @@ const SUBJECTS = [
   { id:"spelling",label:"Spelling",    emoji:"🔤", mascot:"bee",    bg:"#FFFDE7", border:"#F59E0B", btn:"#F59E0B", dark:"#B45309", desc:"Hear it, spell it!" },
   { id:"gaps",    label:"Fill the Gap",emoji:"🧩", mascot:"hedgehog",bg:"#F3F0FF",border:"#8B5CF6", btn:"#8B5CF6", dark:"#6D28D9", desc:"Complete the words!" },
   { id:"times",   label:"Times Tables",emoji:"✖️", mascot:"panda",   bg:"#F0FFF4", border:"#10B981", btn:"#10B981", dark:"#065F46", desc:"2× to 12× with visuals!"},
+  { id:"science", label:"Science",     emoji:"🔬", mascot:"rabbit",  bg:"#F0FFFE", border:"#06B6D4", btn:"#06B6D4", dark:"#0e7490", desc:"Explore the world!"   },
+  { id:"social",  label:"Social Studies",emoji:"🌍",mascot:"giraffe", bg:"#FFF8F0", border:"#F97316", btn:"#F97316", dark:"#c2410c", desc:"People & places!"     },
 ];
 
 const TOTAL = 20;
@@ -29,7 +31,7 @@ const ACHIEVEMENTS = [
   { id:"first_quiz",   icon:"🎯", label:"First Steps",     desc:"Complete your first quiz!",           check:(s,h)=>h.total>=1 },
   { id:"perfect",      icon:"💯", label:"Perfect Score!",  desc:"Get 20/20 on any quiz!",              check:(s,h)=>h.perfectScores>=1 },
   { id:"hat_trick",    icon:"🎩", label:"Hat Trick",       desc:"Get 3 stars on any subject!",         check:(s,h)=>Object.values(s).some(x=>x.stars===3) },
-  { id:"all_subjects", icon:"🌍", label:"Explorer",        desc:"Try all 9 subjects!",                 check:(s,h)=>Object.values(s).filter(x=>x.best>0).length===9 },
+  { id:"all_subjects", icon:"🌍", label:"Explorer",        desc:"Try all 12 subjects!",                check:(s,h)=>Object.values(s).filter(x=>x.best>0).length===12 },
   { id:"ten_quizzes",  icon:"🏃", label:"Marathoner",      desc:"Complete 10 quizzes!",                check:(s,h)=>h.total>=10 },
   { id:"maths_star",   icon:"🔢", label:"Maths Wizard",    desc:"Score 15+ in Maths!",                 check:(s,h)=>(s.maths?.best||0)>=15 },
   { id:"english_star", icon:"✏️",  label:"Word Master",     desc:"Score 15+ in English!",               check:(s,h)=>(s.english?.best||0)>=15 },
@@ -50,6 +52,9 @@ const ACHIEVEMENTS = [
   { id:"times_first",  icon:"✖️", label:"Table Starter",   desc:"Complete your first Times Tables quiz!",check:(s,h)=>(s.times?.best||0)>0 },
   { id:"times_star",   icon:"🌠", label:"Times Champ",     desc:"Score 15+ in Times Tables!",           check:(s,h)=>(s.times?.best||0)>=15 },
   { id:"times_perfect",icon:"🐼", label:"Panda Perfect",   desc:"Perfect score in Times Tables!",        check:(s,h)=>h.timesPerfect>=1 },
+  { id:"science_star", icon:"🔬", label:"Science Whiz",    desc:"Score 15+ in Science!",                 check:(s,h)=>(s.science?.best||0)>=15 },
+  { id:"social_star",  icon:"🌍", label:"World Explorer",  desc:"Score 15+ in Social Studies!",          check:(s,h)=>(s.social?.best||0)>=15 },
+  { id:"all_stars",    icon:"🌟", label:"All-Star",        desc:"3 stars on ALL subjects!",              check:(s,h)=>Object.keys(s).length===12&&Object.values(s).every(x=>x.stars===3) },
 ];
 
 /* ─── Sound Engine ─────────────────────────────────────────────────────── */
@@ -83,6 +88,8 @@ const Mascot=({type,size=80,animate=false})=>{
   if(type==="bee")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="40"cy="44"rx="16"ry="20"fill="#F59E0B"/><ellipse cx="40"cy="34"rx="10"ry="8"fill="#1a1a1a"/><rect x="28"y="40"width="24"height="5"rx="2"fill="#1a1a1a"/><rect x="28"y="49"width="24"height="5"rx="2"fill="#1a1a1a"/><rect x="28"y="58"width="24"height="4"rx="2"fill="#1a1a1a"/><ellipse cx="35"cy="31"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="45"cy="31"rx="4"ry="5"fill="#1a1a1a"/><circle cx="35"cy="30"r="2"fill="white"/><circle cx="45"cy="30"r="2"fill="white"/><path d="M26 38 Q14 28 18 18"stroke="#D1FAE5"strokeWidth="8"fill="none"strokeLinecap="round"opacity="0.8"/><path d="M54 38 Q66 28 62 18"stroke="#D1FAE5"strokeWidth="8"fill="none"strokeLinecap="round"opacity="0.8"/><ellipse cx="40"cy="26"rx="6"ry="4"fill="#1a1a1a"/><path d="M38 22 L40 16 L42 22"fill="#1a1a1a"/></svg>;
   if(type==="hedgehog")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="40"cy="52"rx="24"ry="18"fill="#92400E"/>{[{x:26,y:28},{x:32,y:22},{x:40,y:20},{x:48,y:22},{x:54,y:28},{x:22,y:36},{x:58,y:36},{x:28,y:42},{x:52,y:42}].map((p,i)=><ellipse key={i}cx={p.x}cy={p.y}rx="3"ry="7"fill="#1a1a1a"transform={`rotate(${(p.x-40)*2} ${p.x} ${p.y})`}/>)}<ellipse cx="40"cy="48"rx="18"ry="14"fill="#D97706"/><ellipse cx="32"cy="44"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="48"cy="44"rx="4"ry="5"fill="#1a1a1a"/><circle cx="32"cy="43"r="1.5"fill="white"/><circle cx="48"cy="43"r="1.5"fill="white"/><ellipse cx="40"cy="50"rx="5"ry="3.5"fill="#92400E"/><path d="M36 52 Q40 56 44 52"stroke="#92400E"strokeWidth="1.5"fill="none"strokeLinecap="round"/></svg>;
   if(type==="panda")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><circle cx="40"cy="40"r="24"fill="white"/><ellipse cx="28"cy="22"rx="10"ry="10"fill="#1a1a1a"/><ellipse cx="52"cy="22"rx="10"ry="10"fill="#1a1a1a"/><ellipse cx="32"cy="36"rx="7"ry="8"fill="#1a1a1a"/><ellipse cx="48"cy="36"rx="7"ry="8"fill="#1a1a1a"/><circle cx="32"cy="35"r="3"fill="white"/><circle cx="48"cy="35"r="3"fill="white"/><circle cx="32"cy="35"r="1.5"fill="#1a1a1a"/><circle cx="48"cy="35"r="1.5"fill="#1a1a1a"/><ellipse cx="40"cy="46"rx="7"ry="5"fill="#f9a8d4"/><path d="M35 48 Q40 53 45 48"stroke="#1a1a1a"strokeWidth="1.5"fill="none"strokeLinecap="round"/><ellipse cx="20"cy="48"rx="9"ry="8"fill="#1a1a1a"/><ellipse cx="60"cy="48"rx="9"ry="8"fill="#1a1a1a"/></svg>;
+  if(type==="rabbit")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="30"cy="18"rx="7"ry="18"fill="#e5e7eb"/><ellipse cx="50"cy="18"rx="7"ry="18"fill="#e5e7eb"/><ellipse cx="30"cy="18"rx="4"ry="14"fill="#f9a8d4"/><ellipse cx="50"cy="18"rx="4"ry="14"fill="#f9a8d4"/><circle cx="40"cy="44"r="22"fill="#f3f4f6"/><ellipse cx="32"cy="40"rx="5"ry="6"fill="#1a1a1a"/><ellipse cx="48"cy="40"rx="5"ry="6"fill="#1a1a1a"/><circle cx="32"cy="39"r="2"fill="white"/><circle cx="48"cy="39"r="2"fill="white"/><ellipse cx="40"cy="48"rx="5"ry="3"fill="#f9a8d4"/><path d="M35 50 Q40 55 45 50"stroke="#9ca3af"strokeWidth="1.5"fill="none"strokeLinecap="round"/><ellipse cx="19"cy="50"rx="9"ry="7"fill="#f3f4f6"/><ellipse cx="61"cy="50"rx="9"ry="7"fill="#f3f4f6"/></svg>;
+  if(type==="giraffe")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><rect x="35"y="4"width="10"height="32"rx="5"fill="#F59E0B"/><ellipse cx="40"cy="46"rx="18"ry="20"fill="#F59E0B"/>{[[35,4],[45,4]].map(([x,y],i)=><g key={i}><rect x={x-2}y={y-6}width="4"height="8"rx="2"fill="#92400E"/><circle cx={x}cy={y-6}r="3"fill="#92400E"/></g>)}<circle cx="40"cy="20"r="12"fill="#FBBF24"/><ellipse cx="34"cy="18"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="46"cy="18"rx="4"ry="5"fill="#1a1a1a"/><circle cx="34"cy="17"r="1.5"fill="white"/><circle cx="46"cy="17"r="1.5"fill="white"/><ellipse cx="40"cy="24"rx="4"ry="3"fill="#F97316"/><path d="M36 26 Q40 30 44 26"stroke="#92400E"strokeWidth="1.5"fill="none"strokeLinecap="round"/>{[[28,35],[38,30],[48,38],[32,45],[46,42]].map(([x,y],i)=><ellipse key={i}cx={x}cy={y}rx="4"ry="3"fill="#92400E"opacity="0.6"/>)}</svg>;
   return<span style={{fontSize:size*0.6}}>🐾</span>;
 };
 
@@ -400,6 +407,80 @@ const BANK = {
     {level:"hard",type:"word",q:"Complete the word:\nsp _ der",display:"sp _ der",options:["a","e","i","o"],answer:"i",hint:"It has 8 legs and spins webs! sp_i_der"},
     {level:"hard",type:"word",q:"Complete the word:\nch _ ir",display:"ch _ ir",options:["a","e","i","o"],answer:"a",hint:"You sit on it! ch_a_ir"},
   ],
+
+  /* ── SCIENCE ─────────────────────────────────────────────────────────── */
+  science:[
+    // ── EASY: Animals & Plants ──
+    {level:"easy",q:"What do plants need to grow? 🌱",options:["Milk","Sunlight","Darkness","Sand"],answer:"Sunlight",hint:"Plants make food using sunlight!"},
+    {level:"easy",q:"Which animal is a mammal? 🐾",options:["Frog","Eagle","Dog","Shark"],answer:"Dog",hint:"Mammals have fur and feed babies milk!"},
+    {level:"easy",q:"What do caterpillars turn into? 🦋",options:["Bees","Beetles","Butterflies","Ants"],answer:"Butterflies",hint:"It's called metamorphosis!"},
+    {level:"easy",q:"Where do fish live? 🐟",options:["In trees","Underground","In water","In the sky"],answer:"In water",hint:"Fish breathe through gills underwater!"},
+    {level:"easy",q:"What do bees collect from flowers? 🍯",options:["Water","Pollen & nectar","Leaves","Dirt"],answer:"Pollen & nectar",hint:"Bees use nectar to make honey!"},
+    {level:"easy",q:"Which part of the plant is underground? 🌿",options:["Leaves","Flowers","Roots","Stem"],answer:"Roots",hint:"Roots drink up water from the soil!"},
+    {level:"easy",q:"What do frogs start life as? 🐸",options:["Caterpillars","Tadpoles","Chicks","Larvae"],answer:"Tadpoles",hint:"Tadpoles swim in water before growing legs!"},
+    {level:"easy",q:"Which season comes after Winter? ❄️",options:["Summer","Autumn","Spring","Monsoon"],answer:"Spring",hint:"Spring brings flowers after winter cold!"},
+    {level:"easy",q:"What organ pumps blood around your body? ❤️",options:["Brain","Lungs","Heart","Stomach"],answer:"Heart",hint:"Your heart beats about 100,000 times a day!"},
+    {level:"easy",q:"Which planet do we live on? 🌍",options:["Mars","Jupiter","Venus","Earth"],answer:"Earth",hint:"The third planet from the Sun!"},
+    // ── MEDIUM: Body, Weather, Space ──
+    {level:"medium",q:"What is the largest organ in the human body? 🧬",options:["Heart","Brain","Liver","Skin"],answer:"Skin",hint:"It covers your entire body!"},
+    {level:"medium",q:"What gas do plants release during photosynthesis? 🌿",options:["Carbon dioxide","Nitrogen","Oxygen","Hydrogen"],answer:"Oxygen",hint:"Plants breathe in CO₂ and breathe out what we need!"},
+    {level:"medium",q:"What causes thunder during a storm? ⛈️",options:["Clouds crashing","Wind speed","Lightning heating air rapidly","Rain falling hard"],answer:"Lightning heating air rapidly",hint:"Lightning superheats the air so fast it creates a shockwave!"},
+    {level:"medium",q:"How many bones are in the adult human body?",options:["106","206","306","406"],answer:"206",hint:"Babies have about 270 — some fuse together as you grow!"},
+    {level:"medium",q:"What is the closest star to Earth? ☀️",options:["Sirius","Polaris","Alpha Centauri","The Sun"],answer:"The Sun",hint:"It's only 93 million miles away — our nearest star!"},
+    {level:"medium",q:"Which force pulls objects towards Earth? 🍎",options:["Magnetism","Friction","Gravity","Electricity"],answer:"Gravity",hint:"Isaac Newton observed this when an apple fell!"},
+    {level:"medium",q:"What are clouds made of? ☁️",options:["Cotton","Smoke","Tiny water droplets","Dust"],answer:"Tiny water droplets",hint:"Clouds form when water vapour cools and condenses!"},
+    {level:"medium",q:"Which planet is known as the Red Planet? 🔴",options:["Venus","Saturn","Mars","Jupiter"],answer:"Mars",hint:"Its red colour comes from iron oxide (rust)!"},
+    {level:"medium",q:"What is the process where water turns to vapour? 💧",options:["Condensation","Evaporation","Precipitation","Freezing"],answer:"Evaporation",hint:"Heat turns liquid water into water vapour!"},
+    {level:"medium",q:"What material is the hardest natural substance? 💎",options:["Gold","Iron","Diamond","Quartz"],answer:"Diamond",hint:"Diamond scores 10 on the Mohs hardness scale!"},
+    // ── HARD: Forces, Space, Biology ──
+    {level:"hard",q:"What is the correct order of the water cycle?",options:["Rain→Evaporate→Condense","Evaporate→Condense→Precipitate","Condense→Rain→Evaporate","Precipitate→Condense→Evaporate"],answer:"Evaporate→Condense→Precipitate",hint:"Water heats up, rises, cools into clouds, then falls as rain!"},
+    {level:"hard",q:"Which planet has the most moons?",options:["Jupiter","Saturn","Uranus","Neptune"],answer:"Saturn",hint:"Saturn has over 140 confirmed moons — more than any other planet!"},
+    {level:"hard",q:"What is photosynthesis? 🌱",options:["How animals breathe","How plants make food from sunlight","How rocks are formed","How clouds form"],answer:"How plants make food from sunlight",hint:"Plants use sunlight, CO₂ and water to make glucose!"},
+    {level:"hard",q:"What are the three states of matter?",options:["Hot, warm, cold","Solid, liquid, gas","Metal, wood, plastic","Heavy, light, medium"],answer:"Solid, liquid, gas",hint:"Ice (solid), water (liquid), steam (gas) are all H₂O!"},
+    {level:"hard",q:"What is the function of white blood cells? 🩸",options:["Carry oxygen","Fight infection","Digest food","Pump blood"],answer:"Fight infection",hint:"White blood cells are your body's immune defence!"},
+    {level:"hard",q:"Which gas makes up most of Earth's atmosphere?",options:["Oxygen","Carbon dioxide","Nitrogen","Argon"],answer:"Nitrogen",hint:"Nitrogen makes up about 78% of air — oxygen is about 21%!"},
+    {level:"hard",q:"What force opposes motion between surfaces? ⚙️",options:["Gravity","Magnetism","Friction","Tension"],answer:"Friction",hint:"Friction is why brakes slow down a bike!"},
+    {level:"hard",q:"How long does it take Earth to orbit the Sun? ☀️",options:["24 hours","28 days","365 days","100 years"],answer:"365 days",hint:"One orbit = one year = about 365 days!"},
+    {level:"hard",q:"What is the powerhouse of the cell? 🔬",options:["Nucleus","Cell membrane","Mitochondria","Ribosome"],answer:"Mitochondria",hint:"Mitochondria produce energy (ATP) for the cell!"},
+    {level:"hard",q:"Which type of rock is formed from cooled lava? 🌋",options:["Sedimentary","Metamorphic","Igneous","Limestone"],answer:"Igneous",hint:"Igneous comes from the Latin 'ignis' meaning fire!"},
+  ],
+
+  /* ── SOCIAL STUDIES ──────────────────────────────────────────────────── */
+  social:[
+    // ── EASY: Community & Jobs ──
+    {level:"easy",q:"What does a firefighter do? 🚒",options:["Fixes teeth","Puts out fires","Teaches children","Delivers post"],answer:"Puts out fires",hint:"Firefighters are community heroes who battle fires!"},
+    {level:"easy",q:"Which community helper keeps us safe? 👮",options:["Chef","Police officer","Farmer","Artist"],answer:"Police officer",hint:"Police officers protect communities and uphold the law!"},
+    {level:"easy",q:"What is the capital city of the USA? 🇺🇸",options:["New York","Los Angeles","Washington D.C.","Chicago"],answer:"Washington D.C.",hint:"It's named after the first US president, George Washington!"},
+    {level:"easy",q:"How many continents are there on Earth? 🌍",options:["5","6","7","8"],answer:"7",hint:"Africa, Asia, Europe, North America, South America, Australia, Antarctica!"},
+    {level:"easy",q:"What colour is the flag of the United Kingdom? 🇬🇧",options:["Red and white","Blue and white","Red, white and blue","Green and gold"],answer:"Red, white and blue",hint:"The Union Jack combines crosses of St George, St Andrew and St Patrick!"},
+    {level:"easy",q:"What does a doctor do? 🩺",options:["Grows food","Builds houses","Treats sick people","Drives buses"],answer:"Treats sick people",hint:"Doctors help people get better when they are ill!"},
+    {level:"easy",q:"Which ocean is the largest? 🌊",options:["Atlantic","Indian","Arctic","Pacific"],answer:"Pacific",hint:"The Pacific covers more area than all land combined!"},
+    {level:"easy",q:"What is the job of a farmer? 🌾",options:["Fights fires","Grows food","Fixes cars","Teaches"],answer:"Grows food",hint:"Farmers grow the food we eat every day!"},
+    {level:"easy",q:"Which continent is Egypt in? 🏺",options:["Asia","Europe","Africa","South America"],answer:"Africa",hint:"Egypt is in the northeast corner of Africa!"},
+    {level:"easy",q:"What is a map used for? 🗺️",options:["Cooking","Finding places","Playing games","Building things"],answer:"Finding places",hint:"Maps show us where places are in the world!"},
+    // ── MEDIUM: Countries, History ──
+    {level:"medium",q:"What is the capital city of France? 🇫🇷",options:["Lyon","Marseille","Paris","Bordeaux"],answer:"Paris",hint:"The Eiffel Tower is in this city!"},
+    {level:"medium",q:"Who was the first person to walk on the Moon? 🌙",options:["Buzz Aldrin","Yuri Gagarin","Neil Armstrong","John Glenn"],answer:"Neil Armstrong",hint:"He said 'One small step for man...' in 1969!"},
+    {level:"medium",q:"What is the longest river in the world? 🌊",options:["Amazon","Mississippi","Yangtze","Nile"],answer:"Nile",hint:"The Nile flows through Egypt and Sudan in Africa!"},
+    {level:"medium",q:"Which continent has the most countries? 🌍",options:["Asia","Europe","Africa","Americas"],answer:"Africa",hint:"Africa has 54 recognised countries!"},
+    {level:"medium",q:"What does a senator or MP do? 🏛️",options:["Delivers letters","Makes laws for the country","Teaches at school","Drives ambulances"],answer:"Makes laws for the country",hint:"Elected officials represent citizens and create laws!"},
+    {level:"medium",q:"Which country has the most people? 🌏",options:["USA","Russia","India","China"],answer:"India",hint:"India recently overtook China as the most populous country!"},
+    {level:"medium",q:"What is the flag of Japan called? 🇯🇵",options:["Rising Moon","Red Circle","Hinomaru","Sun Flag"],answer:"Hinomaru",hint:"Hinomaru means 'circle of the sun' — a red disc on white!"},
+    {level:"medium",q:"Where is the Amazon Rainforest? 🌿",options:["Africa","Asia","South America","Australia"],answer:"South America",hint:"The Amazon covers much of Brazil and neighbouring countries!"},
+    {level:"medium",q:"Who was Rosa Parks? ✊",options:["A famous scientist","A civil rights hero who refused to give up her bus seat","The first female president","A famous explorer"],answer:"A civil rights hero who refused to give up her bus seat",hint:"Her brave act in 1955 helped spark the civil rights movement!"},
+    {level:"medium",q:"What is the capital of Australia? 🇦🇺",options:["Sydney","Melbourne","Brisbane","Canberra"],answer:"Canberra",hint:"Many people guess Sydney — but it's actually Canberra!"},
+    // ── HARD: Citizenship, Geography, History ──
+    {level:"hard",q:"What does 'democracy' mean? 🗳️",options:["Rule by one person","Rule by the people","Rule by the military","Rule by religion"],answer:"Rule by the people",hint:"From Greek: 'demos' (people) + 'kratos' (power)!"},
+    {level:"hard",q:"Which ocean lies between Europe/Africa and the Americas?",options:["Pacific","Indian","Arctic","Atlantic"],answer:"Atlantic",hint:"The Titanic sank in the Atlantic Ocean in 1912!"},
+    {level:"hard",q:"What year did World War II end? 🕊️",options:["1939","1942","1945","1950"],answer:"1945",hint:"VE Day (Victory in Europe) was May 8th, 1945!"},
+    {level:"hard",q:"What is the United Nations? 🌐",options:["A sports competition","An international organisation promoting peace","A type of government","A trade agreement"],answer:"An international organisation promoting peace",hint:"Founded in 1945, the UN has 193 member states!"},
+    {level:"hard",q:"Which ancient wonder of the world still exists? 🏺",options:["Colossus of Rhodes","Lighthouse of Alexandria","Great Pyramid of Giza","Hanging Gardens of Babylon"],answer:"Great Pyramid of Giza",hint:"Built around 2560 BC — the only ancient wonder still standing!"},
+    {level:"hard",q:"What does the equator divide? 🌍",options:["East and West hemispheres","North and South hemispheres","Asia and Africa","Land and sea"],answer:"North and South hemispheres",hint:"The equator is an imaginary line around Earth's middle!"},
+    {level:"hard",q:"Who wrote the Declaration of Independence? 📜",options:["George Washington","Benjamin Franklin","Thomas Jefferson","Abraham Lincoln"],answer:"Thomas Jefferson",hint:"Jefferson was the primary author in 1776!"},
+    {level:"hard",q:"What is the purpose of a constitution? 📋",options:["To list all laws","To set out the fundamental rules of a country","To record history","To organise elections"],answer:"To set out the fundamental rules of a country",hint:"A constitution is the supreme law that all other laws must follow!"},
+    {level:"hard",q:"Which mountain range separates Europe from Asia? ⛰️",options:["Alps","Himalayas","Andes","Ural Mountains"],answer:"Ural Mountains",hint:"The Urals run through Russia and mark the Europe-Asia boundary!"},
+    {level:"hard",q:"What is the name of South Africa's system of racial segregation that ended in 1994?",options:["Colonialism","Apartheid","Segregation","Partition"],answer:"Apartheid",hint:"Nelson Mandela spent 27 years in prison fighting against apartheid!"},
+  ],
 };
 
 async function fetchAIQ(subject, level="medium"){
@@ -414,6 +495,8 @@ async function fetchAIQ(subject, level="medium"){
     cogat:`Generate 1 CogAT-style question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
     spelling:`Generate 1 spelling question for ${grade}. Return ONLY valid JSON: {"word":"...","q":"Which is the correct spelling?","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
     gaps:`Generate 1 fill-in-the-gap sentence for ${grade}. Return ONLY valid JSON: {"type":"sentence","q":"sentence with ___ gap","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    science:`Generate 1 science question for ${grade} (animals, plants, human body, space, weather, or materials). Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
+    social:`Generate 1 social studies question for ${grade} (countries, history, community helpers, or geography). Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
   };
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:"You are a friendly teacher. Respond ONLY with valid JSON, no markdown.",messages:[{role:"user",content:prompts[subject]}]})});
@@ -567,10 +650,21 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 .diff-grade{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:0.75;margin-bottom:4px}
 .diff-desc{font-size:12px;font-weight:700;opacity:0.65}
 .diff-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:900;padding:3px 8px;border-radius:99px;background:rgba(0,0,0,0.1)}
+
+/* ── Avatar Builder ── */
+.av-section{background:white;border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.av-section-title{font-family:'Boogaloo',cursive;font-size:15px;color:#374151;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.av-option-row{display:flex;gap:7px;flex-wrap:wrap}
+.av-opt{border-radius:12px;border:3px solid #e5e7eb;padding:6px 10px;cursor:pointer;font-size:18px;transition:all 0.15s;background:white;touch-action:manipulation;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
+.av-opt.selected{border-color:#F6A800;background:#FFFBEB;transform:scale(1.1)}
+.av-opt:active{transform:scale(0.95)}
+.av-color-opt{width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all 0.15s;touch-action:manipulation}
+.av-color-opt.selected{border-color:#1a1a1a;transform:scale(1.15);box-shadow:0 0 0 2px white,0 0 0 4px #1a1a1a}
+.av-preview{background:linear-gradient(135deg,#F0FDF4,#EFF6FF);border-radius:20px;padding:20px;text-align:center;border:3px solid #e5e7eb;margin-bottom:14px}
 `;
 
 /* ─── Home ─────────────────────────────────────────────────────────────── */
-function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setTab,defaultLevel,onSetDefaultLevel}){
+function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setTab,defaultLevel,onSetDefaultLevel,avatar,onEditAvatar}){
   return(
     <div>
       <div className="home-hero">
@@ -584,8 +678,16 @@ function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setT
           </div>
           <button className="icon-btn" onClick={toggleMute}>{muted?"🔇":"🔊"}</button>
         </div>
-        <div className="logo">🌿 BrightMind 🌿</div>
-        <div className="logo-sub">Learning adventures for little explorers!</div>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:14,marginBottom:4}}>
+          <div style={{position:"relative",cursor:"pointer"}} onClick={onEditAvatar}>
+            <AvatarSVG av={avatar} size={64}/>
+            <div style={{position:"absolute",bottom:-2,right:-2,background:"#F6A800",borderRadius:"50%",width:20,height:20,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,boxShadow:"0 2px 6px rgba(0,0,0,0.2)"}}>✏️</div>
+          </div>
+          <div>
+            <div className="logo">🌿 BrightMind</div>
+            <div className="logo-sub">Hi {avatar?.name||"Explorer"}! Ready to learn? 🌟</div>
+          </div>
+        </div>
       </div>
       <div className="vine"/>
       <div className="nav-tabs">
@@ -693,6 +795,175 @@ let praiseIdx=0;
 let wrongIdx=0;
 function nextPraise(){const p=PRAISE_PHRASES[praiseIdx%PRAISE_PHRASES.length];praiseIdx++;return p;}
 function nextWrong(){const p=WRONG_PHRASES[wrongIdx%WRONG_PHRASES.length];wrongIdx++;return p;}
+
+/* ─── Avatar System ─────────────────────────────────────────────────────── */
+const SKIN_TONES=["#FDDBB4","#F5C28A","#E8A96A","#C68642","#8D5524","#4A2912"];
+const HAIR_COLORS=["#1a1a1a","#4a3728","#8B4513","#D2691E","#DAA520","#FF6B6B","#9B59B6","#3498DB","#E0E0E0"];
+const HAIR_STYLES=["short","curly","long","afro","bun","spiky","none"];
+const ACCESSORIES=["none","glasses","sunglasses","bow","cap","crown","headband","star"];
+const TOPS=["tshirt","hoodie","dress","polo","vest","stripes"];
+const TOP_COLORS=["#EF4444","#3B82F6","#10B981","#F59E0B","#8B5CF6","#EC4899","#06B6D4","#F97316","#1a1a1a","#ffffff"];
+const EXPRESSIONS=["happy","cool","excited","cheeky","star"];
+
+const DEFAULT_AVATAR={skin:"#FDDBB4",hair:"#1a1a1a",hairStyle:"short",accessory:"none",top:"tshirt",topColor:"#3B82F6",expression:"happy",name:"Explorer"};
+
+function AvatarSVG({av,size=80}){
+  const s=av||DEFAULT_AVATAR;
+  const scale=size/80;
+  const expr={
+    happy:<path d="M30 50 Q40 58 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/>,
+    cool:<path d="M30 50 Q40 55 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/>,
+    excited:<><path d="M28 49 Q40 60 52 49" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/><ellipse cx="40" cy="54" rx="8" ry="5" fill="#f9a8d4" opacity="0.5"/></>,
+    cheeky:<path d="M30 52 Q35 50 40 52 Q45 54 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/>,
+    star:<><path d="M30 50 Q40 58 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/><text x="38" y="44" fontSize="10" textAnchor="middle">⭐</text></>,
+  }[s.expression||"happy"];
+
+  const hair={
+    short:<ellipse cx="40" cy="24" rx="16" ry="10" fill={s.hair}/>,
+    curly:<><ellipse cx="40" cy="22" rx="17" ry="11" fill={s.hair}/>{[24,30,36,42,48,54].map((x,i)=><ellipse key={i} cx={x} cy="20" rx="4" ry="5" fill={s.hair}/>)}</>,
+    long:<><ellipse cx="40" cy="22" rx="16" ry="10" fill={s.hair}/><rect x="22" y="28" width="7" height="28" rx="3" fill={s.hair}/><rect x="51" y="28" width="7" height="28" rx="3" fill={s.hair}/></>,
+    afro:<ellipse cx="40" cy="20" rx="22" ry="18" fill={s.hair}/>,
+    bun:<><ellipse cx="40" cy="26" rx="16" ry="9" fill={s.hair}/><circle cx="40" cy="13" r="9" fill={s.hair}/></>,
+    spiky:<><ellipse cx="40" cy="24" rx="15" ry="9" fill={s.hair}/>{[26,31,36,41,46,51,56].map((x,i)=><polygon key={i} points={`${x},22 ${x+3},8 ${x+6},22`} fill={s.hair}/>)}</>,
+    none:null,
+  }[s.hairStyle||"short"];
+
+  const accessory={
+    none:null,
+    glasses:<><rect x="26" y="33" width="10" height="8" rx="3" fill="none" stroke="#374151" strokeWidth="1.8"/><rect x="44" y="33" width="10" height="8" rx="3" fill="none" stroke="#374151" strokeWidth="1.8"/><line x1="36" y1="37" x2="44" y2="37" stroke="#374151" strokeWidth="1.5"/></>,
+    sunglasses:<><rect x="25" y="33" width="11" height="8" rx="3" fill="#1a1a1a"/><rect x="43" y="33" width="11" height="8" rx="3" fill="#1a1a1a"/><line x1="36" y1="37" x2="43" y2="37" stroke="#1a1a1a" strokeWidth="2"/></>,
+    bow:<><path d="M28 15 Q34 10 34 18 Q34 10 40 15 Q34 20 34 12 Q34 20 28 15" fill="#EF4444"/><circle cx="34" cy="15" r="3" fill="#DC2626"/></>,
+    cap:<><rect x="20" y="18" width="40" height="14" rx="7" fill={s.topColor}/><rect x="14" y="28" width="52" height="6" rx="3" fill={s.topColor}/></>,
+    crown:<><polygon points="24,24 30,12 36,22 40,10 44,22 50,12 56,24" fill="#F59E0B"/>{[30,40,50].map((x,i)=><circle key={i} cx={x} cy="13" r="3" fill="#EF4444"/>)}</>,
+    headband:<rect x="20" y="26" width="40" height="7" rx="3" fill="#8B5CF6"/>,
+    star:<text x="40" y="18" fontSize="16" textAnchor="middle">⭐</text>,
+  }[s.accessory||"none"];
+
+  const topShape={
+    tshirt:<><rect x="18" y="60" width="44" height="20" rx="4" fill={s.topColor}/><path d="M18 60 Q18 54 26 54 Q32 58 40 58 Q48 58 54 54 Q62 54 62 60" fill={s.topColor}/><path d="M18 60 Q12 56 12 62" stroke={s.topColor} strokeWidth="8" fill="none" strokeLinecap="round"/><path d="M62 60 Q68 56 68 62" stroke={s.topColor} strokeWidth="8" fill="none" strokeLinecap="round"/></>,
+    hoodie:<><rect x="16" y="60" width="48" height="20" rx="6" fill={s.topColor}/><path d="M16 60 Q16 52 24 52 Q32 58 40 58 Q48 58 56 52 Q64 52 64 60" fill={s.topColor}/><path d="M16 60 Q10 56 10 64" stroke={s.topColor} strokeWidth="10" fill="none" strokeLinecap="round"/><path d="M64 60 Q70 56 70 64" stroke={s.topColor} strokeWidth="10" fill="none" strokeLinecap="round"/><path d="M32 52 Q40 60 48 52" stroke="rgba(0,0,0,0.15)" strokeWidth="2" fill="none"/></>,
+    dress:<><path d="M24 58 L16 80 L64 80 L56 58 Q48 62 40 62 Q32 62 24 58" fill={s.topColor}/><path d="M24 58 Q24 52 32 52 Q36 58 40 58 Q44 58 48 52 Q56 52 56 58" fill={s.topColor}/></>,
+    polo:<><rect x="18" y="60" width="44" height="20" rx="4" fill={s.topColor}/><path d="M18 60 Q18 54 26 54 Q32 58 40 58 Q48 58 54 54 Q62 54 62 60" fill={s.topColor}/><rect x="37" y="54" width="6" height="10" rx="3" fill="rgba(255,255,255,0.3)"/></>,
+    vest:<><rect x="20" y="58" width="40" height="22" rx="4" fill={s.topColor}/><path d="M20 58 Q20 52 28 52 Q34 58 40 58 Q46 58 52 52 Q60 52 60 58" fill={s.topColor}/></>,
+    stripes:<><rect x="18" y="60" width="44" height="20" rx="4" fill={s.topColor}/><path d="M18 60 Q18 54 26 54 Q32 58 40 58 Q48 58 54 54 Q62 54 62 60" fill={s.topColor}/>{[63,68,73].map((y,i)=><line key={i} x1="18" y1={y} x2="62" y2={y} stroke="rgba(255,255,255,0.4)" strokeWidth="2.5"/>)}</>,
+  }[s.top||"tshirt"];
+
+  return(
+    <svg width={size} height={size} viewBox="0 0 80 80" style={{display:"block"}}>
+      {topShape}
+      {hair}
+      <circle cx="40" cy="38" r="20" fill={s.skin}/>
+      <ellipse cx="32" cy="36" rx="4.5" ry="5.5" fill="#1a1a1a"/>
+      <ellipse cx="48" cy="36" rx="4.5" ry="5.5" fill="#1a1a1a"/>
+      <circle cx="33" cy="35" r="1.8" fill="white"/>
+      <circle cx="49" cy="35" r="1.8" fill="white"/>
+      {expr}
+      <ellipse cx="29" cy="44" rx="4" ry="2.5" fill={s.skin} opacity="0.7"/>
+      <ellipse cx="51" cy="44" rx="4" ry="2.5" fill={s.skin} opacity="0.7"/>
+      {accessory}
+    </svg>
+  );
+}
+
+function AvatarBuilder({avatar,onSave,onBack,sounds}){
+  const [av,setAv]=useState(avatar||{...DEFAULT_AVATAR});
+  const [name,setName]=useState(av.name||"Explorer");
+  const upd=(k,v)=>setAv(a=>({...a,[k]:v}));
+
+  const Section=({title,children})=>(
+    <div className="av-section">
+      <div className="av-section-title">{title}</div>
+      {children}
+    </div>
+  );
+
+  return(
+    <div>
+      <div className="topbar">
+        <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Back</button>
+        <div className="topbar-label" style={{color:"#F6A800"}}>🎨 My Avatar</div>
+      </div>
+
+      <div className="av-preview">
+        <AvatarSVG av={av} size={100}/>
+        <div style={{marginTop:8}}>
+          <input value={name} onChange={e=>setName(e.target.value)} maxLength={14}
+            placeholder="Your name"
+            style={{fontFamily:"'Boogaloo',cursive",fontSize:20,textAlign:"center",border:"2.5px solid #e5e7eb",borderRadius:12,padding:"6px 12px",width:"180px",color:"#111",background:"white",outline:"none"}}
+            onFocus={e=>e.target.style.borderColor="#F6A800"}
+            onBlur={e=>e.target.style.borderColor="#e5e7eb"}
+          />
+        </div>
+      </div>
+
+      <Section title="😄 Expression">
+        <div className="av-option-row">
+          {EXPRESSIONS.map(e=>(
+            <button key={e} className={`av-opt${av.expression===e?" selected":""}`} onClick={()=>{sounds.tap();upd("expression",e);}}>
+              {e==="happy"?"😄":e==="cool"?"😎":e==="excited"?"🤩":e==="cheeky"?"😜":"🌟"}
+            </button>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="🎨 Skin Tone">
+        <div className="av-option-row">
+          {SKIN_TONES.map(c=>(
+            <div key={c} className={`av-color-opt${av.skin===c?" selected":""}`} style={{background:c}} onClick={()=>{sounds.tap();upd("skin",c);}}/>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="💇 Hair Style">
+        <div className="av-option-row">
+          {HAIR_STYLES.map(h=>(
+            <button key={h} className={`av-opt${av.hairStyle===h?" selected":""}`} onClick={()=>{sounds.tap();upd("hairStyle",h);}}>
+              {h==="short"?"✂️":h==="curly"?"🌀":h==="long"?"💁":h==="afro"?"✊":h==="bun"?"🎀":h==="spiky"?"⚡":"🙂"}
+            </button>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="🎨 Hair Colour">
+        <div className="av-option-row">
+          {HAIR_COLORS.map(c=>(
+            <div key={c} className={`av-color-opt${av.hair===c?" selected":""}`} style={{background:c,border:c==="#ffffff"?"2px solid #e5e7eb":""}} onClick={()=>{sounds.tap();upd("hair",c);}}/>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="🎩 Accessory">
+        <div className="av-option-row">
+          {ACCESSORIES.map(a=>(
+            <button key={a} className={`av-opt${av.accessory===a?" selected":""}`} onClick={()=>{sounds.tap();upd("accessory",a);}}>
+              {a==="none"?"🚫":a==="glasses"?"👓":a==="sunglasses"?"🕶️":a==="bow"?"🎀":a==="cap"?"🧢":a==="crown"?"👑":a==="headband"?"🌸":"⭐"}
+            </button>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="👕 Outfit">
+        <div className="av-option-row" style={{marginBottom:8}}>
+          {TOPS.map(t=>(
+            <button key={t} className={`av-opt${av.top===t?" selected":""}`} onClick={()=>{sounds.tap();upd("top",t);}}>
+              {t==="tshirt"?"👕":t==="hoodie"?"🧥":t==="dress"?"👗":t==="polo"?"🥼":t==="vest"?"🦺":"🎽"}
+            </button>
+          ))}
+        </div>
+        <div className="av-option-row">
+          {TOP_COLORS.map(c=>(
+            <div key={c} className={`av-color-opt${av.topColor===c?" selected":""}`} style={{background:c,border:c==="#ffffff"?"2px solid #e5e7eb":""}} onClick={()=>{sounds.tap();upd("topColor",c);}}/>
+          ))}
+        </div>
+      </Section>
+
+      <button className="next-btn" style={{background:"#F6A800",marginBottom:20}}
+        onClick={()=>{sounds.tap();sounds.fanfare();onSave({...av,name});}}>
+        Save my avatar! 🎉
+      </button>
+    </div>
+  );
+}
 
 /* ─── Difficulty Picker ─────────────────────────────────────────────────── */
 function DifficultyPicker({subject, defaultLevel, onStart, onBack, sounds, progress}){
@@ -1311,7 +1582,8 @@ export default function App(){
   const [tab,setTab]=useState(0);
   const [toastQueue,setToastQueue]=useState([]);
   const [ttMastery,setTtMastery]=useState({});
-  const [defaultLevel,setDefaultLevel]=useState("medium"); // parent default
+  const [defaultLevel,setDefaultLevel]=useState("medium");
+  const [avatar,setAvatar]=useState(DEFAULT_AVATAR); // parent default
   const [progress,setProgress]=useState(()=>{const p={};SUBJECTS.forEach(s=>{p[s.id]={stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};});return p;});
   const [history,setHistory]=useState({total:0,perfectScores:0,bestStreak:0,improvements:0,spellPerfect:0,timesPerfect:0});
   const [earned,setEarned]=useState([]);
@@ -1385,12 +1657,16 @@ export default function App(){
       <div className="app">
         {screen==="home"&&<Home progress={progress} history={history} earned={earned}
           defaultLevel={defaultLevel} onSetDefaultLevel={lv=>{sounds.tap();setDefaultLevel(lv);}}
+          avatar={avatar} onEditAvatar={()=>{sounds.tap();setScreen("avatar");}}
           onSelect={id=>{
             sounds.tap();
             if(id==="times"){setScreen("times-pick");setSubject("times");}
             else{setSubject(id);setScreen("diff-pick");}
           }}
           sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)} tab={tab} setTab={setTab}/>}
+        {screen==="avatar"&&<AvatarBuilder avatar={avatar}
+          onSave={av=>{setAvatar(av);setScreen("home");}}
+          onBack={()=>setScreen("home")} sounds={sounds}/>}
         {screen==="diff-pick"&&subject&&<DifficultyPicker
           subject={subject} defaultLevel={defaultLevel} progress={progress}
           onStart={lv=>{setQuizLevel(lv);setScreen("quiz");}}
