@@ -17,7 +17,13 @@ const SUBJECTS = [
   { id:"social",  label:"Social Studies",emoji:"🌍",mascot:"giraffe", bg:"#FFF8F0", border:"#F97316", btn:"#F97316", dark:"#c2410c", desc:"People & places!"     },
 ];
 
-const TOTAL = 20;
+const GROUPS = [
+  { id:"literacy",  label:"Literacy",        emoji:"📚", color:"#4A9EE0", bg:"#E8F5FF", subjects:["english","reading","spelling","gaps"],           desc:"Reading, writing & words"   },
+  { id:"numeracy",  label:"Numeracy",         emoji:"🔢", color:"#F6A800", bg:"#FFF3CD", subjects:["maths","quant","times"],                          desc:"Numbers, maths & patterns"  },
+  { id:"language",  label:"Language & Logic", emoji:"💬", color:"#D45EBC", bg:"#FFF0FB", subjects:["verbal","spanish","cogat"],                        desc:"Thinking, logic & language" },
+  { id:"science",   label:"Science & Nature", emoji:"🔬", color:"#06B6D4", bg:"#F0FFFE", subjects:["science"],                                         desc:"Explore the natural world"  },
+  { id:"world",     label:"World & Society",  emoji:"🌍", color:"#F97316", bg:"#FFF8F0", subjects:["social"],                                          desc:"People, places & history"   },
+];
 
 /* ─── Difficulty / Grade Config ─────────────────────────────────────────── */
 const DIFFICULTY = {
@@ -537,6 +543,24 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 @media(min-width:500px){.subject-grid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:680px){.subject-grid{grid-template-columns:repeat(4,1fr)}}
 
+/* ── Subject Groups ── */
+.group-card{border-radius:20px;padding:14px 16px;cursor:pointer;border:3px solid transparent;transition:all 0.18s;margin-bottom:10px;position:relative;overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.group-card:active{transform:scale(0.98)}
+.group-header{display:flex;align-items:center;gap:12px}
+.group-emoji{font-size:34px;flex-shrink:0}
+.group-info{flex:1}
+.group-label{font-family:'Boogaloo',cursive;font-size:clamp(17px,4vw,22px);line-height:1.1}
+.group-desc{font-size:11px;font-weight:700;opacity:0.7;margin-top:1px}
+.group-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
+.group-pill{font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;background:rgba(0,0,0,0.08)}
+.group-chevron{font-size:18px;transition:transform 0.2s;flex-shrink:0}
+.group-chevron.open{transform:rotate(90deg)}
+.group-subjects{overflow:hidden;transition:max-height 0.3s ease,opacity 0.3s ease}
+.group-subjects.closed{max-height:0;opacity:0;pointer-events:none}
+.group-subjects.open{max-height:600px;opacity:1}
+.group-subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding-top:10px}
+@media(min-width:400px){.group-subject-grid{grid-template-columns:repeat(3,1fr)}}
+
 .subject-card{border-radius:18px;padding:clamp(11px,2.5vw,18px) clamp(9px,2vw,14px);cursor:pointer;border:3px solid transparent;position:relative;overflow:hidden;transition:transform 0.18s,box-shadow 0.18s;text-align:center;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none}
 .subject-card:active{transform:scale(0.96)}
 @media(hover:hover){.subject-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 10px 28px rgba(0,0,0,0.13)}}
@@ -665,12 +689,27 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 
 /* ─── Home ─────────────────────────────────────────────────────────────── */
 function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setTab,defaultLevel,onSetDefaultLevel,avatar,onEditAvatar}){
+  const [openGroup,setOpenGroup]=useState("literacy"); // first group open by default
+
+  const toggleGroup=(id)=>{
+    sounds.tap();
+    setOpenGroup(g=>g===id?null:id);
+  };
+
+  // compute group progress summary
+  const groupStats=(g)=>{
+    const subs=g.subjects.map(id=>SUBJECTS.find(s=>s.id===id)).filter(Boolean);
+    const done=subs.filter(s=>(progress[s.id]?.best||0)>0).length;
+    const stars=subs.reduce((sum,s)=>sum+(progress[s.id]?.stars||0),0);
+    return{done,total:subs.length,stars};
+  };
+
   return(
     <div>
       <div className="home-hero">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:6,marginBottom:4}}>
-          <div style={{display:"flex",alignItems:"center",gap:5}}>
-            <span style={{fontSize:10,fontWeight:800,color:"#6b7280"}}>Default level:</span>
+          <div style={{display:"flex",alignItems:"center",gap:5,flexWrap:"wrap"}}>
+            <span style={{fontSize:10,fontWeight:800,color:"#6b7280"}}>Level:</span>
             {["easy","medium","hard"].map(lv=>{
               const d=DIFFICULTY[lv];
               return<button key={lv} onClick={()=>onSetDefaultLevel(lv)} style={{border:`2px solid ${defaultLevel===lv?d.color:"#e5e7eb"}`,background:defaultLevel===lv?d.bg:"white",borderRadius:99,padding:"3px 9px",fontSize:10,fontWeight:800,color:defaultLevel===lv?d.color:"#9ca3af",cursor:"pointer",transition:"all 0.15s"}}>{d.emoji} {d.label}</button>;
@@ -695,28 +734,59 @@ function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setT
           <button key={label} className={`nav-tab${tab===i?" active":""}`} onClick={()=>{sounds.tap();setTab(i);}}>{icon} {label}</button>
         ))}
       </div>
+
       {tab===0&&(
-        <div className="subject-grid">
-          {SUBJECTS.map((s,i)=>{
-            const p=progress[s.id]||{};
-            const d=DIFFICULTY[defaultLevel];
-            const levelBest=p[`best_${defaultLevel}`]||0;
+        <div style={{marginTop:4}}>
+          {GROUPS.map((g,gi)=>{
+            const isOpen=openGroup===g.id;
+            const {done,total,stars}=groupStats(g);
+            const groupSubjects=g.subjects.map(id=>SUBJECTS.find(s=>s.id===id)).filter(Boolean);
+            const diff=DIFFICULTY[defaultLevel];
             return(
-              <div key={s.id} className="subject-card slide-up" style={{background:s.bg,borderColor:s.border,animationDelay:`${i*0.07}s`}} onClick={()=>{sounds.tap();onSelect(s.id);}}>
-                {levelBest>0&&<div className="badge-best" style={{color:s.dark}}>{d.emoji} {levelBest}/{TOTAL}</div>}
-                {s.id==="cogat"&&<div className="cogat-badge">GIFTED</div>}
-                {s.id==="spelling"&&<div className="cogat-badge" style={{background:"#F59E0B"}}>🐝 SPELL</div>}
-                {s.id==="gaps"&&<div className="cogat-badge" style={{background:"#8B5CF6"}}>🧩 GAPS</div>}
-                {s.id==="times"&&<div className="cogat-badge" style={{background:"#10B981"}}>✖️ TABLES</div>}
-                <div style={{marginBottom:4}}><Mascot type={s.mascot} size={46} animate/></div>
-                <div className="card-label" style={{color:s.dark}}>{s.label}</div>
-                <div className="card-desc" style={{color:s.dark}}>{s.desc}</div>
-                <div className="card-stars"><Stars count={p.stars||0} size={18}/></div>
+              <div key={g.id} className="group-card slide-up"
+                style={{background:g.bg,borderColor:isOpen?g.color:"transparent",animationDelay:`${gi*0.08}s`}}>
+                {/* Group header — tap to expand */}
+                <div className="group-header" onClick={()=>toggleGroup(g.id)}>
+                  <div className="group-emoji">{g.emoji}</div>
+                  <div className="group-info">
+                    <div className="group-label" style={{color:g.color}}>{g.label}</div>
+                    <div className="group-desc" style={{color:g.color}}>{g.desc}</div>
+                    <div className="group-meta">
+                      <span className="group-pill" style={{color:g.color}}>{total} subject{total>1?"s":""}</span>
+                      {done>0&&<span className="group-pill" style={{color:g.color}}>{done}/{total} tried</span>}
+                      {stars>0&&<span className="group-pill" style={{color:g.color}}>{"⭐".repeat(Math.min(stars,5))}</span>}
+                    </div>
+                  </div>
+                  <div className={`group-chevron${isOpen?" open":""}`} style={{color:g.color}}>›</div>
+                </div>
+
+                {/* Subject tiles — slide open */}
+                <div className={`group-subjects${isOpen?" open":" closed"}`}>
+                  <div className="group-subject-grid">
+                    {groupSubjects.map((s,i)=>{
+                      const p=progress[s.id]||{};
+                      const levelBest=p[`best_${defaultLevel}`]||0;
+                      return(
+                        <div key={s.id} className="subject-card"
+                          style={{background:"white",borderColor:s.border,animationDelay:`${i*0.06}s`,minHeight:90}}
+                          onClick={()=>{sounds.tap();onSelect(s.id);}}>
+                          {levelBest>0&&<div className="badge-best" style={{color:s.dark}}>{diff.emoji}{levelBest}/{TOTAL}</div>}
+                          {s.id==="cogat"&&<div className="cogat-badge">GIFTED</div>}
+                          {s.id==="times"&&<div className="cogat-badge" style={{background:"#10B981"}}>✖️</div>}
+                          <div style={{marginBottom:3}}><Mascot type={s.mascot} size={40} animate/></div>
+                          <div className="card-label" style={{color:s.dark,fontSize:"clamp(12px,3vw,15px)"}}>{s.label}</div>
+                          <div className="card-stars"><Stars count={p.stars||0} size={15}/></div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             );
           })}
         </div>
       )}
+
       {tab===1&&(
         <div>
           <div style={{fontWeight:700,color:"#6b7280",fontSize:12,marginBottom:9}}>{earned.length} of {ACHIEVEMENTS.length} badges earned 🏅</div>
