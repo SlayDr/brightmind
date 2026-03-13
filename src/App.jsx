@@ -681,6 +681,19 @@ function ParentDash({progress,history,earned}){
   );
 }
 
+const PRAISE_PHRASES = [
+  "Well done!","Correct!","Amazing!","Brilliant!",
+  "Super star!","You got it!","Wahoo!","Yes! That's right!",
+];
+const WRONG_PHRASES = [
+  "Oops, try again!","Not quite!","Almost — keep going!",
+  "Don't give up!","So close — you've got this!",
+];
+let praiseIdx=0;
+let wrongIdx=0;
+function nextPraise(){const p=PRAISE_PHRASES[praiseIdx%PRAISE_PHRASES.length];praiseIdx++;return p;}
+function nextWrong(){const p=WRONG_PHRASES[wrongIdx%WRONG_PHRASES.length];wrongIdx++;return p;}
+
 /* ─── Difficulty Picker ─────────────────────────────────────────────────── */
 function DifficultyPicker({subject, defaultLevel, onStart, onBack, sounds, progress}){
   const s=SUBJECTS.find(x=>x.id===subject);
@@ -812,8 +825,14 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
     setSel(opt);
     if(opt===cur.answer){
       const ns=streak+1;setScore(n=>n+1);setStreak(ns);setBestStreak(b=>Math.max(b,ns));
-      setConfetti(true);setTimeout(()=>setConfetti(false),1300);sounds.correct();
-    }else{setStreak(0);sounds.wrong();}
+      setConfetti(true);setTimeout(()=>setConfetti(false),1300);
+      sounds.correct();
+      if(!muted)setTimeout(()=>speak(nextPraise()),420);
+    }else{
+      setStreak(0);
+      sounds.wrong();
+      if(!muted)setTimeout(()=>speak(nextWrong()),320);
+    }
   };
 
   const next=()=>{
@@ -1173,8 +1192,14 @@ function TimesTableQuiz({table,onBack,onDone,sounds,muted,toggleMute}){
     setSel(opt);
     if(opt===cur.answer){
       setScore(n=>n+1);setStreak(s=>s+1);
-      setConfetti(true);setTimeout(()=>setConfetti(false),1200);sounds.correct();
-    }else{setStreak(0);sounds.wrong();}
+      setConfetti(true);setTimeout(()=>setConfetti(false),1200);
+      sounds.correct();
+      if(!muted)setTimeout(()=>speak(nextPraise()),420);
+    }else{
+      setStreak(0);
+      sounds.wrong();
+      if(!muted)setTimeout(()=>speak(nextWrong()),320);
+    }
   };
 
   const next=()=>{
