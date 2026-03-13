@@ -10,6 +10,8 @@ const SUBJECTS = [
   { id:"quant",   label:"Quantitative",emoji:"📐", mascot:"fox",    bg:"#FFF5F0", border:"#FF6B35", btn:"#FF6B35", dark:"#c44a15", desc:"Patterns & logic"  },
   { id:"spanish", label:"Spanish",     emoji:"🇪🇸", mascot:"toucan", bg:"#FFF0E0", border:"#E07B00", btn:"#E07B00", dark:"#b05f00", desc:"¡Hola! Learn Spanish"},
   { id:"cogat",   label:"CogAT",       emoji:"🧠", mascot:"eagle",  bg:"#F0F0FF", border:"#6366F1", btn:"#6366F1", dark:"#4338CA", desc:"Gifted test prep"  },
+  { id:"spelling",label:"Spelling",    emoji:"🔤", mascot:"bee",    bg:"#FFFDE7", border:"#F59E0B", btn:"#F59E0B", dark:"#B45309", desc:"Hear it, spell it!" },
+  { id:"gaps",    label:"Fill the Gap",emoji:"🧩", mascot:"hedgehog",bg:"#F3F0FF",border:"#8B5CF6", btn:"#8B5CF6", dark:"#6D28D9", desc:"Complete the words!" },
 ];
 
 const TOTAL = 20;
@@ -19,7 +21,7 @@ const ACHIEVEMENTS = [
   { id:"first_quiz",   icon:"🎯", label:"First Steps",     desc:"Complete your first quiz!",           check:(s,h)=>h.total>=1 },
   { id:"perfect",      icon:"💯", label:"Perfect Score!",  desc:"Get 20/20 on any quiz!",              check:(s,h)=>h.perfectScores>=1 },
   { id:"hat_trick",    icon:"🎩", label:"Hat Trick",       desc:"Get 3 stars on any subject!",         check:(s,h)=>Object.values(s).some(x=>x.stars===3) },
-  { id:"all_subjects", icon:"🌍", label:"Explorer",        desc:"Try all 7 subjects!",                 check:(s,h)=>Object.values(s).filter(x=>x.best>0).length===7 },
+  { id:"all_subjects", icon:"🌍", label:"Explorer",        desc:"Try all 9 subjects!",                 check:(s,h)=>Object.values(s).filter(x=>x.best>0).length===9 },
   { id:"ten_quizzes",  icon:"🏃", label:"Marathoner",      desc:"Complete 10 quizzes!",                check:(s,h)=>h.total>=10 },
   { id:"maths_star",   icon:"🔢", label:"Maths Wizard",    desc:"Score 15+ in Maths!",                 check:(s,h)=>(s.maths?.best||0)>=15 },
   { id:"english_star", icon:"✏️",  label:"Word Master",     desc:"Score 15+ in English!",               check:(s,h)=>(s.english?.best||0)>=15 },
@@ -30,10 +32,13 @@ const ACHIEVEMENTS = [
   { id:"cogat_star",   icon:"🧠", label:"Gifted Mind",     desc:"Score 15+ in CogAT!",                 check:(s,h)=>(s.cogat?.best||0)>=15 },
   { id:"streak3",      icon:"🔥", label:"On Fire!",        desc:"Get 3 correct in a row!",             check:(s,h)=>h.bestStreak>=3 },
   { id:"streak5",      icon:"⚡", label:"Lightning!",      desc:"Get 5 correct in a row!",             check:(s,h)=>h.bestStreak>=5 },
-  { id:"all_stars",    icon:"🌟", label:"All-Star",        desc:"3 stars on ALL subjects!",            check:(s,h)=>Object.values(s).length===7&&Object.values(s).every(x=>x.stars===3) },
+  { id:"all_stars",    icon:"🌟", label:"All-Star",        desc:"3 stars on ALL subjects!",            check:(s,h)=>Object.values(s).length===9&&Object.values(s).every(x=>x.stars===3) },
   { id:"twenty_five",  icon:"🏆", label:"Champion",        desc:"Complete 25 quizzes!",                check:(s,h)=>h.total>=25 },
   { id:"hola",         icon:"🌮", label:"¡Hola!",          desc:"Complete your first Spanish quiz!",   check:(s,h)=>(s.spanish?.best||0)>0 },
   { id:"cogat_first",  icon:"🎓", label:"Brain Trainer",   desc:"Complete your first CogAT quiz!",     check:(s,h)=>(s.cogat?.best||0)>0 },
+  { id:"spelling_star",icon:"🔤", label:"Spelling Bee",    desc:"Score 15+ in Spelling!",              check:(s,h)=>(s.spelling?.best||0)>=15 },
+  { id:"gaps_star",    icon:"🧩", label:"Gap Filler",      desc:"Score 15+ in Fill the Gap!",          check:(s,h)=>(s.gaps?.best||0)>=15 },
+  { id:"spell_perfect",icon:"🐝", label:"Queen Bee",       desc:"Perfect score in Spelling!",          check:(s,h)=>h.spellPerfect>=1 },
 ];
 
 /* ─── Sound Engine ─────────────────────────────────────────────────────── */
@@ -64,6 +69,8 @@ const Mascot=({type,size=80,animate=false})=>{
   if(type==="fox")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><path d="M15 20 L28 38 L15 45"fill="#FF6B35"/><path d="M65 20 L52 38 L65 45"fill="#FF6B35"/><ellipse cx="40"cy="46"rx="22"ry="20"fill="#FF6B35"/><circle cx="40"cy="34"r="18"fill="#FF6B35"/><ellipse cx="40"cy="42"rx="12"ry="9"fill="#FED7AA"/><ellipse cx="32"cy="31"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="48"cy="31"rx="4"ry="5"fill="#1a1a1a"/><circle cx="32"cy="30"r="1.5"fill="white"/><circle cx="48"cy="30"r="1.5"fill="white"/><ellipse cx="40"cy="38"rx="4"ry="3"fill="#1a1a1a"/><path d="M36 40 Q40 44 44 40"stroke="#1a1a1a"strokeWidth="1.5"fill="none"strokeLinecap="round"/><path d="M22 15 L30 28 L18 30 Z"fill="#FF6B35"/><path d="M58 15 L50 28 L62 30 Z"fill="#FF6B35"/></svg>;
   if(type==="toucan")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="40"cy="48"rx="18"ry="22"fill="#1a1a1a"/><circle cx="40"cy="28"r="16"fill="#1a1a1a"/><ellipse cx="40"cy="30"rx="10"ry="8"fill="white"/><ellipse cx="34"cy="24"rx="4"ry="5"fill="#1a1a1a"/><circle cx="34"cy="23"r="2"fill="white"/><circle cx="34"cy="23"r="1"fill="#1a1a1a"/><path d="M44 26 Q62 22 62 30 Q62 38 44 34 Z"fill="#F59E0B"/><path d="M44 28 Q58 25 58 30 Q58 35 44 32"fill="#EF4444"/><path d="M44 30 Q56 28 56 30"stroke="#10B981"strokeWidth="2"fill="none"/><path d="M22 52 Q14 58 18 65"stroke="#1a1a1a"strokeWidth="7"fill="none"strokeLinecap="round"/><path d="M58 52 Q66 58 62 65"stroke="#1a1a1a"strokeWidth="7"fill="none"strokeLinecap="round"/></svg>;
   if(type==="eagle")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><path d="M10 35 Q5 20 20 25 L35 38"fill="#8B4513"/><path d="M70 35 Q75 20 60 25 L45 38"fill="#8B4513"/><ellipse cx="40"cy="46"rx="18"ry="20"fill="#6B3A10"/><circle cx="40"cy="30"r="18"fill="#8B4513"/><ellipse cx="40"cy="28"rx="12"ry="8"fill="white"/><ellipse cx="33"cy="26"rx="5"ry="6"fill="#1a1a1a"/><ellipse cx="47"cy="26"rx="5"ry="6"fill="#1a1a1a"/><circle cx="33"cy="25"r="2"fill="#FFD700"/><circle cx="47"cy="25"r="2"fill="#FFD700"/><circle cx="33"cy="25"r="1"fill="#1a1a1a"/><circle cx="47"cy="25"r="1"fill="#1a1a1a"/><path d="M35 34 L40 40 L45 34"fill="#F59E0B"/><path d="M36 36 Q40 42 44 36"stroke="#E07B00"strokeWidth="1"fill="none"/></svg>;
+  if(type==="bee")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="40"cy="44"rx="16"ry="20"fill="#F59E0B"/><ellipse cx="40"cy="34"rx="10"ry="8"fill="#1a1a1a"/><rect x="28"y="40"width="24"height="5"rx="2"fill="#1a1a1a"/><rect x="28"y="49"width="24"height="5"rx="2"fill="#1a1a1a"/><rect x="28"y="58"width="24"height="4"rx="2"fill="#1a1a1a"/><ellipse cx="35"cy="31"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="45"cy="31"rx="4"ry="5"fill="#1a1a1a"/><circle cx="35"cy="30"r="2"fill="white"/><circle cx="45"cy="30"r="2"fill="white"/><path d="M26 38 Q14 28 18 18"stroke="#D1FAE5"strokeWidth="8"fill="none"strokeLinecap="round"opacity="0.8"/><path d="M54 38 Q66 28 62 18"stroke="#D1FAE5"strokeWidth="8"fill="none"strokeLinecap="round"opacity="0.8"/><ellipse cx="40"cy="26"rx="6"ry="4"fill="#1a1a1a"/><path d="M38 22 L40 16 L42 22"fill="#1a1a1a"/></svg>;
+  if(type==="hedgehog")return<svg width={size}height={size}viewBox="0 0 80 80"className={cls}><ellipse cx="40"cy="52"rx="24"ry="18"fill="#92400E"/>{[{x:26,y:28},{x:32,y:22},{x:40,y:20},{x:48,y:22},{x:54,y:28},{x:22,y:36},{x:58,y:36},{x:28,y:42},{x:52,y:42}].map((p,i)=><ellipse key={i}cx={p.x}cy={p.y}rx="3"ry="7"fill="#1a1a1a"transform={`rotate(${(p.x-40)*2} ${p.x} ${p.y})`}/>)}<ellipse cx="40"cy="48"rx="18"ry="14"fill="#D97706"/><ellipse cx="32"cy="44"rx="4"ry="5"fill="#1a1a1a"/><ellipse cx="48"cy="44"rx="4"ry="5"fill="#1a1a1a"/><circle cx="32"cy="43"r="1.5"fill="white"/><circle cx="48"cy="43"r="1.5"fill="white"/><ellipse cx="40"cy="50"rx="5"ry="3.5"fill="#92400E"/><path d="M36 52 Q40 56 44 52"stroke="#92400E"strokeWidth="1.5"fill="none"strokeLinecap="round"/></svg>;
   return<span style={{fontSize:size*0.6}}>🐾</span>;
 };
 
@@ -309,6 +316,78 @@ const BANK = {
     {type:"CogAT Non-Verbal",q:"SPATIAL REASONING:\nHow many small squares make\none big 2×2 square?",options:["2","3","4","6"],answer:"4",hint:"2 rows × 2 columns = ?"},
     {type:"CogAT Non-Verbal",q:"FIGURE CLASSIFICATION:\nWhich has EXACTLY 4 sides?",options:["Triangle","Circle","Rectangle","Pentagon"],answer:"Rectangle",hint:"Count the sides of each shape!"},
   ],
+
+  /* ── SPELLING ────────────────────────────────────────────────────────── */
+  /* Each question: word to spell shown + spoken, pick correct spelling    */
+  spelling:[
+    // The 'word' field = the correct word shown/spoken before options appear
+    {word:"because",q:"Which is the correct spelling?",options:["becaus","because","becorse","becuase"],answer:"because",hint:"b-e-c-a-u-s-e"},
+    {word:"people",q:"Which is the correct spelling?",options:["peopel","peeple","people","peaple"],answer:"people",hint:"p-e-o-p-l-e"},
+    {word:"which",q:"Which is the correct spelling?",options:["wich","whitch","which","wihch"],answer:"which",hint:"starts with wh- like where and when"},
+    {word:"there",q:"Which is the correct spelling?",options:["thier","there","thear","theyr"],answer:"there",hint:"like 'here' with a T in front"},
+    {word:"would",q:"Which is the correct spelling?",options:["woud","wood","wuld","would"],answer:"would",hint:"has a silent L: w-o-u-l-d"},
+    {word:"really",q:"Which is the correct spelling?",options:["realy","relly","realla","really"],answer:"really",hint:"double L: r-e-a-l-l-y"},
+    {word:"beautiful",q:"Which is the correct spelling?",options:["beutiful","beautifull","beautiful","butiful"],answer:"beautiful",hint:"b-e-a-u-t-i-f-u-l"},
+    {word:"friend",q:"Which is the correct spelling?",options:["freind","frend","friend","friand"],answer:"friend",hint:"i before e in friend!"},
+    {word:"school",q:"Which is the correct spelling?",options:["scool","shcool","school","skhool"],answer:"school",hint:"sch- then -ool"},
+    {word:"again",q:"Which is the correct spelling?",options:["agen","agian","agin","again"],answer:"again",hint:"a-g-a-i-n"},
+    {word:"different",q:"Which is the correct spelling?",options:["diferent","diffrent","different","diferrent"],answer:"different",hint:"double f: d-i-f-f-e-r-e-n-t"},
+    {word:"garden",q:"Which is the correct spelling?",options:["gardin","garden","gaarden","gardan"],answer:"garden",hint:"g-a-r-d-e-n"},
+    {word:"answer",q:"Which is the correct spelling?",options:["anser","answar","asnwer","answer"],answer:"answer",hint:"silent w: a-n-s-w-e-r"},
+    {word:"every",q:"Which is the correct spelling?",options:["evry","every","evrey","everry"],answer:"every",hint:"e-v-e-r-y"},
+    {word:"thought",q:"Which is the correct spelling?",options:["thort","thougt","thought","thougth"],answer:"thought",hint:"th-ough-t — tricky ough!"},
+    {word:"enough",q:"Which is the correct spelling?",options:["enuf","enouf","enougth","enough"],answer:"enough",hint:"e-n-o-u-g-h — tricky ough!"},
+    {word:"through",q:"Which is the correct spelling?",options:["threw","throgh","through","throo"],answer:"through",hint:"thr-ough — another ough word!"},
+    {word:"might",q:"Which is the correct spelling?",options:["mite","migt","myght","might"],answer:"might",hint:"m-i-g-h-t — silent gh!"},
+    {word:"night",q:"Which is the correct spelling?",options:["nite","nigt","nyght","night"],answer:"night",hint:"n-i-g-h-t — like light and right!"},
+    {word:"light",q:"Which is the correct spelling?",options:["lite","lght","lyght","light"],answer:"light",hint:"l-i-g-h-t — silent gh!"},
+    {word:"caught",q:"Which is the correct spelling?",options:["cort","caght","cawght","caught"],answer:"caught",hint:"c-a-u-g-h-t — tricky aught!"},
+    {word:"taught",q:"Which is the correct spelling?",options:["tort","taght","tawght","taught"],answer:"taught",hint:"t-a-u-g-h-t — like caught!"},
+    {word:"island",q:"Which is the correct spelling?",options:["iland","eiland","ilsand","island"],answer:"island",hint:"silent s: i-s-l-a-n-d"},
+    {word:"climb",q:"Which is the correct spelling?",options:["clim","clime","climm","climb"],answer:"climb",hint:"silent b at the end: c-l-i-m-b"},
+    {word:"knee",q:"Which is the correct spelling?",options:["nee","kne","knea","knee"],answer:"knee",hint:"silent k: k-n-e-e"},
+    {word:"whole",q:"Which is the correct spelling?",options:["hole","whol","wole","whole"],answer:"whole",hint:"silent wh-: w-h-o-l-e"},
+    {word:"daughter",q:"Which is the correct spelling?",options:["darter","doughter","dawter","daughter"],answer:"daughter",hint:"d-a-u-g-h-t-e-r — tricky!"},
+    {word:"favourite",q:"Which is the correct spelling?",options:["favorit","favrite","favourite","faverite"],answer:"favourite",hint:"f-a-v-o-u-r-i-t-e"},
+    {word:"chocolate",q:"Which is the correct spelling?",options:["choclate","chokolate","chockolate","chocolate"],answer:"chocolate",hint:"choc-o-late — three syllables!"},
+    {word:"surprise",q:"Which is the correct spelling?",options:["suprise","surpise","surprize","surprise"],answer:"surprise",hint:"sur-prise: s-u-r-p-r-i-s-e"},
+  ],
+
+  /* ── FILL THE GAP ────────────────────────────────────────────────────── */
+  gaps:[
+    // type:"sentence" = full sentence with ___ | type:"word" = missing letters
+    {type:"sentence",q:"The cat sat on the ___.",options:["mat","dog","run","blue"],answer:"mat",hint:"Cats like to sit on flat things!"},
+    {type:"sentence",q:"She put on her coat because\nit was ___.",options:["sunny","hot","cold","funny"],answer:"cold",hint:"Why do you wear a coat?"},
+    {type:"sentence",q:"The children played in the ___ after school.",options:["bed","park","book","spoon"],answer:"park",hint:"Where do children go to play outside?"},
+    {type:"sentence",q:"He was very ___ so he drank\na glass of water.",options:["hungry","tired","thirsty","happy"],answer:"thirsty",hint:"When you need water, you feel...?"},
+    {type:"sentence",q:"We use a ___ to cut paper.",options:["spoon","pen","scissors","pillow"],answer:"scissors",hint:"What has two blades and cuts?"},
+    {type:"sentence",q:"Birds fly with their ___.",options:["legs","tails","wings","beaks"],answer:"wings",hint:"What do birds flap to fly?"},
+    {type:"sentence",q:"The sun rises in the ___ and sets in the west.",options:["north","south","east","sky"],answer:"east",hint:"The sun comes up in the east!"},
+    {type:"sentence",q:"A baby cat is called a ___.",options:["puppy","calf","kitten","foal"],answer:"kitten",hint:"A baby dog is a puppy. A baby cat is a...?"},
+    {type:"sentence",q:"We read and write at ___.",options:["home","school","hospital","shop"],answer:"school",hint:"Where do you go to learn?"},
+    {type:"sentence",q:"Fish live in ___ water.",options:["hot","dry","salty","rocky"],answer:"salty",hint:"The sea tastes salty — and fish live there!"},
+    {type:"sentence",q:"A doctor works in a ___.",options:["school","shop","hospital","library"],answer:"hospital",hint:"Where do sick people go for help?"},
+    {type:"sentence",q:"We use an ___ when it rains.",options:["hat","umbrella","coat","boot"],answer:"umbrella",hint:"It keeps rain off your head!"},
+    {type:"sentence",q:"The opposite of hot is ___.",options:["warm","cold","big","fast"],answer:"cold",hint:"Hot and ___ are opposites!"},
+    {type:"sentence",q:"A spider has ___ legs.",options:["4","6","8","10"],answer:"8",hint:"Count the legs on a spider!"},
+    {type:"sentence",q:"We plant seeds in the ___ to grow flowers.",options:["sea","soil","sky","snow"],answer:"soil",hint:"Seeds go into the ground — into the...?"},
+    // Word gap questions — missing letters shown with underscores
+    {type:"word",q:"Complete the word:\nc _ t",display:"c _ t",options:["a","e","i","o"],answer:"a",hint:"This animal says meow! c_a_t"},
+    {type:"word",q:"Complete the word:\nd _ g",display:"d _ g",options:["a","e","i","o"],answer:"o",hint:"This animal barks! d_o_g"},
+    {type:"word",q:"Complete the word:\ns _ n",display:"s _ n",options:["a","e","i","o","u"],answer:"u",hint:"It shines in the sky! s_u_n"},
+    {type:"word",q:"Complete the word:\nb _ d",display:"b _ d",options:["a","e","i","o","u"],answer:"e",hint:"You sleep in it! b_e_d"},
+    {type:"word",q:"Complete the word:\nt _ ee",display:"t _ ee",options:["a","e","r","n"],answer:"r",hint:"It has leaves and branches! t_r_ee"},
+    {type:"word",q:"Complete the word:\nfl _ wer",display:"fl _ wer",options:["a","e","o","u"],answer:"o",hint:"It blooms in the garden! fl_o_wer"},
+    {type:"word",q:"Complete the word:\nf _ sh",display:"f _ sh",options:["a","e","i","o"],answer:"i",hint:"It lives in water and swims! f_i_sh"},
+    {type:"word",q:"Complete the word:\nfr _ g",display:"fr _ g",options:["a","e","o","u"],answer:"o",hint:"It hops and says ribbit! fr_o_g"},
+    {type:"word",q:"Complete the word:\ndr _ gon",display:"dr _ gon",options:["a","e","i","o"],answer:"a",hint:"A mythical fire-breathing creature! dr_a_gon"},
+    {type:"word",q:"Complete the word:\nj _ mp",display:"j _ mp",options:["a","e","i","u"],answer:"u",hint:"What you do on a trampoline! j_u_mp"},
+    {type:"word",q:"Complete the word:\nst _ r",display:"st _ r",options:["a","e","i","o"],answer:"a",hint:"It twinkles in the night sky! st_a_r"},
+    {type:"word",q:"Complete the word:\nch _ ir",display:"ch _ ir",options:["a","e","i","o"],answer:"a",hint:"You sit on it! ch_a_ir"},
+    {type:"word",q:"Complete the word:\ntr _ in",display:"tr _ in",options:["a","e","i","o"],answer:"a",hint:"It runs on railway tracks! tr_a_in"},
+    {type:"word",q:"Complete the word:\nsp _ der",display:"sp _ der",options:["a","e","i","o"],answer:"i",hint:"It has 8 legs and spins webs! sp_i_der"},
+    {type:"word",q:"Complete the word:\ncl _ ud",display:"cl _ ud",options:["a","e","o","u"],answer:"o",hint:"Fluffy white things in the sky! cl_o_ud"},
+  ],
 };
 
 async function fetchAIQ(subject){
@@ -320,6 +399,8 @@ async function fetchAIQ(subject){
     quant:"Generate 1 quantitative reasoning question for ages 5-7 (number patterns, missing numbers, or puzzles). Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
     spanish:"Generate 1 beginner Spanish vocabulary question for ages 5-7. Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
     cogat:"Generate 1 CogAT-style question for ages 5-7 (verbal analogy, number series, or pattern recognition). Return ONLY valid JSON: {\"q\":\"...\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
+    spelling:"Generate 1 spelling question for ages 5-7. Pick a common English word and give 4 spellings (1 correct, 3 plausible misspellings). Return ONLY valid JSON: {\"word\":\"...\",\"q\":\"Which is the correct spelling?\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
+    gaps:"Generate 1 fill-in-the-gap sentence for ages 5-7 with one missing word. Return ONLY valid JSON: {\"type\":\"sentence\",\"q\":\"sentence with ___ for the gap\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"...\",\"hint\":\"...\"}",
   };
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:"You are a friendly teacher for children aged 5-7. Respond ONLY with valid JSON, no markdown.",messages:[{role:"user",content:prompts[subject]}]})});
@@ -469,6 +550,8 @@ function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setT
               <div key={s.id} className="subject-card slide-up" style={{background:s.bg,borderColor:s.border,animationDelay:`${i*0.07}s`}} onClick={()=>{sounds.tap();onSelect(s.id);}}>
                 {p.best>0&&<div className="badge-best" style={{color:s.dark}}>Best {p.best}/{TOTAL}</div>}
                 {s.id==="cogat"&&<div className="cogat-badge">GIFTED</div>}
+                {s.id==="spelling"&&<div className="cogat-badge" style={{background:"#F59E0B"}}>🐝 SPELL</div>}
+                {s.id==="gaps"&&<div className="cogat-badge" style={{background:"#8B5CF6"}}>🧩 GAPS</div>}
                 <div style={{marginBottom:4}}><Mascot type={s.mascot} size={46} animate/></div>
                 <div className="card-label" style={{color:s.dark}}>{s.label}</div>
                 <div className="card-desc" style={{color:s.dark}}>{s.desc}</div>
@@ -549,8 +632,12 @@ const CHEERS=["Amazing! 🎉","Brilliant! 🌟","Super star! ⭐","Wow! 🏆","G
 
 const BATTERY_COLORS={"CogAT Verbal":"#10B981","CogAT Quantitative":"#F59E0B","CogAT Non-Verbal":"#6366F1"};
 
+const clampWord="clamp(22px,6vw,34px)";
+
 function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
   const s=SUBJECTS.find(x=>x.id===subjectId);
+  const isSpelling=subjectId==="spelling";
+  const isGaps=subjectId==="gaps";
   const [qs,setQs]=useState([]);
   const [idx,setIdx]=useState(0);
   const [sel,setSel]=useState(null);
@@ -562,6 +649,8 @@ function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
   const [streak,setStreak]=useState(0);
   const [bestStreak,setBestStreak]=useState(0);
   const [reading,setReading]=useState(false);
+  // Spelling: "show" = display word phase, "quiz" = pick spelling phase
+  const [spellPhase,setSpellPhase]=useState("show");
 
   const build=useCallback(async()=>{
     setLoading(true);
@@ -576,12 +665,23 @@ function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
   useEffect(()=>{build();},[build]);
   useEffect(()=>{return()=>stopSpeaking();},[]);
 
+  // Auto-speak word when spelling phase starts
+  useEffect(()=>{
+    if(isSpelling&&spellPhase==="show"&&qs.length>0&&qs[idx]?.word&&!muted){
+      const w=qs[idx].word;
+      setTimeout(()=>speak(`The word is: ${w}. ${w}.`),400);
+    }
+  },[idx,spellPhase,qs,isSpelling,muted]);
+
   const cur=qs[idx];
 
   const readQuestion=()=>{
     if(reading){stopSpeaking();setReading(false);return;}
     setReading(true);
-    const txt=cur.passage?`${cur.passage}. Question: ${cur.q}`:`Question ${idx+1}. ${cur.q}`;
+    let txt;
+    if(isSpelling&&cur.word) txt=`The word is: ${cur.word}. ${cur.word}. Can you spell it?`;
+    else if(cur.passage) txt=`${cur.passage}. Question: ${cur.q}`;
+    else txt=`Question ${idx+1}. ${cur.q}`;
     speak(txt,()=>setReading(false));
   };
 
@@ -598,7 +698,13 @@ function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
   const next=()=>{
     sounds.tap();stopSpeaking();setReading(false);
     if(idx+1>=TOTAL){onDone(score,bestStreak);setDone(true);}
-    else{setIdx(i=>i+1);setSel(null);setHint(false);}
+    else{setIdx(i=>i+1);setSel(null);setHint(false);if(isSpelling)setSpellPhase("show");}
+  };
+
+  const proceedToSpell=()=>{
+    sounds.tap();
+    speak(cur.word,()=>{});
+    setSpellPhase("quiz");
   };
 
   if(loading)return(
@@ -618,11 +724,57 @@ function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
 
   if(done)return<Results score={score} total={TOTAL} subject={s}
     onBack={()=>{sounds.tap();onBack();}}
-    onRetry={()=>{sounds.tap();setQs([]);setIdx(0);setSel(null);setHint(false);setScore(0);setDone(false);setStreak(0);build();}}
+    onRetry={()=>{sounds.tap();setQs([]);setIdx(0);setSel(null);setHint(false);setScore(0);setDone(false);setStreak(0);if(isSpelling)setSpellPhase("show");build();}}
     sounds={sounds} muted={muted} toggleMute={toggleMute}/>;
 
   const correct=sel===cur?.answer;
   const batteryColor=cur?.type?BATTERY_COLORS[cur.type]:"";
+
+  // ── Spelling "show word" phase ──────────────────────────────────────────
+  if(isSpelling&&spellPhase==="show"&&cur){
+    return(
+      <div>
+        <Confetti active={confetti}/>
+        <div className="topbar">
+          <button className="back-btn" onClick={()=>{sounds.tap();stopSpeaking();onBack();}}>← Home</button>
+          <div className="topbar-label" style={{color:s.btn}}>{s.emoji} {s.label}</div>
+          <div className="score-chip" style={{color:s.btn}}>{score} ⭐</div>
+          <button className="icon-btn" onClick={toggleMute}>{muted?"🔇":"🔊"}</button>
+        </div>
+        <div className="prog-row">
+          {Array.from({length:TOTAL}).map((_,i)=>(
+            <div key={i} className={`prog-dot ${i<idx?"done":i===idx?"active":""}`} style={i===idx?{background:s.btn}:{}}/>
+          ))}
+          <div className="prog-track"><div className="prog-fill" style={{width:`${(idx/TOTAL)*100}%`,background:s.btn}}/></div>
+          <span style={{fontSize:10,fontWeight:800,color:"#9ca3af"}}>{idx+1}/{TOTAL}</span>
+        </div>
+        <div className="q-wrap" key={`show-${idx}`}>
+          <div className="q-card" style={{borderColor:s.border,textAlign:"center"}}>
+            <div style={{marginBottom:10}}><Mascot type={s.mascot} size={52} animate/></div>
+            <div style={{fontSize:12,fontWeight:800,color:"#9ca3af",letterSpacing:".08em",textTransform:"uppercase",marginBottom:6}}>Word {idx+1} of {TOTAL}</div>
+            <div style={{fontSize:clampWord,fontFamily:"'Boogaloo',cursive",color:s.dark,letterSpacing:"0.05em",marginBottom:8,padding:"14px 8px",background:s.bg,borderRadius:14,border:`3px solid ${s.border}`}}>
+              {cur.word}
+            </div>
+            <div style={{fontSize:13,fontWeight:700,color:"#6b7280",marginBottom:14}}>
+              Listen carefully, then pick the correct spelling!
+            </div>
+            <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
+              <button className="read-btn" style={{fontSize:13,padding:"8px 16px"}} onClick={readQuestion}>
+                🔈 Hear it again
+              </button>
+              <button className="next-btn" style={{background:s.btn,width:"auto",padding:"10px 28px",fontSize:18,marginTop:0}} onClick={proceedToSpell}>
+                I'm ready to spell! →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Normal quiz card (also used for spelling "quiz" phase and gaps) ─────
+  // For gaps word type: render display field if present
+  const gapWordDisplay=isGaps&&cur?.type==="word"&&cur?.display;
 
   return(
     <div>
@@ -646,16 +798,32 @@ function Quiz({subjectId,onBack,onDone,sounds,muted,toggleMute}){
           <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:9}}>
             <Mascot type={s.mascot} size={38} animate={sel!==null&&correct}/>
             <div style={{flex:1}}>
-              {cur.type&&<div className="battery-badge" style={{background:batteryColor+"22",color:batteryColor}}>🧠 {cur.type}</div>}
+              {cur.type&&!isGaps&&<div className="battery-badge" style={{background:batteryColor+"22",color:batteryColor}}>🧠 {cur.type}</div>}
+              {isGaps&&cur.type&&<div className="battery-badge" style={{background:cur.type==="word"?"#EDE9FE":"#DCFCE7",color:cur.type==="word"?"#7C3AED":"#15803d"}}>{cur.type==="word"?"🔤 Missing Letter":"📝 Missing Word"}</div>}
               {cur.isAI&&<div className="ai-badge">✨ AI question</div>}
               <div className="q-num">Question {idx+1} of {TOTAL}</div>
             </div>
           </div>
+          {/* Spelling: show the word again small as reminder */}
+          {isSpelling&&cur.word&&(
+            <div style={{textAlign:"center",marginBottom:8}}>
+              <div style={{display:"inline-block",background:s.bg,border:`2px solid ${s.border}`,borderRadius:10,padding:"6px 18px",fontFamily:"'Boogaloo',cursive",fontSize:22,color:s.dark,letterSpacing:"0.05em"}}>{cur.word}</div>
+              <button className={`read-btn${reading?" reading":""}`} style={{display:"inline-flex",marginLeft:8}} onClick={readQuestion}>{reading?"⏹":"🔈"}</button>
+            </div>
+          )}
           {cur.passage&&<div className="passage">{cur.passage}</div>}
+          {/* Gap word display box */}
+          {gapWordDisplay&&(
+            <div style={{textAlign:"center",margin:"8px 0 12px"}}>
+              <div style={{display:"inline-block",background:"#F3F0FF",border:"3px dashed #8B5CF6",borderRadius:12,padding:"10px 24px",fontFamily:"'Boogaloo',cursive",fontSize:clampWord,color:"#6D28D9",letterSpacing:"0.12em"}}>{cur.display}</div>
+            </div>
+          )}
           <div className="q-text">{cur.q}</div>
-          <button className={`read-btn${reading?" reading":""}`} onClick={readQuestion}>
-            {reading?"⏹ Stop":"🔈 Read to me"}
-          </button>
+          {!isSpelling&&(
+            <button className={`read-btn${reading?" reading":""}`} onClick={readQuestion}>
+              {reading?"⏹ Stop":"🔈 Read to me"}
+            </button>
+          )}
           <div className="options">
             {cur.options.map(opt=>{
               let cls="opt opt-default";
@@ -740,7 +908,7 @@ export default function App(){
     const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
     const oldBest=progress[subject]?.best||0;
     const newProgress={...progress,[subject]:{stars:Math.max(progress[subject].stars,stars),best:Math.max(oldBest,score)}};
-    const newHistory={total:history.total+1,perfectScores:history.perfectScores+(score===TOTAL?1:0),bestStreak:Math.max(history.bestStreak,streak||0),improvements:history.improvements+(score>oldBest&&oldBest>0?1:0)};
+    const newHistory={total:history.total+1,perfectScores:history.perfectScores+(score===TOTAL?1:0),bestStreak:Math.max(history.bestStreak,streak||0),improvements:history.improvements+(score>oldBest&&oldBest>0?1:0),spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0)};
     setProgress(newProgress);setHistory(newHistory);
     const newBadges=checkAchievements(newProgress,newHistory,earned);
     if(newBadges.length>0){
