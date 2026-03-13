@@ -1788,3 +1788,85 @@ function WelcomeScreen({profiles,activeId,onSelectProfile,onAddProfile,onDeleteP
   );
 }
 
+
+/* ─── Root ─────────────────────────────────────────────────────────────── */
+export default function App(){
+  const [profiles,setProfiles]=useState([]);
+  const [activeId,setActiveId]=useState(null);
+  const activeProfile=profiles.find(p=>p.id===activeId)||null;
+  const progress=activeProfile?.progress||makeEmptyProgress();
+  const history=activeProfile?.history||{total:0,perfectScores:0,bestStreak:0,improvements:0,spellPerfect:0,timesPerfect:0};
+  const earned=activeProfile?.earned||[];
+  const avatar=activeProfile?.avatar||DEFAULT_AVATAR;
+  const defaultLevel=activeProfile?.defaultLevel||"easy";
+  const ttMastery=activeProfile?.ttMastery||{};
+  const updateProfile=(fields)=>setProfiles(ps=>ps.map(p=>p.id===activeId?{...p,...fields}:p));
+  const [screen,setScreen]=useState("welcome");
+  const [subject,setSubject]=useState(null);
+  const [quizLevel,setQuizLevel]=useState("easy");
+  const [ttTable,setTtTable]=useState(null);
+  const [muted,setMuted]=useState(false);
+  const [tab,setTab]=useState(0);
+  const [toastQueue,setToastQueue]=useState([]);
+  const rawSounds=useRef(null);
+  if(!rawSounds.current)rawSounds.current=createSounds();
+  const sounds={
+    tap:()=>{if(!muted)rawSounds.current.tap();},
+    correct:()=>{if(!muted)rawSounds.current.correct();},
+    wrong:()=>{if(!muted)rawSounds.current.wrong();},
+    fanfare:()=>{if(!muted)rawSounds.current.fanfare();},
+    badge:()=>{if(!muted)rawSounds.current.badge();},
+  };
+  const addProfile=(name)=>{
+    const p=makeProfile(name,{name});
+    setProfiles(ps=>[...ps,p]);
+    setActiveId(p.id);
+    setScreen("avatar");
+  };
+  const selectProfile=(id)=>{setActiveId(id);setScreen("home");setTab(0);};
+  const deleteProfile=(id)=>{
+    setProfiles(ps=>ps.filter(p=>p.id!==id));
+    if(activeId===id){setActiveId(null);setScreen("welcome");}
+  };
+  const checkAch=(np,nh,ce)=>ACHIEVEMENTS.filter(a=>!ce.includes(a.id)&&a.check(np,nh));
+  const done=(score,streak)=>{
+    const pct=score/TOTAL;
+    const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
+    const old=progress[subject]||{stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};
+    const lk="best_"+quizLevel;
+    const np={...progress,[subject]:{...old,stars:Math.max(old.stars,stars),best:Math.max(old.best,score),[lk]:Math.max(old[lk]||0,score)}};
+    const nh={total:history.total+1,perfectScores:history.perfectScores+(score===TOTAL?1:0),bestStreak:Math.max(history.bestStreak,streak||0),improvements:history.improvements+(score>(old.best||0)&&(old.best||0)>0?1:0),spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0),timesPerfect:history.timesPerfect||0};
+    const nb=checkAch(np,nh,earned);
+    const ne=nb.length>0?[...earned,...nb.map(b=>b.id)]:earned;
+    updateProfile({progress:np,history:nh,earned:ne});
+    if(nb.length>0)nb.forEach((b,i)=>{setTimeout(()=>{sounds.badge();setToastQueue(q=>[...q,b]);},i*3400);});
+  };
+  const doneTT=(score)=>{
+    const nm={...ttMastery,[ttTable]:Math.max(ttMastery[ttTable]||0,score)};
+    const pct=score/TT_QUESTIONS_PER_SESSION;
+    const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
+    const ot=progress.times||{stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};
+    const np={...progress,times:{...ot,stars:Math.max(ot.stars,stars),best:Math.max(ot.best,score)}};
+    const nh={...history,total:history.total+1,timesPerfect:(history.timesPerfect||0)+(score===TT_QUESTIONS_PER_SESSION?1:0)};
+    const nb=checkAch(np,nh,earned);
+    const ne=nb.length>0?[...earned,...nb.map(b=>b.id)]:earned;
+    updateProfile({progress:np,history:nh,earned:ne,ttMastery:nm});
+    if(nb.length>0)nb.forEach((b,i)=>{setTimeout(()=>{sounds.badge();setToastQueue(q=>[...q,b]);},i*3400);});
+  };
+  return(
+    <>
+      <style>{CSS}</style>
+      <JungleBg/>
+      {toastQueue.length>0&&<BadgeToast badge={toastQueue[0]} onDone={()=>setToastQueue(q=>q.slice(1))}/>}
+      <div className="app">
+        {screen==="welcome"&&<WelcomeScreen profiles={profiles} activeId={activeId} onSelectProfile={selectProfile} onAddProfile={addProfile} onDeleteProfile={deleteProfile} sounds={sounds}/>}
+        {screen==="avatar"&&<AvatarBuilder avatar={avatar} onSave={av=>{updateProfile({avatar:{...av,name:av.name||activeProfile?.name||"Explorer"}});setScreen("home");}} onBack={()=>setScreen(profiles.length>0&&activeId?"home":"welcome")} sounds={sounds}/>}
+        {screen==="home"&&activeProfile&&<Home progress={progress} history={history} earned={earned} defaultLevel={defaultLevel} onSetDefaultLevel={lv=>{sounds.tap();updateProfile({defaultLevel:lv});}} avatar={avatar} onEditAvatar={()=>{sounds.tap();setScreen("avatar");}} onSwitchProfile={()=>{sounds.tap();setScreen("welcome");}} onSelect={id=>{sounds.tap();if(id==="times"){setScreen("times-pick");setSubject("times");}else{setSubject(id);setScreen("diff-pick");}}} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)} tab={tab} setTab={setTab}/>}
+        {screen==="diff-pick"&&subject&&<DifficultyPicker subject={subject} defaultLevel={defaultLevel} progress={progress} onStart={lv=>{setQuizLevel(lv);setScreen("quiz");}} onBack={()=>{setScreen("home");setSubject(null);}} sounds={sounds}/>}
+        {screen==="quiz"&&subject&&<Quiz subjectId={subject} level={quizLevel} onBack={()=>setScreen("diff-pick")} onDone={done} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
+        {screen==="times-pick"&&<TimesTablePicker onStart={t=>{setTtTable(t);setScreen("times-quiz");}} onBack={()=>{setScreen("home");setSubject(null);}} sounds={sounds} mastery={ttMastery}/>}
+        {screen==="times-quiz"&&ttTable&&<TimesTableQuiz table={ttTable} onBack={()=>setScreen("times-pick")} onDone={doneTT} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
+      </div>
+    </>
+  );
+}
