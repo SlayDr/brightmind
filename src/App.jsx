@@ -820,7 +820,7 @@ const CSS=`
 @import url('${FONTS}');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;touch-action:manipulation}
-body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-height:100dvh;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-height:100dvh;overscroll-behavior:none;-webkit-tap-highlight-color:transparent;color-scheme:light;}
 .app{max-width:720px;margin:0 auto;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom));padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right));position:relative;z-index:1;min-height:100vh;min-height:100dvh}
 @keyframes sway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
 @keyframes mascot-bounce{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
@@ -1070,8 +1070,8 @@ function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setT
             const groupSubjects=g.subjects.map(id=>SUBJECTS.find(s=>s.id===id)).filter(Boolean);
             const diff=DIFFICULTY[defaultLevel];
             return(
-              <div key={g.id} className="group-card slide-up"
-                style={{background:g.bg,borderColor:isOpen?g.color:"transparent",animationDelay:`${gi*0.08}s`}}>
+              <div key={g.id} className="group-card"
+                style={{background:g.bg,borderColor:isOpen?g.color:"transparent"}}>
                 {/* Group header — tap to expand */}
                 <div className="group-header" onClick={()=>toggleGroup(g.id)}>
                   <div className="group-emoji">{g.emoji}</div>
@@ -1408,7 +1408,7 @@ function AvatarBuilder({avatar,onSave,onBack,sounds}){
         <div style={{marginTop:10}}>
           <input value={name} onChange={e=>setName(e.target.value)} maxLength={14}
             placeholder="Your name"
-            style={{fontFamily:"'Boogaloo',cursive",fontSize:20,textAlign:"center",border:"2.5px solid #e5e7eb",borderRadius:12,padding:"6px 12px",width:"190px",color:"#111",background:"white",outline:"none"}}
+            style={{fontFamily:"'Boogaloo',cursive",fontSize:20,textAlign:"center",border:"2.5px solid #e5e7eb",borderRadius:12,padding:"6px 12px",width:"190px",color:"#111",background:"#ffffff",WebkitTextFillColor:"#111",colorScheme:"light",outline:"none"}}
             onFocus={e=>e.target.style.borderColor="#F6A800"}
             onBlur={e=>e.target.style.borderColor="#e5e7eb"}
           />
@@ -1590,50 +1590,32 @@ function Quiz({subjectId,level,seenQs,onBack,onDone,sounds,muted,toggleMute}){
   // Spelling: "show" = display word phase, "quiz" = pick spelling phase
   const [spellPhase,setSpellPhase]=useState("show");
 
-  const build=useCallback(async()=>{
+  const build=useCallback(()=>{
     setLoading(true);
     const all=BANK[subjectId]||[];
     const levelled=all.filter(q=>q.level===level);
-    const pool=levelled.length>=8?levelled:all;
+    const pool=levelled.length>=20?levelled:all;
 
-    // Give every bank question a stable key based on its index
-    const indexed=pool.map((q,i)=>({...q,_key:`${subjectId}_${level}_${i}`}));
-
-    // Split into unseen and seen
+    // Use question text as stable unique key
+    const makeKey=(q)=>`${q.q||q.word||""}`.slice(0,40);
     const seenSet=new Set(seenQs||[]);
-    const unseen=indexed.filter(q=>!seenSet.has(q._key));
-    const seen=indexed.filter(q=>seenSet.has(q._key));
 
-    // Shuffle both, take unseen first — reset if all seen
-    const shuffleUnseen=[...unseen].sort(()=>Math.random()-0.5);
-    const shuffleSeen=[...seen].sort(()=>Math.random()-0.5);
+    // Split into unseen and seen, shuffle each
+    const unseen=[...pool.filter(q=>!seenSet.has(makeKey(q)))].sort(()=>Math.random()-0.5);
+    const seen=[...pool.filter(q=>seenSet.has(makeKey(q)))].sort(()=>Math.random()-0.5);
 
-    // Build pool: prioritise unseen, pad with seen if needed
-    const ordered=[...shuffleUnseen,...shuffleSeen];
+    // Take 20: unseen first, pad with seen if needed, then repeat
+    let ordered=[...unseen,...seen];
+    if(ordered.length===0)ordered=[...pool].sort(()=>Math.random()-0.5);
 
-    // Repeat if bank is tiny
+    // Repeat pool until we have TOTAL
     let bankPool=[];
-    while(bankPool.length<TOTAL)bankPool=[...bankPool,...ordered];
-    const bankFallback=bankPool.slice(0,TOTAL);
+    while(bankPool.length<TOTAL)bankPool=[...bankPool,...[...ordered].sort(()=>Math.random()-0.5)];
 
-    // Try AI batch — use as bonus on top, fall back silently
-    let aiQs=[];
-    try{ aiQs=await fetchAIBatch(subjectId,level,12); }catch(e){}
-
-    const isValid=(q)=>q&&q.q&&Array.isArray(q.options)&&q.options.length===4&&q.answer&&q.options.includes(q.answer);
-
-    // Mix: fill with unseen bank first, then AI, guarantee TOTAL
-    const combined=[...bankFallback.slice(0,TOTAL-Math.min(aiQs.length,6)),...aiQs.slice(0,6)]
-      .filter(isValid)
-      .slice(0,TOTAL);
-
-    const final=combined.length>=TOTAL
-      ? combined
-      : [...combined,...bankFallback.slice(0,TOTAL-combined.length)].filter(isValid).slice(0,TOTAL);
-
+    const final=bankPool.slice(0,TOTAL).map(q=>({...q,_key:makeKey(q)}));
     setQs(final);
     setLoading(false);
-  },[subjectId,level,seenQs]);
+  },[subjectId,level]);
 
   useEffect(()=>{build();},[build]);
   useEffect(()=>{return()=>stopSpeaking();},[]);
@@ -2233,7 +2215,7 @@ function WelcomeScreen({profiles,activeId,onSelectProfile,onAddProfile,onDeleteP
                 onKeyDown={e=>e.key==="Enter"&&submitProfile()}
                 maxLength={14}
                 placeholder={whoType==="kid"?"e.g. Lily":"e.g. James"}
-                style={{width:"100%",padding:"12px 14px",fontSize:18,fontFamily:"'Boogaloo',cursive",border:`2.5px solid ${nameError?"#ef4444":"#e5e7eb"}`,borderRadius:14,outline:"none",marginBottom:6,textAlign:"center",color:"#111"}}
+                style={{width:"100%",padding:"12px 14px",fontSize:18,fontFamily:"'Boogaloo',cursive",border:`2.5px solid ${nameError?"#ef4444":"#e5e7eb"}`,borderRadius:14,outline:"none",marginBottom:6,textAlign:"center",color:"#111",background:"#ffffff",WebkitTextFillColor:"#111",colorScheme:"light"}}
               />
               {nameError&&<div style={{color:"#ef4444",fontSize:12,fontWeight:700,marginBottom:8,textAlign:"center"}}>{nameError}</div>}
               <button className="next-btn" style={{background:"#16a34a",marginTop:10}} onClick={submitProfile}>
