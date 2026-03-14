@@ -193,6 +193,39 @@ const BANK = {
     {level:"hard",q:"A train travels 60km/h.\nHow far in 2.5 hours?",options:["120km","130km","150km","160km"],answer:"150km",hint:"60 × 2.5 = 60×2 + 60×0.5"},
     {level:"hard",q:"What is ³⁄₄ + ¹⁄₂?",options:["1","1¼","1½","2"],answer:"1¼",hint:"Convert: ¾ + ²⁄₄ = ?"},
     {level:"hard",q:"What is the perimeter of a regular hexagon\nwith sides of 4cm?",options:["20cm","24cm","28cm","32cm"],answer:"24cm",hint:"Hexagon has 6 sides: 6 × 4 = ?"},
+    // ── EXTRA EASY ──
+    {level:"easy",q:"What is 1 + 1?",options:["1","2","3","4"],answer:"2",hint:"One and one makes two!"},
+    {level:"easy",q:"What is 5 + 2?",options:["6","7","8","9"],answer:"7",hint:"Count up from 5!"},
+    {level:"easy",q:"What is 3 + 3?",options:["5","6","7","8"],answer:"6",hint:"Double 3!"},
+    {level:"easy",q:"How many legs does a dog have?",options:["2","3","4","6"],answer:"4",hint:"Count the paws!"},
+    {level:"easy",q:"What shape is a wheel?",options:["Square","Triangle","Circle","Rectangle"],answer:"Circle",hint:"Round and round it goes!"},
+    {level:"easy",q:"What comes after 9?",options:["8","10","11","12"],answer:"10",hint:"Count: 7,8,9,..."},
+    {level:"easy",q:"How many fingers on one hand?",options:["4","5","6","7"],answer:"5",hint:"Count your fingers!"},
+    {level:"easy",q:"What is 10 − 3?",options:["5","6","7","8"],answer:"7",hint:"Count back 3 from 10!"},
+    {level:"easy",q:"How many sides does a triangle have?",options:["2","3","4","5"],answer:"3",hint:"Tri means three!"},
+    {level:"easy",q:"What is 2 + 2 + 2?",options:["4","5","6","7"],answer:"6",hint:"Three groups of 2!"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",q:"What is 6 × 6?",options:["30","36","42","48"],answer:"36",hint:"6 groups of 6!"},
+    {level:"medium",q:"What is 100 − 37?",options:["53","63","73","83"],answer:"63",hint:"100 − 37: start with 100 − 40 = 60, then + 3!"},
+    {level:"medium",q:"What is ¹⁄₂ of 16?",options:["4","6","8","10"],answer:"8",hint:"Split 16 into 2 equal groups!"},
+    {level:"medium",q:"What is 7 × 8?",options:["54","56","58","63"],answer:"56",hint:"7 × 8 = 56, remember it!"},
+    {level:"medium",q:"How many seconds in a minute?",options:["30","60","100","120"],answer:"60",hint:"60 seconds = 1 minute!"},
+    {level:"medium",q:"What is 9 × 9?",options:["72","81","90","99"],answer:"81",hint:"9 × 9 = 81!"},
+    {level:"medium",q:"What is 48 ÷ 6?",options:["6","7","8","9"],answer:"8",hint:"6 × 8 = 48, so 48 ÷ 6 = ?"},
+    {level:"medium",q:"What is 3 × 12?",options:["30","34","36","39"],answer:"36",hint:"3 × 12 = 3 × 10 + 3 × 2!"},
+    {level:"medium",q:"What is ¹⁄₄ of 20?",options:["4","5","6","8"],answer:"5",hint:"Split 20 into 4 equal groups!"},
+    {level:"medium",q:"What is 25 + 37?",options:["52","62","72","82"],answer:"62",hint:"25 + 37: 20+30=50, 5+7=12, so 50+12=?"},
+    // ── EXTRA HARD ──
+    {level:"hard",q:"What is 12 × 13?",options:["144","150","156","162"],answer:"156",hint:"12×13 = 12×10 + 12×3 = 120 + 36"},
+    {level:"hard",q:"What is 15% of 200?",options:["20","25","30","35"],answer:"30",hint:"10% = 20, 5% = 10, so 15% = 30!"},
+    {level:"hard",q:"A rectangle is 12cm long and 7cm wide. What is the perimeter?",options:["38cm","40cm","42cm","44cm"],answer:"38cm",hint:"Perimeter = 2×(length + width) = 2×19"},
+    {level:"hard",q:"What is 2⁴?",options:["6","8","12","16"],answer:"16",hint:"2×2×2×2 = 4×4 = 16"},
+    {level:"hard",q:"What is 1000 − 456?",options:["444","544","554","644"],answer:"544",hint:"1000 − 456: 1000 − 400 = 600, 600 − 56 = 544"},
+    {level:"hard",q:"What is the area of a triangle\nwith base 8cm and height 5cm?",options:["20cm²","30cm²","40cm²","80cm²"],answer:"20cm²",hint:"Area = ½ × base × height = ½ × 8 × 5"},
+    {level:"hard",q:"What is √144?",options:["10","11","12","13"],answer:"12",hint:"12 × 12 = 144"},
+    {level:"hard",q:"A shop sells 3 items for £2.70.\nHow much is one item?",options:["70p","80p","90p","£1.00"],answer:"90p",hint:"270p ÷ 3 = ?"},
+    {level:"hard",q:"What is 5³?",options:["15","25","100","125"],answer:"125",hint:"5×5×5 = 25×5 = 125"},
+    {level:"hard",q:"What is the LCM of 4 and 6?",options:["10","12","18","24"],answer:"12",hint:"List multiples: 4,8,12... and 6,12... first common is 12!"},
   ],
 
   english:[
@@ -229,6 +262,26 @@ const BANK = {
     {level:"hard",q:"What is an 'oxymoron'?",options:["A very long word","Two contradictory words together","A word that sounds like its meaning","A word borrowed from another language"],answer:"Two contradictory words together",hint:"'Deafening silence' and 'bitter sweet' are oxymorons!"},
     {level:"hard",q:"Which word is spelled correctly?",options:["recieve","neice","achieve","beleive"],answer:"achieve",hint:"i before e except after c — ach-i-e-ve!"},
     {level:"hard",q:"What literary device is used in:\n'The wind whispered through the trees'?",options:["Simile","Metaphor","Personification","Alliteration"],answer:"Personification",hint:"Giving human qualities (whispered) to non-human things!"},
+    // ── EXTRA EASY ──
+    {level:"easy",q:"Which word names an animal?",options:["run","blue","cat","fast"],answer:"cat",hint:"An animal is a living creature!"},
+    {level:"easy",q:"Which word is a colour?",options:["jump","green","swim","tall"],answer:"green",hint:"Colours describe how things look!"},
+    {level:"easy",q:"What letter does 'ball' start with?",options:["D","C","B","P"],answer:"B",hint:"B is for Ball!"},
+    {level:"easy",q:"Which word rhymes with 'dog'?",options:["cat","log","car","pig"],answer:"log",hint:"Dog... log... both end in -og!"},
+    {level:"easy",q:"Which word is a number?",options:["cat","run","three","hot"],answer:"three",hint:"Numbers count things!"},
+    {level:"easy",q:"How many letters in 'sun'?",options:["2","3","4","5"],answer:"3",hint:"S-U-N — count them!"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",q:"What does 'gigantic' mean?",options:["Very small","Very fast","Very huge","Very quiet"],answer:"Very huge",hint:"Gigantic = enormous = really really big!"},
+    {level:"medium",q:"Which word is a noun?\n'The quick brown fox jumps.'",options:["quick","brown","fox","jumps"],answer:"fox",hint:"A noun is a person, place or thing!"},
+    {level:"medium",q:"Which word means the opposite of 'ancient'?",options:["old","modern","large","quiet"],answer:"modern",hint:"Ancient = very old. Its opposite is new/modern!"},
+    {level:"medium",q:"Which sentence has correct punctuation?",options:["Where are you going","Where are you going?","where are you going?","Where are you going!"],answer:"Where are you going?",hint:"A question needs a capital letter and question mark!"},
+    {level:"medium",q:"What is the past tense of 'run'?",options:["runned","runs","ran","running"],answer:"ran",hint:"Today I run. Yesterday I ran!"},
+    {level:"medium",q:"Which word is a simile?",options:["The dog barked.","She runs fast.","He is as brave as a lion.","The flowers bloomed."],answer:"He is as brave as a lion.",hint:"A simile compares using 'as' or 'like'!"},
+    // ── EXTRA HARD ──
+    {level:"hard",q:"What is a 'clause'?",options:["A type of punctuation","A group of words with a subject and verb","A describing word","A connecting word"],answer:"A group of words with a subject and verb",hint:"A clause has a subject (who) and predicate (what they do)!"},
+    {level:"hard",q:"Which word contains a silent letter?",options:["jump","fast","kneel","bright"],answer:"kneel",hint:"Kneel has a silent K at the start!"},
+    {level:"hard",q:"What does the suffix '-tion' mean?",options:["Without","Full of","The act of","Before"],answer:"The act of",hint:"Education = the act of educating. Action = the act of acting!"},
+    {level:"hard",q:"Which is an example of alliteration?",options:["She sells seashells","The cat sat on the mat","It was as big as a house","He ran quickly"],answer:"She sells seashells",hint:"Alliteration = same first sound repeated: s-s-s!"},
+    {level:"hard",q:"What type of word is 'quickly'?",options:["Noun","Verb","Adjective","Adverb"],answer:"Adverb",hint:"Adverbs describe how something is done — quickly, slowly, carefully!"},
   ],
 
   reading:[
@@ -250,6 +303,18 @@ const BANK = {
     {level:"hard",passage:"In 1969, astronaut Neil Armstrong became the first human to walk on the moon. He described the surface as 'magnificent desolation'. The mission, called Apollo 11, lasted eight days in total.",q:"What did Armstrong call the moon's surface?",options:["Beautiful wilderness","Magnificent desolation","Lunar paradise","Silent emptiness"],answer:"Magnificent desolation",hint:"Find his direct quote in the passage!"},
     {level:"hard",passage:"Bees communicate by dancing. The 'waggle dance' tells other bees the direction and distance of flowers. The longer the waggle, the farther away the flowers are. Scientists spent decades decoding this language.",q:"What does the length of the waggle tell other bees?",options:["The type of flower","The direction of flowers","How far the flowers are","How many flowers there are"],answer:"How far the flowers are",hint:"Read the sentence about the 'longer the waggle'!"},
     {level:"hard",passage:"The Amazon rainforest produces about 20% of the world's oxygen and is home to 10% of all species on Earth. Despite covering only 5% of Earth's surface, it plays a critical role in regulating the global climate.",q:"What percentage of the world's oxygen does the Amazon produce?",options:["5%","10%","15%","20%"],answer:"20%",hint:"Find the statistic about oxygen in the first sentence!"},
+    // ── EXTRA EASY ──
+    {level:"easy",passage:"Ben has a red ball. He plays with it in the park every day. His favourite game is catch with his dad.",q:"What colour is Ben's ball?",options:["Blue","Green","Red","Yellow"],answer:"Red",hint:"Read the first sentence!"},
+    {level:"easy",passage:"Sara loves butterflies. She saw a yellow one in the garden. It landed on a flower and flew away.",q:"What colour was the butterfly?",options:["Red","Blue","Yellow","Green"],answer:"Yellow",hint:"Find the sentence about the butterfly!"},
+    {level:"easy",passage:"Tim has a pet rabbit called Snowy. Snowy is white and fluffy. Tim feeds Snowy carrots every morning.",q:"What does Tim feed Snowy?",options:["Grass","Lettuce","Carrots","Apples"],answer:"Carrots",hint:"Read the last sentence!"},
+    {level:"easy",passage:"The children went to the zoo. They saw lions, elephants and giraffes. Their favourite animal was the giraffe because of its long neck.",q:"What was the children's favourite animal?",options:["Lion","Elephant","Giraffe","Zebra"],answer:"Giraffe",hint:"Find the sentence about their favourite!"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",passage:"Dolphins are highly intelligent marine mammals. They live in groups called pods and communicate using clicks and whistles. Dolphins have been known to help injured members of their pod.",q:"What do dolphins live in?",options:["Herds","Packs","Pods","Schools"],answer:"Pods",hint:"Find the word that describes their group!"},
+    {level:"medium",passage:"The Great Wall of China is one of the largest structures ever built. It stretches over 21,000 kilometres across northern China. It was built to protect China from invasions.",q:"Why was the Great Wall built?",options:["For tourism","To show wealth","To protect from invasions","For trade routes"],answer:"To protect from invasions",hint:"Read the last sentence!"},
+    {level:"medium",passage:"Volcanoes form when hot melted rock called magma pushes up through cracks in the Earth's surface. When a volcano erupts, magma flows out as lava. Some volcanoes are found under the ocean.",q:"What is magma called once it erupts?",options:["Ash","Steam","Lava","Rock"],answer:"Lava",hint:"Find the sentence about what magma becomes!"},
+    // ── EXTRA HARD ──
+    {level:"hard",passage:"Marie Curie was the first woman to win a Nobel Prize, and the only person ever to win Nobel Prizes in two different sciences — Physics in 1903 and Chemistry in 1911. Her discoveries about radioactivity changed the world of science forever.",q:"How many Nobel Prizes did Marie Curie win?",options:["1","2","3","4"],answer:"2",hint:"Read carefully — she won prizes in two different sciences!"},
+    {level:"hard",passage:"Migration is the seasonal movement of animals from one region to another. Arctic terns hold the record for the longest migration, travelling up to 90,000 kilometres each year between the Arctic and Antarctic. Scientists track these journeys using tiny tracking devices.",q:"Which animal has the longest migration?",options:["Monarch butterfly","Humpback whale","Arctic tern","Wildebeest"],answer:"Arctic tern",hint:"Find the sentence mentioning the record!"},
   ],
 
   verbal:[
@@ -277,6 +342,24 @@ const BANK = {
     {level:"hard",q:"If all Bloops are Razzles,\nand all Razzles are Lazzles,\nare all Bloops definitely Lazzles?",options:["Yes","No","Sometimes","Can't tell"],answer:"Yes",hint:"If A=B and B=C, then A=C! Logical chain!"},
     {level:"hard",q:"Optimist is to pessimist as\ngenerous is to...?",options:["kind","stingy","wealthy","honest"],answer:"stingy",hint:"Optimist and pessimist are opposites. What's the opposite of generous?"},
     {level:"hard",q:"What comes next?\n1, 1, 2, 3, 5, 8, __",options:["11","12","13","14"],answer:"13",hint:"Each number is the sum of the two before it! (Fibonacci)"},
+    // ── EXTRA EASY ──
+    {level:"easy",q:"Which word doesn't belong?\n🔴 Red  🔵 Blue  🟢 Green  🐕 Dog",options:["Red","Blue","Green","Dog"],answer:"Dog",hint:"Three are colours. One is an animal!"},
+    {level:"easy",q:"Which word goes with\n'hat, scarf, gloves'?",options:["sandals","coat","shorts","swimsuit"],answer:"coat",hint:"All worn in cold weather!"},
+    {level:"easy",q:"Apple is to tree as\nrose is to...?",options:["petal","thorn","bush","leaf"],answer:"bush",hint:"An apple grows on a tree. A rose grows on a..."},
+    {level:"easy",q:"What comes next?\n1, 2, 3, 4, __",options:["4","5","6","7"],answer:"5",hint:"Count up by 1!"},
+    {level:"easy",q:"Which word means the same as 'little'?",options:["huge","tall","small","fast"],answer:"small",hint:"Little = small!"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",q:"Pen is to write as\nbrush is to...?",options:["draw","eat","cut","run"],answer:"draw",hint:"You write with a pen. You draw/paint with a brush!"},
+    {level:"medium",q:"Which word doesn't belong?\nCircle  Square  Triangle  Cylinder",options:["Circle","Square","Triangle","Cylinder"],answer:"Cylinder",hint:"Three are 2D flat shapes. One is a 3D solid!"},
+    {level:"medium",q:"What comes next?\n2, 4, 8, 16, __",options:["18","24","32","64"],answer:"32",hint:"Each number doubles!"},
+    {level:"medium",q:"Ice is to cold as\nfire is to...?",options:["smoke","hot","wood","light"],answer:"hot",hint:"Ice is associated with cold. Fire is associated with..."},
+    {level:"medium",q:"Which word means the same as 'angry'?",options:["happy","furious","excited","calm"],answer:"furious",hint:"Furious = very angry!"},
+    // ── EXTRA HARD ──
+    {level:"hard",q:"Thermometer is to temperature as\nbarometer is to...?",options:["wind","rain","air pressure","humidity"],answer:"air pressure",hint:"A thermometer measures temperature. A barometer measures..."},
+    {level:"hard",q:"Which doesn't belong?\nSonata  Symphony  Concerto  Novel",options:["Sonata","Symphony","Concerto","Novel"],answer:"Novel",hint:"Three are musical compositions. One is a type of book!"},
+    {level:"hard",q:"If some Flurps are Glorps,\nare all Glorps definitely Flurps?",options:["Yes","No","Sometimes","Can't tell"],answer:"No",hint:"Some ≠ all. Some Flurps are Glorps doesn't mean all Glorps are Flurps!"},
+    {level:"hard",q:"What comes next?\n3, 5, 8, 12, 17, __",options:["21","22","23","24"],answer:"23",hint:"Differences: +2, +3, +4, +5, +6..."},
+    {level:"hard",q:"Microscope is to tiny as\ntelescope is to...?",options:["small","near","distant","bright"],answer:"distant",hint:"A microscope sees tiny things. A telescope sees distant things!"},
   ],
 
   /* ── QUANTITATIVE REASONING ─────────────────────────────────────────── */
@@ -403,6 +486,30 @@ const BANK = {
     {level:"hard",word:"favourite",q:"Which is the correct spelling?",options:["favorit","favrite","favourite","faverite"],answer:"favourite",hint:"f-a-v-o-u-r-i-t-e"},
     {level:"hard",word:"chocolate",q:"Which is the correct spelling?",options:["choclate","chokolate","chockolate","chocolate"],answer:"chocolate",hint:"choc-o-late — three syllables!"},
     {level:"hard",word:"surprise",q:"Which is the correct spelling?",options:["suprise","surpise","surprize","surprise"],answer:"surprise",hint:"sur-prise: s-u-r-p-r-i-s-e"},
+    // ── EXTRA EASY ──
+    {level:"easy",word:"pig",q:"Which is the correct spelling?",options:["peg","pig","pog","pug"],answer:"pig",hint:"p-i-g"},
+    {level:"easy",word:"cup",q:"Which is the correct spelling?",options:["cap","cop","cup","cip"],answer:"cup",hint:"c-u-p"},
+    {level:"easy",word:"hen",q:"Which is the correct spelling?",options:["han","hin","hun","hen"],answer:"hen",hint:"h-e-n"},
+    {level:"easy",word:"top",q:"Which is the correct spelling?",options:["tap","tip","tup","top"],answer:"top",hint:"t-o-p"},
+    {level:"easy",word:"map",q:"Which is the correct spelling?",options:["mop","map","mup","mep"],answer:"map",hint:"m-a-p"},
+    {level:"easy",word:"pen",q:"Which is the correct spelling?",options:["pan","pin","pun","pen"],answer:"pen",hint:"p-e-n"},
+    {level:"easy",word:"box",q:"Which is the correct spelling?",options:["bax","bix","bux","box"],answer:"box",hint:"b-o-x"},
+    {level:"easy",word:"net",q:"Which is the correct spelling?",options:["nat","nit","nut","net"],answer:"net",hint:"n-e-t"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",word:"happy",q:"Which is the correct spelling?",options:["hapy","happi","happy","happey"],answer:"happy",hint:"double p: h-a-p-p-y"},
+    {level:"medium",word:"little",q:"Which is the correct spelling?",options:["litle","littel","little","littul"],answer:"little",hint:"double t, double l: l-i-t-t-l-e"},
+    {level:"medium",word:"people",q:"Which is the correct spelling?",options:["peaple","peeple","peopel","people"],answer:"people",hint:"p-e-o-p-l-e"},
+    {level:"medium",word:"could",q:"Which is the correct spelling?",options:["coud","culd","could","chold"],answer:"could",hint:"silent l: c-o-u-l-d"},
+    {level:"medium",word:"write",q:"Which is the correct spelling?",options:["rite","writ","right","write"],answer:"write",hint:"silent w: w-r-i-t-e"},
+    {level:"medium",word:"know",q:"Which is the correct spelling?",options:["no","now","know","knoe"],answer:"know",hint:"silent k: k-n-o-w"},
+    {level:"medium",word:"listen",q:"Which is the correct spelling?",options:["lissen","liten","listen","listun"],answer:"listen",hint:"silent t: l-i-s-t-e-n"},
+    {level:"medium",word:"castle",q:"Which is the correct spelling?",options:["casel","castel","castle","castul"],answer:"castle",hint:"silent t: c-a-s-t-l-e"},
+    // ── EXTRA HARD ──
+    {level:"hard",word:"necessary",q:"Which is the correct spelling?",options:["neccessary","necesary","necessary","neccesary"],answer:"necessary",hint:"1 collar (c), 2 socks (ss): n-e-c-e-s-s-a-r-y"},
+    {level:"hard",word:"separate",q:"Which is the correct spelling?",options:["seperate","separete","seprate","separate"],answer:"separate",hint:"sep-a-rate: s-e-p-a-r-a-t-e"},
+    {level:"hard",word:"Wednesday",q:"Which is the correct spelling?",options:["Wendsday","Wensday","Wednesday","Wendesday"],answer:"Wednesday",hint:"Wed-nes-day — the d is silent!"},
+    {level:"hard",word:"rhythm",q:"Which is the correct spelling?",options:["rithm","rythm","rhythym","rhythm"],answer:"rhythm",hint:"no vowels! r-h-y-t-h-m"},
+    {level:"hard",word:"conscience",q:"Which is the correct spelling?",options:["consience","concience","conscience","conscence"],answer:"conscience",hint:"con-science: c-o-n-s-c-i-e-n-c-e"},
   ],
 
   /* ── FILL THE GAP ────────────────────────────────────────────────────── */
@@ -431,6 +538,28 @@ const BANK = {
     {level:"hard",type:"word",q:"Complete the word:\ndr _ gon",display:"dr _ gon",options:["a","e","i","o"],answer:"a",hint:"A mythical fire-breathing creature! dr_a_gon"},
     {level:"hard",type:"word",q:"Complete the word:\nsp _ der",display:"sp _ der",options:["a","e","i","o"],answer:"i",hint:"It has 8 legs and spins webs! sp_i_der"},
     {level:"hard",type:"word",q:"Complete the word:\nch _ ir",display:"ch _ ir",options:["a","e","i","o"],answer:"a",hint:"You sit on it! ch_a_ir"},
+    // ── EXTRA EASY ──
+    {level:"easy",type:"sentence",q:"I drink ___ when I am thirsty.",options:["water","cake","stones","paper"],answer:"water",hint:"What do you drink?"},
+    {level:"easy",type:"sentence",q:"We sleep in a ___.",options:["car","bed","tree","river"],answer:"bed",hint:"Where do you sleep at night?"},
+    {level:"easy",type:"sentence",q:"A dog says ___.",options:["moo","quack","woof","meow"],answer:"woof",hint:"What sound does a dog make?"},
+    {level:"easy",type:"sentence",q:"I use a ___ to write.",options:["spoon","fork","pencil","shoe"],answer:"pencil",hint:"What do you write with?"},
+    {level:"easy",type:"word",q:"Complete the word:\nb _ t",display:"b _ t",options:["a","e","i","o"],answer:"a",hint:"A flying mammal! b_a_t"},
+    {level:"easy",type:"word",q:"Complete the word:\nh _ t",display:"h _ t",options:["a","e","i","o"],answer:"a",hint:"You wear it on your head! h_a_t"},
+    {level:"easy",type:"word",q:"Complete the word:\np _ n",display:"p _ n",options:["a","e","i","o"],answer:"e",hint:"You write with it! p_e_n"},
+    {level:"easy",type:"word",q:"Complete the word:\nb _ g",display:"b _ g",options:["a","e","i","o"],answer:"a",hint:"You carry things in it! b_a_g"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",type:"sentence",q:"The opposite of tall is ___.",options:["big","short","fast","loud"],answer:"short",hint:"Tall and ___ are opposites!"},
+    {level:"medium",type:"sentence",q:"We use ___ to see in the dark.",options:["a spoon","a torch","a book","a chair"],answer:"a torch",hint:"What lights up the dark?"},
+    {level:"medium",type:"sentence",q:"Plants need sunlight, water and ___ to grow.",options:["sand","soil","glass","metal"],answer:"soil",hint:"Plants grow in the ground — in the..."},
+    {level:"medium",type:"sentence",q:"A group of fish is called a ___.",options:["herd","flock","school","pack"],answer:"school",hint:"Fish swim together in a school!"},
+    {level:"medium",type:"word",q:"Complete the word:\nkn _ fe",display:"kn _ fe",options:["a","e","i","o"],answer:"i",hint:"You use it to cut food! kn_i_fe"},
+    {level:"medium",type:"word",q:"Complete the word:\nph _ ne",display:"ph _ ne",options:["a","e","i","o"],answer:"o",hint:"You call people on it! ph_o_ne"},
+    // ── EXTRA HARD ──
+    {level:"hard",type:"sentence",q:"The ___ of a circle is the distance across its centre.",options:["radius","diameter","perimeter","circumference"],answer:"diameter",hint:"Diameter goes all the way across. Radius is half!"},
+    {level:"hard",type:"sentence",q:"A word that sounds like another but has a different meaning is called a ___.",options:["synonym","antonym","homophone","metaphor"],answer:"homophone",hint:"Hear/here and there/their are homophones!"},
+    {level:"hard",type:"sentence",q:"The process by which a liquid turns into a gas is called ___.",options:["condensation","freezing","evaporation","melting"],answer:"evaporation",hint:"Puddles disappear by evaporation!"},
+    {level:"hard",type:"word",q:"Complete the word:\nsc _ ssors",display:"sc _ ssors",options:["a","e","i","o"],answer:"i",hint:"You cut with them! sc_i_ssors"},
+    {level:"hard",type:"word",q:"Complete the word:\nd _ ctor",display:"d _ ctor",options:["a","e","i","o"],answer:"o",hint:"They help sick people! d_o_ctor"},
   ],
 
   /* ── SCIENCE ─────────────────────────────────────────────────────────── */
@@ -468,6 +597,27 @@ const BANK = {
     {level:"hard",q:"How long does it take Earth to orbit the Sun? ☀️",options:["24 hours","28 days","365 days","100 years"],answer:"365 days",hint:"One orbit = one year = about 365 days!"},
     {level:"hard",q:"What is the powerhouse of the cell? 🔬",options:["Nucleus","Cell membrane","Mitochondria","Ribosome"],answer:"Mitochondria",hint:"Mitochondria produce energy (ATP) for the cell!"},
     {level:"hard",q:"Which type of rock is formed from cooled lava? 🌋",options:["Sedimentary","Metamorphic","Igneous","Limestone"],answer:"Igneous",hint:"Igneous comes from the Latin 'ignis' meaning fire!"},
+    // ── EXTRA EASY ──
+    {level:"easy",q:"What do butterflies start life as? 🦋",options:["Tadpoles","Caterpillars","Chicks","Grubs"],answer:"Caterpillars",hint:"Egg → Caterpillar → Chrysalis → Butterfly!"},
+    {level:"easy",q:"What do we breathe in to survive? 🌬️",options:["Carbon dioxide","Nitrogen","Oxygen","Steam"],answer:"Oxygen",hint:"We breathe in oxygen and breathe out carbon dioxide!"},
+    {level:"easy",q:"How many legs does a spider have? 🕷️",options:["4","6","8","10"],answer:"8",hint:"Spiders have 8 legs — more than insects!"},
+    {level:"easy",q:"What is the hottest planet in our solar system? ☀️",options:["Mercury","Venus","Mars","Jupiter"],answer:"Venus",hint:"Venus has a thick atmosphere that traps heat!"},
+    {level:"easy",q:"Which animal is the largest on land? 🐘",options:["Giraffe","Hippo","Elephant","Rhino"],answer:"Elephant",hint:"African elephants are the biggest land animals!"},
+    {level:"easy",q:"What do plants make during photosynthesis? 🌿",options:["Water","Sugar","Salt","Soil"],answer:"Sugar",hint:"Plants make sugar (glucose) from sunlight!"},
+    {level:"easy",q:"What covers most of the Earth's surface? 🌍",options:["Ice","Land","Forests","Water"],answer:"Water",hint:"About 71% of Earth is covered by oceans!"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",q:"What is the function of the lungs? 🫁",options:["Pump blood","Filter blood","Exchange gases","Digest food"],answer:"Exchange gases",hint:"Lungs take in oxygen and release carbon dioxide!"},
+    {level:"medium",q:"Which planet has rings? 🪐",options:["Mars","Jupiter","Saturn","Neptune"],answer:"Saturn",hint:"Saturn's rings are made of ice and rock!"},
+    {level:"medium",q:"What is the boiling point of water? 💧",options:["50°C","75°C","100°C","150°C"],answer:"100°C",hint:"Water boils at 100 degrees Celsius!"},
+    {level:"medium",q:"What type of animal is a whale? 🐋",options:["Fish","Reptile","Mammal","Amphibian"],answer:"Mammal",hint:"Whales breathe air and feed their young milk!"},
+    {level:"medium",q:"What causes day and night? 🌙",options:["Earth orbiting the Sun","Moon blocking the Sun","Earth spinning on its axis","Clouds covering the Sun"],answer:"Earth spinning on its axis",hint:"Earth rotates once every 24 hours, causing day and night!"},
+    {level:"medium",q:"What is the main source of energy for Earth? ☀️",options:["Wind","The Moon","The Sun","Volcanoes"],answer:"The Sun",hint:"The Sun provides light and heat energy for all life on Earth!"},
+    // ── EXTRA HARD ──
+    {level:"hard",q:"What is the name for animals that eat both plants and meat?",options:["Herbivores","Carnivores","Omnivores","Predators"],answer:"Omnivores",hint:"Omni = all. Omnivores eat everything!"},
+    {level:"hard",q:"Which part of the cell contains genetic information (DNA)?",options:["Cell membrane","Mitochondria","Nucleus","Vacuole"],answer:"Nucleus",hint:"The nucleus is the control centre of the cell!"},
+    {level:"hard",q:"What is the speed of light approximately?",options:["300 km/s","3,000 km/s","300,000 km/s","3,000,000 km/s"],answer:"300,000 km/s",hint:"Light travels about 300,000 kilometres per second!"},
+    {level:"hard",q:"What is Newton's First Law of Motion?",options:["Force = Mass × Acceleration","Objects in motion stay in motion unless acted upon","Every action has an equal reaction","Energy cannot be created or destroyed"],answer:"Objects in motion stay in motion unless acted upon",hint:"Also called the Law of Inertia!"},
+    {level:"hard",q:"What percentage of the human body is water?",options:["30%","45%","60%","80%"],answer:"60%",hint:"About 60% of the adult human body is water!"},
   ],
 
   /* ── SOCIAL STUDIES ──────────────────────────────────────────────────── */
@@ -505,6 +655,26 @@ const BANK = {
     {level:"hard",q:"What is the purpose of a constitution? 📋",options:["To list all laws","To set out the fundamental rules of a country","To record history","To organise elections"],answer:"To set out the fundamental rules of a country",hint:"A constitution is the supreme law that all other laws must follow!"},
     {level:"hard",q:"Which mountain range separates Europe from Asia? ⛰️",options:["Alps","Himalayas","Andes","Ural Mountains"],answer:"Ural Mountains",hint:"The Urals run through Russia and mark the Europe-Asia boundary!"},
     {level:"hard",q:"What is the name of South Africa's system of racial segregation that ended in 1994?",options:["Colonialism","Apartheid","Segregation","Partition"],answer:"Apartheid",hint:"Nelson Mandela spent 27 years in prison fighting against apartheid!"},
+    // ── EXTRA EASY ──
+    {level:"easy",q:"What does a teacher do? 📚",options:["Fixes teeth","Teaches children","Drives buses","Builds houses"],answer:"Teaches children",hint:"Teachers help us learn at school!"},
+    {level:"easy",q:"What does a nurse do? 💉",options:["Grows food","Fixes cars","Helps sick people","Delivers letters"],answer:"Helps sick people",hint:"Nurses work in hospitals and clinics!"},
+    {level:"easy",q:"What is the capital of England? 🏴󠁧󠁢󠁥󠁮󠁧󠁿",options:["Manchester","Birmingham","London","Leeds"],answer:"London",hint:"London is the biggest city and capital of England!"},
+    {level:"easy",q:"On which continent is Brazil? 🌎",options:["Africa","Asia","Europe","South America"],answer:"South America",hint:"Brazil is the largest country in South America!"},
+    {level:"easy",q:"What colour is the flag of the USA? 🇺🇸",options:["Red, white and blue","Red and white","Blue and white","Green and white"],answer:"Red, white and blue",hint:"The Stars and Stripes has red, white and blue!"},
+    {level:"easy",q:"What does a postman/postwoman do? 📬",options:["Fights fires","Delivers letters","Teaches children","Fixes teeth"],answer:"Delivers letters",hint:"The post person brings your letters and parcels!"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",q:"What is the capital of Japan? 🇯🇵",options:["Osaka","Kyoto","Hiroshima","Tokyo"],answer:"Tokyo",hint:"Tokyo is one of the world's largest cities!"},
+    {level:"medium",q:"Which river flows through Egypt? 🏺",options:["Amazon","Mississippi","Thames","Nile"],answer:"Nile",hint:"The Nile is the world's longest river and runs through Egypt!"},
+    {level:"medium",q:"What was the name of the first satellite sent to space?",options:["Apollo","Sputnik","Explorer","Vostok"],answer:"Sputnik",hint:"The Soviet Union launched Sputnik 1 in 1957!"},
+    {level:"medium",q:"Which country is the Eiffel Tower in? 🗼",options:["Italy","Spain","France","Germany"],answer:"France",hint:"The Eiffel Tower is in Paris, the capital of France!"},
+    {level:"medium",q:"What is the largest ocean on Earth? 🌊",options:["Atlantic","Indian","Arctic","Pacific"],answer:"Pacific",hint:"The Pacific Ocean covers more than a third of Earth's surface!"},
+    {level:"medium",q:"Who was Martin Luther King Jr.? ✊",options:["A US President","A civil rights leader","A famous scientist","An astronaut"],answer:"A civil rights leader",hint:"He led peaceful protests for equal rights for Black Americans!"},
+    // ── EXTRA HARD ──
+    {level:"hard",q:"What is the name of the international court that settles disputes between countries?",options:["Supreme Court","The Hague","ICC","World Court"],answer:"The Hague",hint:"The International Court of Justice is in The Hague, Netherlands!"},
+    {level:"hard",q:"In which year did the Berlin Wall fall?",options:["1985","1987","1989","1991"],answer:"1989",hint:"The Berlin Wall fell on November 9th, 1989!"},
+    {level:"hard",q:"What is the Silk Road?",options:["A road in China","An ancient trade route","A modern highway","A river in Asia"],answer:"An ancient trade route",hint:"The Silk Road connected Asia, Africa and Europe for trade!"},
+    {level:"hard",q:"Which country has the most land area?",options:["USA","China","Canada","Russia"],answer:"Russia",hint:"Russia spans 11 time zones — the largest country by area!"},
+    {level:"hard",q:"What does GDP stand for?",options:["General Daily Production","Gross Domestic Product","Government Decimal Policy","Grand Development Plan"],answer:"Gross Domestic Product",hint:"GDP measures the total value of goods and services a country produces!"},
   ],
 };
 
