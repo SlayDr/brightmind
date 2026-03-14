@@ -315,6 +315,23 @@ const BANK = {
     // ── EXTRA HARD ──
     {level:"hard",passage:"Marie Curie was the first woman to win a Nobel Prize, and the only person ever to win Nobel Prizes in two different sciences — Physics in 1903 and Chemistry in 1911. Her discoveries about radioactivity changed the world of science forever.",q:"How many Nobel Prizes did Marie Curie win?",options:["1","2","3","4"],answer:"2",hint:"Read carefully — she won prizes in two different sciences!"},
     {level:"hard",passage:"Migration is the seasonal movement of animals from one region to another. Arctic terns hold the record for the longest migration, travelling up to 90,000 kilometres each year between the Arctic and Antarctic. Scientists track these journeys using tiny tracking devices.",q:"Which animal has the longest migration?",options:["Monarch butterfly","Humpback whale","Arctic tern","Wildebeest"],answer:"Arctic tern",hint:"Find the sentence mentioning the record!"},
+    // ── MORE EASY ──
+    {level:"easy",passage:"Joe loves football. He plays every Saturday with his friends. His team won the match last week and he scored two goals.",q:"When does Joe play football?",options:["Sunday","Monday","Saturday","Friday"],answer:"Saturday",hint:"Read the second sentence!"},
+    {level:"easy",passage:"Anna has a pet fish called Bubbles. She feeds it every morning. The fish lives in a big blue tank in her bedroom.",q:"Where does Bubbles live?",options:["In the kitchen","In the garden","In Anna's bedroom","In the bathroom"],answer:"In Anna's bedroom",hint:"Read the last sentence!"},
+    {level:"easy",passage:"The zoo has many animals. There are lions, monkeys, and penguins. The penguins are the most popular because they swim so fast.",q:"Which animals are most popular?",options:["Lions","Monkeys","Penguins","Elephants"],answer:"Penguins",hint:"Find the sentence about the most popular animals!"},
+    {level:"easy",passage:"Mum made a birthday cake. It had chocolate frosting and ten candles. Everyone sang happy birthday and clapped.",q:"How many candles were on the cake?",options:["5","8","10","12"],answer:"10",hint:"Find the number in the second sentence!"},
+    {level:"easy",passage:"It was snowing outside. Sam put on his coat, hat and gloves. He made a big snowman in the garden.",q:"What did Sam make?",options:["A snow angel","A snowball","A snowman","An igloo"],answer:"A snowman",hint:"Read the last sentence!"},
+    {level:"easy",passage:"Lily found a caterpillar in the garden. She put it in a jar with leaves. Two weeks later, a beautiful butterfly flew out.",q:"What came out of the jar?",options:["A moth","A bee","A caterpillar","A butterfly"],answer:"A butterfly",hint:"Read the last sentence!"},
+    // ── MORE MEDIUM ──
+    {level:"medium",passage:"The cheetah is the fastest land animal on Earth. It can reach speeds of up to 112 kilometres per hour. However, it can only maintain this speed for short bursts before it tires.",q:"How fast can a cheetah run?",options:["Up to 80 km/h","Up to 100 km/h","Up to 112 km/h","Up to 150 km/h"],answer:"Up to 112 km/h",hint:"Find the exact speed in the passage!"},
+    {level:"medium",passage:"Rainforests cover only 6% of the Earth's surface, but are home to more than half of the world's plant and animal species. They receive over 2000mm of rain each year and are found near the equator.",q:"What fraction of Earth's surface do rainforests cover?",options:["6%","12%","25%","50%"],answer:"6%",hint:"Find the exact percentage in the first sentence!"},
+    {level:"medium",passage:"The Wright brothers, Orville and Wilbur, made the first successful powered aeroplane flight in 1903. The flight lasted only 12 seconds and covered 37 metres. It changed the world forever.",q:"How long did the first flight last?",options:["6 seconds","12 seconds","37 seconds","1 minute"],answer:"12 seconds",hint:"Find the flight duration in the second sentence!"},
+    {level:"medium",passage:"Honeybees live in colonies of up to 60,000 bees. Each colony has one queen, thousands of workers, and a few hundred drones. The queen can lay up to 2,000 eggs per day.",q:"How many eggs can a queen bee lay per day?",options:["200","600","1,000","2,000"],answer:"2,000",hint:"Find the number in the last sentence!"},
+    {level:"medium",passage:"The Sahara Desert is the largest hot desert in the world. It covers about 9 million square kilometres across North Africa. Temperatures can reach 50°C during the day but drop sharply at night.",q:"Where is the Sahara Desert located?",options:["South America","Central Asia","North Africa","Southern Europe"],answer:"North Africa",hint:"Find the location in the second sentence!"},
+    // ── MORE HARD ──
+    {level:"hard",passage:"Shakespeare wrote 37 plays and 154 sonnets during his lifetime. He was born in Stratford-upon-Avon in 1564 and died in 1616. His works have been translated into every major language and are performed more often than those of any other playwright.",q:"How many plays did Shakespeare write?",options:["27","37","47","154"],answer:"37",hint:"Find the exact number of plays in the first sentence!"},
+    {level:"hard",passage:"Black holes are regions of space where gravity is so strong that nothing — not even light — can escape. They form when massive stars collapse at the end of their lives. Scientists cannot see black holes directly but detect them by their effect on nearby matter.",q:"How do scientists detect black holes?",options:["By their light","By their colour","By their effect on nearby matter","By their size"],answer:"By their effect on nearby matter",hint:"Read the last sentence carefully!"},
+    {level:"hard",passage:"The Industrial Revolution began in Britain in the 18th century and transformed how goods were manufactured. Machines replaced hand tools, and factories replaced small workshops. Cities grew rapidly as workers moved from rural areas to find employment.",q:"What did machines replace during the Industrial Revolution?",options:["Factories","Hand tools","Cities","Workers"],answer:"Hand tools",hint:"Find what machines replaced in the second sentence!"},
   ],
 
   verbal:[
@@ -388,6 +405,37 @@ const BANK = {
     {level:"hard",q:"If ⭐=5 and 🌙=2,\nwhat is ⭐×🌙?",options:["7","8","10","12"],answer:"10",hint:"5×2=?"},
     {level:"hard",q:"A snail moves 3cm\nevery minute.\nHow far in 4 minutes?",options:["7cm","10cm","12cm","15cm"],answer:"12cm",hint:"3×4=?"},
     {level:"hard",q:"A number is between 10 and 20.\nIt is even.\nIt has a 4 in it.\nWhat is it?",options:["12","14","16","18"],answer:"14",hint:"Even numbers between 10-20 with a 4: 14!"},
+    // ── EXTRA EASY ──
+    {level:"easy",q:"What comes next?\n10, 20, 30, 40, __",options:["45","48","50","55"],answer:"50",hint:"Count by 10!"},
+    {level:"easy",q:"🔲 + 2 = 5\nWhat is 🔲?",options:["1","2","3","4"],answer:"3",hint:"What plus 2 equals 5?"},
+    {level:"easy",q:"What comes next?\n1, 2, 3, 4, 5, __",options:["5","6","7","8"],answer:"6",hint:"Count up by 1!"},
+    {level:"easy",q:"How many sides does a square have?",options:["3","4","5","6"],answer:"4",hint:"Count all four sides!"},
+    {level:"easy",q:"Which number is bigger?\n7 or 4",options:["4","7","They're equal","Can't tell"],answer:"7",hint:"Count up: 4, 5, 6, 7 — 7 is bigger!"},
+    {level:"easy",q:"🔲 − 1 = 4\nWhat is 🔲?",options:["3","4","5","6"],answer:"5",hint:"What minus 1 equals 4?"},
+    {level:"easy",q:"What comes next?\n5, 10, 15, __",options:["18","20","22","25"],answer:"20",hint:"Count by 5!"},
+    {level:"easy",q:"If 🍎🍎🍎 = 6,\nhow much is one 🍎?",options:["1","2","3","4"],answer:"2",hint:"6 ÷ 3 = ?"},
+    {level:"easy",q:"How many corners does a rectangle have?",options:["2","3","4","5"],answer:"4",hint:"Count all four corners!"},
+    {level:"easy",q:"Which comes first?\n3, 1, 4, 2",options:["3","1","4","2"],answer:"1",hint:"Put them in order: 1, 2, 3, 4 — which is smallest?"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",q:"What comes next?\n4, 8, 12, 16, __",options:["18","20","22","24"],answer:"20",hint:"Count by 4!"},
+    {level:"medium",q:"🔲 × 4 = 20\nWhat is 🔲?",options:["4","5","6","7"],answer:"5",hint:"What times 4 equals 20?"},
+    {level:"medium",q:"Which is greatest?\n2×8, 3×5, 4×4, 6×2",options:["2×8","3×5","4×4","6×2"],answer:"2×8",hint:"Work out each: 16, 15, 16, 12 — which appears first?"},
+    {level:"medium",q:"A bag has 24 sweets.\nShared equally among 4 friends.\nHow many each?",options:["4","5","6","8"],answer:"6",hint:"24 ÷ 4 = ?"},
+    {level:"medium",q:"What fraction is shaded?\n⬛⬛⬜⬜",options:["1/4","1/2","3/4","2/3"],answer:"1/2",hint:"2 shaded out of 4 total = 2/4 = 1/2!"},
+    {level:"medium",q:"What comes next?\n1, 3, 6, 10, __",options:["13","14","15","16"],answer:"15",hint:"Add 2, then 3, then 4, then 5..."},
+    {level:"medium",q:"🔲 ÷ 3 = 7\nWhat is 🔲?",options:["18","21","24","27"],answer:"21",hint:"7 × 3 = ?"},
+    {level:"medium",q:"A train has 6 carriages.\nEach carriage holds 8 passengers.\nHow many in total?",options:["42","46","48","52"],answer:"48",hint:"6 × 8 = ?"},
+    {level:"medium",q:"Which number is both odd and greater than 10?",options:["8","10","11","12"],answer:"11",hint:"Odd numbers end in 1,3,5,7,9. Which one is greater than 10?"},
+    {level:"medium",q:"If 🌟🌟 = 10, what does 🌟🌟🌟🌟🌟 equal?",options:["20","25","30","35"],answer:"25",hint:"One 🌟 = 5, so five 🌟 = 5×5 = ?"},
+    // ── EXTRA HARD ──
+    {level:"hard",q:"What is the value of n?\n3n + 4 = 19",options:["4","5","6","7"],answer:"5",hint:"3n = 19 - 4 = 15, so n = 15 ÷ 3"},
+    {level:"hard",q:"What comes next?\n2, 3, 5, 7, 11, __",options:["12","13","14","15"],answer:"13",hint:"These are prime numbers!"},
+    {level:"hard",q:"A rectangle has area 48cm²\nand width 6cm.\nWhat is its length?",options:["6cm","7cm","8cm","9cm"],answer:"8cm",hint:"Length = Area ÷ Width = 48 ÷ 6"},
+    {level:"hard",q:"What is 20% of 150?",options:["20","25","30","35"],answer:"30",hint:"20% = 1/5. 150 ÷ 5 = ?"},
+    {level:"hard",q:"If the pattern is ×2 then −1:\n3, 5, 9, 17, __",options:["31","33","34","35"],answer:"33",hint:"17 × 2 = 34, then 34 − 1 = 33"},
+    {level:"hard",q:"What is the mean of:\n4, 7, 9, 6, 4?",options:["5","6","7","8"],answer:"6",hint:"Add all up: 30, then divide by 5"},
+    {level:"hard",q:"What is the next square number after 25?",options:["30","34","36","40"],answer:"36",hint:"Square numbers: 1,4,9,16,25,... 6×6=?"},
+    {level:"hard",q:"A shop reduces a £40 item by 25%.\nWhat is the new price?",options:["£25","£28","£30","£32"],answer:"£30",hint:"25% of 40 = 10. 40 − 10 = ?"},
   ],
 
   /* ── SPANISH ─────────────────────────────────────────────────────────── */
@@ -416,6 +464,37 @@ const BANK = {
     {level:"hard",q:"What does 'Me gusta' mean?",options:["I don't like","I like","I want","I have"],answer:"I like",hint:"Me gusta = it pleases me = I like!"},
     {level:"hard",q:"How do you say 'Green' in Spanish? 🟢",options:["Rojo","Azul","Verde","Blanco"],answer:"Verde",hint:"Verde sounds like 'Vair-day'!"},
     {level:"hard",q:"What does 'Muy bien' mean?",options:["Very bad","Very big","Very well","Very small"],answer:"Very well",hint:"Bien means good/well, muy means very!"},
+    // ── EXTRA EASY ──
+    {level:"easy",q:"How do you say 'No' in Spanish?",options:["Sí","Bien","No","Mal"],answer:"No",hint:"No is the same in English and Spanish!"},
+    {level:"easy",q:"How do you say '2' in Spanish?",options:["Uno","Dos","Tres","Cuatro"],answer:"Dos",hint:"Dos sounds like 'dose'!"},
+    {level:"easy",q:"How do you say 'Blue' in Spanish? 🔵",options:["Rojo","Azul","Verde","Negro"],answer:"Azul",hint:"Azul sounds like 'Ah-zool'!"},
+    {level:"easy",q:"How do you say 'Bird' in Spanish? 🐦",options:["Pez","Gato","Perro","Pájaro"],answer:"Pájaro",hint:"Pájaro sounds like 'Pa-ha-ro'!"},
+    {level:"easy",q:"How do you say 'Please' in Spanish?",options:["Gracias","Por favor","Adiós","Hola"],answer:"Por favor",hint:"Por favor means 'for favour'!"},
+    {level:"easy",q:"How do you say 'Apple' in Spanish? 🍎",options:["Naranja","Manzana","Plátano","Uva"],answer:"Manzana",hint:"Manzana sounds like 'Man-sah-na'!"},
+    {level:"easy",q:"How do you say 'Yellow' in Spanish? 🟡",options:["Rojo","Azul","Amarillo","Verde"],answer:"Amarillo",hint:"Amarillo sounds like 'Am-a-ree-yo'!"},
+    {level:"easy",q:"How do you say '3' in Spanish?",options:["Uno","Dos","Tres","Cuatro"],answer:"Tres",hint:"Tres sounds like 'trace' without the -ace!"},
+    {level:"easy",q:"How do you say 'White' in Spanish? ⬜",options:["Negro","Blanco","Rojo","Azul"],answer:"Blanco",hint:"Blanco sounds like 'Blan-co'!"},
+    {level:"easy",q:"How do you say 'Fish' in Spanish? 🐟",options:["Perro","Pez","Gato","Caballo"],answer:"Pez",hint:"Pez sounds like 'Peth'!"},
+    // ── EXTRA MEDIUM ──
+    {level:"medium",q:"How do you say '5' in Spanish?",options:["Cuatro","Cinco","Seis","Siete"],answer:"Cinco",hint:"Cinco sounds like 'Seen-co'!"},
+    {level:"medium",q:"How do you say 'Goodbye' in Spanish?",options:["Hola","Buenas","Adiós","Gracias"],answer:"Adiós",hint:"Adiós sounds like 'Ad-ee-os'!"},
+    {level:"medium",q:"How do you say 'Water' in Spanish? 💧",options:["Leche","Jugo","Agua","Pan"],answer:"Agua",hint:"Agua sounds like 'Ah-gwa'!"},
+    {level:"medium",q:"How do you say 'Mother' in Spanish? 👩",options:["Padre","Hermano","Madre","Abuela"],answer:"Madre",hint:"Madre sounds like 'Mah-dray'!"},
+    {level:"medium",q:"How do you say 'Father' in Spanish? 👨",options:["Madre","Padre","Hermana","Abuelo"],answer:"Padre",hint:"Padre sounds like 'Pah-dray'!"},
+    {level:"medium",q:"How do you say 'Bread' in Spanish? 🍞",options:["Leche","Pan","Agua","Queso"],answer:"Pan",hint:"Pan sounds like 'pahn'!"},
+    {level:"medium",q:"What does '¿Cómo te llamas?' mean?",options:["How are you?","What is your name?","Where do you live?","How old are you?"],answer:"What is your name?",hint:"Llamas comes from llamarse = to be called!"},
+    {level:"medium",q:"How do you say '10' in Spanish?",options:["Ocho","Nueve","Diez","Once"],answer:"Diez",hint:"Diez sounds like 'dee-eth'!"},
+    {level:"medium",q:"How do you say 'School' in Spanish? 🏫",options:["Casa","Colegio","Tienda","Hospital"],answer:"Colegio",hint:"Colegio sounds like 'Col-eh-hee-oh'!"},
+    {level:"medium",q:"How do you say 'Book' in Spanish? 📚",options:["Lápiz","Mesa","Libro","Silla"],answer:"Libro",hint:"Libro sounds like 'Lee-broh'!"},
+    // ── EXTRA HARD ──
+    {level:"hard",q:"What does 'Me llamo...' mean?",options:["I live in...","I am... years old","My name is...","I like..."],answer:"My name is...",hint:"Me llamo = I call myself!"},
+    {level:"hard",q:"What does '¿Cómo estás?' mean?",options:["What is your name?","How old are you?","How are you?","Where are you?"],answer:"How are you?",hint:"Estás comes from estar = to be!"},
+    {level:"hard",q:"What does 'Me gusta' mean?",options:["I don't like","I like","I want","I have"],answer:"I like",hint:"Me gusta = it pleases me = I like!"},
+    {level:"hard",q:"How do you say 'I am 8 years old' in Spanish?",options:["Tengo 8 años","Soy 8 años","Tengo 8","Yo 8 años"],answer:"Tengo 8 años",hint:"Tengo = I have. In Spanish you 'have' years!"},
+    {level:"hard",q:"What does 'Buenos días' mean?",options:["Good night","Good evening","Good morning","Good afternoon"],answer:"Good morning",hint:"Días = days. Buenos días = good days = good morning!"},
+    {level:"hard",q:"How do you say 'I live in London' in Spanish?",options:["Vivo en Londres","Yo Londres","Estoy Londres","Habito Londres"],answer:"Vivo en Londres",hint:"Vivo = I live, en = in!"},
+    {level:"hard",q:"What does 'por favor' mean?",options:["Thank you","Sorry","Please","Excuse me"],answer:"Please",hint:"Por favor = for favour = please!"},
+    {level:"hard",q:"How do you count 1-5 in Spanish?",options:["Uno, dos, tres, cuatro, cinco","Un, deux, trois, quatre, cinq","Ein, zwei, drei, vier, fünf","One, two, three, four, five"],answer:"Uno, dos, tres, cuatro, cinco",hint:"Spanish numbers 1-5!"},
   ],
 
   /* ── CogAT ───────────────────────────────────────────────────────────── */
@@ -2207,8 +2286,27 @@ function WelcomeScreen({profiles,activeId,onSelectProfile,onAddProfile,onDeleteP
 
 /* ─── Root ─────────────────────────────────────────────────────────────── */
 export default function App(){
-  const [profiles,setProfiles]=useState([]);
-  const [activeId,setActiveId]=useState(null);
+  const [profiles,setProfiles]=useState(()=>{
+    try{const saved=localStorage.getItem("brightmind_profiles");return saved?JSON.parse(saved):[];}
+    catch{return[];}
+  });
+  const [activeId,setActiveId]=useState(()=>{
+    try{return localStorage.getItem("brightmind_activeId")||null;}
+    catch{return null;}
+  });
+
+  // Persist profiles whenever they change
+  useEffect(()=>{
+    try{localStorage.setItem("brightmind_profiles",JSON.stringify(profiles));}
+    catch{}
+  },[profiles]);
+
+  useEffect(()=>{
+    try{
+      if(activeId)localStorage.setItem("brightmind_activeId",activeId);
+      else localStorage.removeItem("brightmind_activeId");
+    }catch{}
+  },[activeId]);
   const activeProfile=profiles.find(p=>p.id===activeId)||null;
   const progress=activeProfile?.progress||makeEmptyProgress();
   const history=activeProfile?.history||{total:0,perfectScores:0,bestStreak:0,improvements:0,spellPerfect:0,timesPerfect:0};
