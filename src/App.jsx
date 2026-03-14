@@ -1491,7 +1491,7 @@ const BATTERY_COLORS={"CogAT Verbal":"#10B981","CogAT Quantitative":"#F59E0B","C
 
 const clampWord="clamp(22px,6vw,34px)";
 
-function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
+function Quiz({subjectId,level,seenQs,onBack,onDone,sounds,muted,toggleMute}){
   const s=SUBJECTS.find(x=>x.id===subjectId);
   if(!s)return null;
   const isSpelling=subjectId==="spelling";
@@ -1513,35 +1513,48 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
 
   const build=useCallback(async()=>{
     setLoading(true);
-    // ── Step 1: Get bank questions as guaranteed fallback ──────────────
     const all=BANK[subjectId]||[];
     const levelled=all.filter(q=>q.level===level);
-    const pool=[...(levelled.length>=8?levelled:all)].sort(()=>Math.random()-0.5);
-    // Always keep a shuffled bank pool ready
+    const pool=levelled.length>=8?levelled:all;
+
+    // Give every bank question a stable key based on its index
+    const indexed=pool.map((q,i)=>({...q,_key:`${subjectId}_${level}_${i}`}));
+
+    // Split into unseen and seen
+    const seenSet=new Set(seenQs||[]);
+    const unseen=indexed.filter(q=>!seenSet.has(q._key));
+    const seen=indexed.filter(q=>seenSet.has(q._key));
+
+    // Shuffle both, take unseen first — reset if all seen
+    const shuffleUnseen=[...unseen].sort(()=>Math.random()-0.5);
+    const shuffleSeen=[...seen].sort(()=>Math.random()-0.5);
+
+    // Build pool: prioritise unseen, pad with seen if needed
+    const ordered=[...shuffleUnseen,...shuffleSeen];
+
+    // Repeat if bank is tiny
     let bankPool=[];
-    while(bankPool.length<TOTAL)bankPool=[...bankPool,...[...pool].sort(()=>Math.random()-0.5)];
+    while(bankPool.length<TOTAL)bankPool=[...bankPool,...ordered];
     const bankFallback=bankPool.slice(0,TOTAL);
 
-    // ── Step 2: Request 18 fresh AI questions in one batch ─────────────
+    // Try AI batch — use as bonus on top, fall back silently
     let aiQs=[];
-    try{
-      aiQs=await fetchAIBatch(subjectId,level,18);
-    }catch(e){aiQs=[];}
+    try{ aiQs=await fetchAIBatch(subjectId,level,12); }catch(e){}
 
-    // ── Step 3: Fill session — AI first, bank fills any gaps ───────────
-    const isValid=(q)=>q&&typeof q==="object"&&q.q&&Array.isArray(q.options)&&q.options.length===4&&q.answer&&q.options.includes(q.answer);
-    const combined=[...aiQs,...bankFallback]
+    const isValid=(q)=>q&&q.q&&Array.isArray(q.options)&&q.options.length===4&&q.answer&&q.options.includes(q.answer);
+
+    // Mix: fill with unseen bank first, then AI, guarantee TOTAL
+    const combined=[...bankFallback.slice(0,TOTAL-Math.min(aiQs.length,6)),...aiQs.slice(0,6)]
       .filter(isValid)
       .slice(0,TOTAL);
 
-    // Guarantee exactly TOTAL questions
     const final=combined.length>=TOTAL
-      ? combined.slice(0,TOTAL)
-      : [...combined,...bankFallback.slice(0,TOTAL-combined.length)];
+      ? combined
+      : [...combined,...bankFallback.slice(0,TOTAL-combined.length)].filter(isValid).slice(0,TOTAL);
 
-    setQs(final.slice(0,TOTAL));
+    setQs(final);
     setLoading(false);
-  },[subjectId,level]);
+  },[subjectId,level,seenQs]);
 
   useEffect(()=>{build();},[build]);
   useEffect(()=>{return()=>stopSpeaking();},[]);
@@ -1595,7 +1608,12 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
 
   const next=()=>{
     sounds.tap();stopSpeaking();setReading(false);
-    if(idx+1>=TOTAL){onDone(score,bestStreak);setDone(true);}
+    if(idx+1>=TOTAL){
+      // Collect all _key values from this session's bank questions
+      const usedKeys=qs.filter(q=>q._key).map(q=>q._key);
+      onDone(score,bestStreak,usedKeys);
+      setDone(true);
+    }
     else{setIdx(i=>i+1);setSel(null);setHint(false);if(isSpelling)setSpellPhase("show");}
   };
 
@@ -2071,6 +2089,7 @@ const makeProfile=(name,avatar)=>({
   earned:[],
   defaultLevel:"easy",
   ttMastery:{},
+  seenQs:{}, // tracks seen question indices per subject+level key
 });
 
 /* ─── Welcome Screen ────────────────────────────────────────────────────── */
@@ -2197,6 +2216,7 @@ export default function App(){
   const avatar=activeProfile?.avatar||DEFAULT_AVATAR;
   const defaultLevel=activeProfile?.defaultLevel||"easy";
   const ttMastery=activeProfile?.ttMastery||{};
+  const seenQs=activeProfile?.seenQs||{};
   const updateProfile=(fields)=>setProfiles(ps=>ps.map(p=>p.id===activeId?{...p,...fields}:p));
   const [screen,setScreen]=useState("welcome");
   const [subject,setSubject]=useState(null);
@@ -2226,7 +2246,7 @@ export default function App(){
     if(activeId===id){setActiveId(null);setScreen("welcome");}
   };
   const checkAch=(np,nh,ce)=>ACHIEVEMENTS.filter(a=>!ce.includes(a.id)&&a.check(np,nh));
-  const done=(score,streak)=>{
+  const done=(score,streak,usedQKeys)=>{
     const pct=score/TOTAL;
     const stars=pct===1?3:pct>=0.6?2:pct>=0.3?1:0;
     const old=progress[subject]||{stars:0,best:0,best_easy:0,best_medium:0,best_hard:0};
@@ -2235,7 +2255,13 @@ export default function App(){
     const nh={total:history.total+1,perfectScores:history.perfectScores+(score===TOTAL?1:0),bestStreak:Math.max(history.bestStreak,streak||0),improvements:history.improvements+(score>(old.best||0)&&(old.best||0)>0?1:0),spellPerfect:(history.spellPerfect||0)+(subject==="spelling"&&score===TOTAL?1:0),timesPerfect:history.timesPerfect||0};
     const nb=checkAch(np,nh,earned);
     const ne=nb.length>0?[...earned,...nb.map(b=>b.id)]:earned;
-    updateProfile({progress:np,history:nh,earned:ne});
+    // Update seen questions — add newly used keys, reset if all exhausted
+    const seenKey=`${subject}_${quizLevel}`;
+    const bankSize=(BANK[subject]||[]).filter(q=>q.level===quizLevel).length||BANK[subject]?.length||1;
+    const prevSeen=seenQs[seenKey]||[];
+    const newSeen=[...new Set([...prevSeen,...(usedQKeys||[])])];
+    const updatedSeenQs={...seenQs,[seenKey]:newSeen.length>=bankSize?[]:newSeen};
+    updateProfile({progress:np,history:nh,earned:ne,seenQs:updatedSeenQs});
     if(nb.length>0)nb.forEach((b,i)=>{setTimeout(()=>{sounds.badge();setToastQueue(q=>[...q,b]);},i*3400);});
   };
   const doneTT=(score)=>{
@@ -2260,7 +2286,7 @@ export default function App(){
         {screen==="avatar"&&<AvatarBuilder avatar={avatar} onSave={av=>{updateProfile({avatar:{...av,name:av.name||activeProfile?.name||"Explorer"}});setScreen("home");}} onBack={()=>setScreen(profiles.length>0&&activeId?"home":"welcome")} sounds={sounds}/>}
         {screen==="home"&&activeProfile&&<Home progress={progress} history={history} earned={earned} defaultLevel={defaultLevel} onSetDefaultLevel={lv=>{sounds.tap();updateProfile({defaultLevel:lv});}} avatar={avatar} onEditAvatar={()=>{sounds.tap();setScreen("avatar");}} onSwitchProfile={()=>{sounds.tap();setScreen("welcome");}} onSelect={id=>{sounds.tap();if(id==="times"){setScreen("times-pick");setSubject("times");}else{setSubject(id);setScreen("diff-pick");}}} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)} tab={tab} setTab={setTab}/>}
         {screen==="diff-pick"&&subject&&<DifficultyPicker subject={subject} defaultLevel={defaultLevel} progress={progress} onStart={lv=>{setQuizLevel(lv);setScreen("quiz");}} onBack={()=>{setScreen("home");setSubject(null);}} sounds={sounds}/>}
-        {screen==="quiz"&&subject&&<Quiz subjectId={subject} level={quizLevel} onBack={()=>setScreen("diff-pick")} onDone={done} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
+        {screen==="quiz"&&subject&&<Quiz subjectId={subject} level={quizLevel} seenQs={seenQs[`${subject}_${quizLevel}`]||[]} onBack={()=>setScreen("diff-pick")} onDone={done} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
         {screen==="times-pick"&&<TimesTablePicker onStart={t=>{setTtTable(t);setScreen("times-quiz");}} onBack={()=>{setScreen("home");setSubject(null);}} sounds={sounds} mastery={ttMastery}/>}
         {screen==="times-quiz"&&ttTable&&<TimesTableQuiz table={ttTable} onBack={()=>setScreen("times-pick")} onDone={doneTT} sounds={sounds} muted={muted} toggleMute={()=>setMuted(m=>!m)}/>}
       </div>
