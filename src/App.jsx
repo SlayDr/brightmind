@@ -1359,8 +1359,9 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
     }catch(e){aiQs=[];}
 
     // ── Step 3: Fill session — AI first, bank fills any gaps ───────────
+    const isValid=(q)=>q&&typeof q==="object"&&q.q&&Array.isArray(q.options)&&q.options.length===4&&q.answer&&q.options.includes(q.answer);
     const combined=[...aiQs,...bankFallback]
-      .filter(q=>q&&q.q&&q.options&&Array.isArray(q.options)&&q.answer)
+      .filter(isValid)
       .slice(0,TOTAL);
 
     // Guarantee exactly TOTAL questions
@@ -1395,12 +1396,14 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
       </div>
     );
   }
+
+  const readQuestion=()=>{
     if(reading){stopSpeaking();setReading(false);return;}
     setReading(true);
     let txt;
-    if(isSpelling&&cur.word) txt=`The word is: ${cur.word}. ${cur.word}. Can you spell it?`;
-    else if(cur.passage) txt=`${cur.passage}. Question: ${cur.q}`;
-    else txt=`Question ${idx+1}. ${cur.q}`;
+    if(isSpelling&&cur?.word) txt=`The word is: ${cur.word}. ${cur.word}. Can you spell it?`;
+    else if(cur?.passage) txt=`${cur.passage}. Question: ${cur.q}`;
+    else txt=`Question ${idx+1}. ${cur?.q||""}`;
     speak(txt,()=>setReading(false));
   };
 
@@ -1544,14 +1547,14 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
               <div style={{display:"inline-block",background:"#F3F0FF",border:"3px dashed #8B5CF6",borderRadius:12,padding:"10px 24px",fontFamily:"'Boogaloo',cursive",fontSize:clampWord,color:"#6D28D9",letterSpacing:"0.12em"}}>{cur.display}</div>
             </div>
           )}
-          <div className="q-text">{cur.q}</div>
+          <div className="q-text">{cur?.q||""}</div>
           {!isSpelling&&(
             <button className={`read-btn${reading?" reading":""}`} onClick={readQuestion}>
               {reading?"⏹ Stop":"🔈 Read to me"}
             </button>
           )}
           <div className="options">
-            {cur.options.map(opt=>{
+            {(cur?.options||[]).map(opt=>{
               let cls="opt opt-default";
               if(sel!==null){if(opt===cur.answer)cls="opt opt-correct";else if(opt===sel)cls="opt opt-wrong";}
               return<button key={opt} className={cls} disabled={sel!==null} onClick={()=>pick(opt)} style={sel===null?{borderColor:s.border+"66"}:{}}>{opt}</button>;
@@ -1562,7 +1565,7 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
           {sel!==null&&(
             <>
               <div className={`feedback ${correct?"fb-correct":"fb-wrong"}`}>
-                {correct?`✅ ${CHEERS[Math.floor(Math.random()*CHEERS.length)]}`:`❌ The answer is: ${cur.answer}`}
+                {correct?`✅ ${CHEERS[Math.floor(Math.random()*CHEERS.length)]}`:`❌ The answer is: ${cur?.answer||""}`}
               </div>
               {!correct&&<div className="hint-box">💡 {cur.hint}</div>}
               <button className="next-btn" style={{background:s.btn}} onClick={next}>
