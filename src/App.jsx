@@ -34,6 +34,8 @@ const SUBJECTS = [
   { id:"social",  label:"Social Studies",emoji:"🌍",mascot:"giraffe", bg:"#FFF8F0", border:"#F97316", btn:"#F97316", dark:"#c2410c", desc:"People & places!"     },
 ];
 
+const TOTAL = 20;
+
 const GROUPS = [
   { id:"literacy",  label:"Literacy",        emoji:"📚", color:"#4A9EE0", bg:"#E8F5FF", subjects:["english","reading","spelling","gaps"],           desc:"Reading, writing & words"   },
   { id:"numeracy",  label:"Numeracy",         emoji:"🔢", color:"#F6A800", bg:"#FFF3CD", subjects:["maths","quant","times"],                          desc:"Numbers, maths & patterns"  },
