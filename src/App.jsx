@@ -508,27 +508,62 @@ const BANK = {
   ],
 };
 
-async function fetchAIQ(subject, level="medium"){
-  const grade={easy:"Kindergarten",medium:"Grade 1-2",hard:"Grade 3-4"}[level];
-  const prompts={
-    maths:`Generate 1 maths question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    english:`Generate 1 English question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    reading:`Generate a short passage with 1 question for ${grade}. Return ONLY valid JSON: {"passage":"...","q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    verbal:`Generate 1 verbal reasoning question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    quant:`Generate 1 quantitative reasoning question for ${grade} (number patterns or puzzles). Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    spanish:`Generate 1 Spanish vocabulary question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    cogat:`Generate 1 CogAT-style question for ${grade}. Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    spelling:`Generate 1 spelling question for ${grade}. Return ONLY valid JSON: {"word":"...","q":"Which is the correct spelling?","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    gaps:`Generate 1 fill-in-the-gap sentence for ${grade}. Return ONLY valid JSON: {"type":"sentence","q":"sentence with ___ gap","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    science:`Generate 1 science question for ${grade} (animals, plants, human body, space, weather, or materials). Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-    social:`Generate 1 social studies question for ${grade} (countries, history, community helpers, or geography). Return ONLY valid JSON: {"q":"...","options":["a","b","c","d"],"answer":"...","hint":"..."}`,
-  };
+async function fetchAIBatch(subject, level, count=10){
+  const grade={easy:"Kindergarten",medium:"Grade 1-2",hard:"Grade 3-4"}[level]||"Grade 1-2";
+  const topics={
+    maths:   `varied maths topics for ${grade}: arithmetic, shapes, fractions, word problems, time, measurement, patterns`,
+    english: `varied English topics for ${grade}: grammar, vocabulary, punctuation, sentence structure, synonyms, antonyms`,
+    reading: `short passages (2-4 sentences) with comprehension questions for ${grade}. Each must have a "passage" field`,
+    verbal:  `verbal reasoning for ${grade}: odd-one-out, analogies, sequences, classifications`,
+    quant:   `quantitative reasoning for ${grade}: number series, missing numbers, symbol puzzles, logic`,
+    spanish: `Spanish vocabulary and phrases for ${grade}: greetings, numbers, colours, animals, food, family`,
+    cogat:   `CogAT-style questions for ${grade}: verbal analogies, number series, pattern recognition, spatial reasoning`,
+    spelling:`spelling questions for ${grade}. Each must have a "word" field (the correct word) and "q":"Which is the correct spelling?" with 3 plausible misspellings`,
+    gaps:    `fill-in-the-gap sentences for ${grade}. Each must have "type":"sentence" and a sentence with ___ for the missing word`,
+    science: `science questions for ${grade}: animals, plants, human body, space, weather, forces, materials`,
+    social:  `social studies questions for ${grade}: world geography, history, community helpers, countries, citizenship`,
+  }[subject]||`general knowledge for ${grade}`;
+
+  const isReading=subject==="reading";
+  const isSpelling=subject==="spelling";
+  const isGaps=subject==="gaps";
+
+  let schema=`{"q":"question text","options":["a","b","c","d"],"answer":"exact match to one option","hint":"helpful hint"}`;
+  if(isReading) schema=`{"passage":"2-4 sentence story","q":"question","options":["a","b","c","d"],"answer":"...","hint":"..."}`;
+  if(isSpelling) schema=`{"word":"correct spelling","q":"Which is the correct spelling?","options":["correct","wrong1","wrong2","wrong3"],"answer":"correct spelling","hint":"spelling tip"}`;
+  if(isGaps) schema=`{"type":"sentence","q":"sentence with ___ for gap","options":["a","b","c","d"],"answer":"correct word","hint":"..."}`;
+
+  const prompt=`Generate exactly ${count} UNIQUE, VARIED ${topics}. 
+Rules: All questions must be different topics. Difficulty appropriate for ${grade}. Options must be shuffled (answer not always first).
+Return ONLY a valid JSON array of ${count} objects, each matching: ${schema}
+No markdown, no explanation, just the JSON array.`;
+
   try{
-    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,system:"You are a friendly teacher. Respond ONLY with valid JSON, no markdown.",messages:[{role:"user",content:prompts[subject]}]})});
+    const r=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:4000,
+        system:"You are an expert teacher creating educational quiz questions for children. Always return ONLY valid JSON arrays with no markdown or extra text.",
+        messages:[{role:"user",content:prompt}]
+      })
+    });
     const d=await r.json();
     const txt=(d.content?.[0]?.text||"").replace(/```json|```/g,"").trim();
-    return JSON.parse(txt);
-  }catch{return null;}
+    const arr=JSON.parse(txt);
+    if(!Array.isArray(arr))return[];
+    return arr.filter(q=>q?.q&&q?.options&&Array.isArray(q.options)&&q.options.length===4&&q?.answer).map(q=>({...q,isAI:true,level}));
+  }catch(e){
+    console.warn("AI batch failed:",e);
+    return[];
+  }
+}
+
+// Keep single-fetch fallback for emergencies
+async function fetchAIQ(subject, level="medium"){
+  const results=await fetchAIBatch(subject,level,1);
+  return results[0]||null;
 }
 
 /* ─── CSS ──────────────────────────────────────────────────────────────── */
@@ -1308,15 +1343,33 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
 
   const build=useCallback(async()=>{
     setLoading(true);
-    // Filter bank by level, fallback to all if too few
-    const all=BANK[subjectId];
+    // ── Step 1: Get bank questions as guaranteed fallback ──────────────
+    const all=BANK[subjectId]||[];
     const levelled=all.filter(q=>q.level===level);
-    const bank=[...(levelled.length>=10?levelled:all)].sort(()=>Math.random()-0.5);
-    const aiResults=await Promise.all([fetchAIQ(subjectId,level),fetchAIQ(subjectId,level),fetchAIQ(subjectId,level)]);
-    const aiQs=aiResults.filter(q=>q?.q&&q?.options&&q?.answer).map(q=>({...q,isAI:true,level}));
-    const fixed=bank.slice(0,TOTAL-aiQs.length);
-    const combined=[...fixed,...aiQs].sort(()=>Math.random()-0.5).slice(0,TOTAL);
-    setQs(combined);setLoading(false);
+    const pool=[...(levelled.length>=8?levelled:all)].sort(()=>Math.random()-0.5);
+    // Always keep a shuffled bank pool ready
+    let bankPool=[];
+    while(bankPool.length<TOTAL)bankPool=[...bankPool,...[...pool].sort(()=>Math.random()-0.5)];
+    const bankFallback=bankPool.slice(0,TOTAL);
+
+    // ── Step 2: Request 18 fresh AI questions in one batch ─────────────
+    let aiQs=[];
+    try{
+      aiQs=await fetchAIBatch(subjectId,level,18);
+    }catch(e){aiQs=[];}
+
+    // ── Step 3: Fill session — AI first, bank fills any gaps ───────────
+    const combined=[...aiQs,...bankFallback]
+      .filter(q=>q&&q.q&&q.options&&Array.isArray(q.options)&&q.answer)
+      .slice(0,TOTAL);
+
+    // Guarantee exactly TOTAL questions
+    const final=combined.length>=TOTAL
+      ? combined.slice(0,TOTAL)
+      : [...combined,...bankFallback.slice(0,TOTAL-combined.length)];
+
+    setQs(final.slice(0,TOTAL));
+    setLoading(false);
   },[subjectId,level]);
 
   useEffect(()=>{build();},[build]);
@@ -1332,7 +1385,16 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
 
   const cur=qs[idx];
 
-  const readQuestion=()=>{
+  // Safety guard — should never happen after fix but just in case
+  if(!loading&&!done&&!cur){
+    return(
+      <div style={{padding:24,textAlign:"center"}}>
+        <div style={{fontSize:32,marginBottom:12}}>⚠️</div>
+        <div style={{fontWeight:700,marginBottom:8}}>Question not found</div>
+        <button className="next-btn" style={{background:s.btn,maxWidth:200,margin:"0 auto",display:"block"}} onClick={()=>build()}>Try again</button>
+      </div>
+    );
+  }
     if(reading){stopSpeaking();setReading(false);return;}
     setReading(true);
     let txt;
@@ -1380,7 +1442,7 @@ function Quiz({subjectId,level,onBack,onDone,sounds,muted,toggleMute}){
       </div>
       <div className="loading">
         <div className="spin" style={{borderTopColor:s.btn}}/>
-        <div style={{fontWeight:700,color:"#9ca3af",fontSize:13}}>Loading {TOTAL} questions... 🌿</div>
+        <div style={{fontWeight:700,color:"#9ca3af",fontSize:13}}>Creating fresh questions just for you... ✨</div>
         <div style={{marginTop:13}}><Mascot type={s.mascot} size={62} animate/></div>
       </div>
     </div>
