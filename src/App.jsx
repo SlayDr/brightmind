@@ -549,7 +549,7 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 .slide-up{animation:slideUp 0.3s ease both}
 
 .home-hero{text-align:center;padding:14px 0 8px}
-.logo{font-family:'Boogaloo',cursive;font-size:clamp(30px,7vw,46px);background:linear-gradient(135deg,#16a34a,#F6A800,#D45EBC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+.logo{font-family:'Boogaloo',cursive;font-size:clamp(30px,7vw,46px);line-height:1.1;display:flex;align-items:center;gap:6px}
 .logo-sub{font-size:clamp(11px,2.8vw,14px);color:#6b7280;font-weight:700;margin-top:3px}
 .vine{height:4px;background:repeating-linear-gradient(90deg,#4ade80 0,#4ade80 12px,transparent 12px,transparent 20px);border-radius:99px;margin:8px 0}
 
@@ -707,7 +707,8 @@ body{font-family:'Quicksand',sans-serif;background:#F0FDF4;min-height:100vh;min-
 
 /* ── Welcome / Profile screens ── */
 .welcome-wrap{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;text-align:center}
-.welcome-logo{font-family:'Boogaloo',cursive;font-size:clamp(36px,9vw,54px);background:linear-gradient(135deg,#16a34a,#F6A800,#D45EBC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.welcome-logo{font-family:'Boogaloo',cursive;font-size:clamp(36px,9vw,54px);margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+.welcome-logo-text{background:linear-gradient(135deg,#16a34a,#F6A800,#D45EBC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .welcome-sub{font-size:clamp(13px,3vw,16px);font-weight:700;color:#6b7280;margin-bottom:28px}
 .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:380px;margin-bottom:24px}
 .who-card{border-radius:22px;padding:22px 14px;cursor:pointer;border:3px solid transparent;transition:all 0.18s;text-align:center;user-select:none;touch-action:manipulation}
@@ -765,7 +766,7 @@ function Home({progress,history,earned,onSelect,sounds,muted,toggleMute,tab,setT
             <div style={{position:"absolute",bottom:-2,right:-2,background:"#F6A800",borderRadius:"50%",width:20,height:20,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,boxShadow:"0 2px 6px rgba(0,0,0,0.2)"}}>✏️</div>
           </div>
           <div>
-            <div className="logo">🌿 BrightMind</div>
+            <div className="logo"><span>🌿</span><span style={{background:"linear-gradient(135deg,#16a34a,#F6A800,#D45EBC)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>BrightMind</span></div>
             <div className="logo-sub">Hi {avatar?.name||"Explorer"}! Ready to learn? 🌟</div>
           </div>
         </div>
@@ -1724,7 +1725,7 @@ function WelcomeScreen({profiles,activeId,onSelectProfile,onAddProfile,onDeleteP
       <div className="welcome-wrap">
         <JungleBg/>
         <div style={{position:"relative",zIndex:1,width:"100%",display:"flex",flexDirection:"column",alignItems:"center"}}>
-          <div className="welcome-logo">🌿 BrightMind</div>
+          <div className="welcome-logo"><span>🌿</span><span className="welcome-logo-text">BrightMind</span></div>
           {!whoType?(
             <>
               <div className="welcome-sub">Who's learning today?</div>
@@ -1782,7 +1783,7 @@ function WelcomeScreen({profiles,activeId,onSelectProfile,onAddProfile,onDeleteP
     <div className="welcome-wrap">
       <JungleBg/>
       <div style={{position:"relative",zIndex:1,width:"100%",display:"flex",flexDirection:"column",alignItems:"center"}}>
-        <div className="welcome-logo">🌿 BrightMind</div>
+        <div className="welcome-logo"><span>🌿</span><span className="welcome-logo-text">BrightMind</span></div>
         <div className="welcome-sub">Who's learning today? 👇</div>
         <div className="profile-grid">
           {profiles.map(p=>(
