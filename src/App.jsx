@@ -910,76 +910,175 @@ function nextPraise(){const p=PRAISE_PHRASES[praiseIdx%PRAISE_PHRASES.length];pr
 function nextWrong(){const p=WRONG_PHRASES[wrongIdx%WRONG_PHRASES.length];wrongIdx++;return p;}
 
 /* ─── Avatar System ─────────────────────────────────────────────────────── */
-const SKIN_TONES=["#FDDBB4","#F5C28A","#E8A96A","#C68642","#8D5524","#4A2912"];
-const HAIR_COLORS=["#1a1a1a","#4a3728","#8B4513","#D2691E","#DAA520","#FF6B6B","#9B59B6","#3498DB","#E0E0E0"];
-const HAIR_STYLES=["short","curly","long","afro","bun","spiky","none"];
-const ACCESSORIES=["none","glasses","sunglasses","bow","cap","crown","headband","star"];
-const TOPS=["tshirt","hoodie","dress","polo","vest","stripes"];
-const TOP_COLORS=["#EF4444","#3B82F6","#10B981","#F59E0B","#8B5CF6","#EC4899","#06B6D4","#F97316","#1a1a1a","#ffffff"];
-const EXPRESSIONS=["happy","cool","excited","cheeky","star"];
+const SKIN_TONES=[
+  {id:"s1",color:"#FDDBB4",shadow:"#E8A96A",lip:"#C97B7B"},
+  {id:"s2",color:"#F5C28A",shadow:"#D4956A",lip:"#B8725A"},
+  {id:"s3",color:"#E8A96A",shadow:"#C47A45",lip:"#A85F3A"},
+  {id:"s4",color:"#C68642",shadow:"#9A6130",lip:"#8B4A2A"},
+  {id:"s5",color:"#8D5524",shadow:"#6B3A10",lip:"#7A3520"},
+  {id:"s6",color:"#5C3317",shadow:"#3E2009",lip:"#5A2510"},
+  {id:"s7",color:"#FAEBD7",shadow:"#E8C9A0",lip:"#D4A0A0"},
+  {id:"s8",color:"#FFE0BD",shadow:"#E8BA8A",lip:"#CC8888"},
+];
+const HAIR_COLORS=[
+  {id:"h1",color:"#1a1a1a"},{id:"h2",color:"#2C1810"},{id:"h3",color:"#4a3728"},
+  {id:"h4",color:"#8B4513"},{id:"h5",color:"#C19A6B"},{id:"h6",color:"#DAA520"},
+  {id:"h7",color:"#E8D5B7"},{id:"h8",color:"#F5F5DC"},{id:"h9",color:"#FF6B6B"},
+  {id:"h10",color:"#9B59B6"},{id:"h11",color:"#3498DB"},{id:"h12",color:"#2ECC71"},
+];
+const HAIR_STYLES=["short_straight","short_wave","medium_straight","medium_curly","long_straight","long_curly","afro","fade","bun","ponytail","braids","locs"];
+const EYE_COLORS=["#1a1a1a","#4a3728","#1565C0","#2E7D32","#7B3F00","#546E7A"];
+const ACCESSORIES=["none","glasses_round","glasses_square","sunglasses","bow","cap","crown","headband","earrings","beanie"];
+const TOPS=["tshirt","hoodie","dress","polo","blazer","sweater","tank","uniform"];
+const TOP_COLORS=["#EF4444","#3B82F6","#10B981","#F59E0B","#8B5CF6","#EC4899","#06B6D4","#F97316","#1a1a1a","#ffffff","#374151","#7C3AED"];
+const EXPRESSIONS=["happy","big_smile","cool","surprised","thoughtful","cheeky"];
+const BASE_AVATARS=[
+  {id:"b1",label:"Alex",   skin:"s1",hair:"h1",hairStyle:"short_straight",eye:"#1a1a1a",accessory:"none",top:"tshirt",topColor:"#3B82F6",expression:"happy"},
+  {id:"b2",label:"Maya",   skin:"s4",hair:"h4",hairStyle:"long_straight",eye:"#4a3728",accessory:"none",top:"dress",topColor:"#EC4899",expression:"big_smile"},
+  {id:"b3",label:"Jordan", skin:"s5",hair:"h2",hairStyle:"fade",eye:"#1a1a1a",accessory:"none",top:"hoodie",topColor:"#10B981",expression:"cool"},
+  {id:"b4",label:"Zara",   skin:"s3",hair:"h5",hairStyle:"afro",eye:"#4a3728",accessory:"none",top:"tshirt",topColor:"#F59E0B",expression:"happy"},
+  {id:"b5",label:"Sam",    skin:"s2",hair:"h3",hairStyle:"medium_curly",eye:"#1565C0",accessory:"none",top:"sweater",topColor:"#8B5CF6",expression:"thoughtful"},
+  {id:"b6",label:"Priya",  skin:"s6",hair:"h1",hairStyle:"braids",eye:"#1a1a1a",accessory:"none",top:"dress",topColor:"#06B6D4",expression:"big_smile"},
+  {id:"b7",label:"Kai",    skin:"s7",hair:"h8",hairStyle:"short_wave",eye:"#2E7D32",accessory:"none",top:"polo",topColor:"#374151",expression:"cheeky"},
+  {id:"b8",label:"Imani",  skin:"s5",hair:"h2",hairStyle:"locs",eye:"#1a1a1a",accessory:"none",top:"blazer",topColor:"#7C3AED",expression:"happy"},
+];
 
-const DEFAULT_AVATAR={skin:"#FDDBB4",hair:"#1a1a1a",hairStyle:"short",accessory:"none",top:"tshirt",topColor:"#3B82F6",expression:"happy",name:"Explorer"};
+const DEFAULT_AVATAR={skin:"s1",hair:"h1",hairStyle:"short_straight",eye:"#1a1a1a",accessory:"none",top:"tshirt",topColor:"#3B82F6",expression:"happy",name:"Explorer"};
+
+const getSkin=(id)=>SKIN_TONES.find(s=>s.id===id)||SKIN_TONES[0];
+const getHair=(id)=>HAIR_COLORS.find(h=>h.id===id)||HAIR_COLORS[0];
 
 function AvatarSVG({av,size=80}){
-  const s=av||DEFAULT_AVATAR;
-  const scale=size/80;
-  const expr={
-    happy:<path d="M30 50 Q40 58 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/>,
-    cool:<path d="M30 50 Q40 55 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/>,
-    excited:<><path d="M28 49 Q40 60 52 49" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/><ellipse cx="40" cy="54" rx="8" ry="5" fill="#f9a8d4" opacity="0.5"/></>,
-    cheeky:<path d="M30 52 Q35 50 40 52 Q45 54 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/>,
-    star:<><path d="M30 50 Q40 58 50 50" stroke="#1a1a1a" strokeWidth="2.5" fill="none" strokeLinecap="round"/><text x="38" y="44" fontSize="10" textAnchor="middle">⭐</text></>,
-  }[s.expression||"happy"];
+  const a=av||DEFAULT_AVATAR;
+  const sk=getSkin(a.skin);
+  const hr=getHair(a.hair);
+  const sc=sk.color, sh=sk.shadow, lp=sk.lip, hc=hr.color, ec=a.eye||"#1a1a1a";
 
-  const hair={
-    short:<ellipse cx="40" cy="24" rx="16" ry="10" fill={s.hair}/>,
-    curly:<><ellipse cx="40" cy="22" rx="17" ry="11" fill={s.hair}/>{[24,30,36,42,48,54].map((x,i)=><ellipse key={i} cx={x} cy="20" rx="4" ry="5" fill={s.hair}/>)}</>,
-    long:<><ellipse cx="40" cy="22" rx="16" ry="10" fill={s.hair}/><rect x="22" y="28" width="7" height="28" rx="3" fill={s.hair}/><rect x="51" y="28" width="7" height="28" rx="3" fill={s.hair}/></>,
-    afro:<ellipse cx="40" cy="20" rx="22" ry="18" fill={s.hair}/>,
-    bun:<><ellipse cx="40" cy="26" rx="16" ry="9" fill={s.hair}/><circle cx="40" cy="13" r="9" fill={s.hair}/></>,
-    spiky:<><ellipse cx="40" cy="24" rx="15" ry="9" fill={s.hair}/>{[26,31,36,41,46,51,56].map((x,i)=><polygon key={i} points={`${x},22 ${x+3},8 ${x+6},22`} fill={s.hair}/>)}</>,
+  // ── Hair shapes ──────────────────────────────────────────────────
+  const hairMap={
+    short_straight:<><path d="M18 38 Q16 18 40 14 Q64 18 62 38 Q58 22 40 20 Q22 22 18 38Z" fill={hc}/><rect x="16" y="32" width="5" height="14" rx="2.5" fill={hc}/><rect x="59" y="32" width="5" height="14" rx="2.5" fill={hc}/></>,
+    short_wave:<><path d="M17 38 Q15 16 40 13 Q65 16 63 38 Q55 18 48 22 Q40 18 32 22 Q24 18 17 38Z" fill={hc}/><rect x="15" y="30" width="5" height="15" rx="2.5" fill={hc}/><rect x="60" y="30" width="5" height="15" rx="2.5" fill={hc}/></>,
+    medium_straight:<><path d="M16 38 Q14 16 40 12 Q66 16 64 38 Q60 20 40 18 Q20 20 16 38Z" fill={hc}/><rect x="14" y="30" width="6" height="28" rx="3" fill={hc}/><rect x="60" y="30" width="6" height="28" rx="3" fill={hc}/></>,
+    medium_curly:<><path d="M16 36 Q14 15 40 12 Q66 15 64 36 Q58 16 48 20 Q40 16 32 20 Q22 16 16 36Z" fill={hc}/>{[18,24,30].map((x,i)=><ellipse key={i} cx={x} cy={45+i*8} rx="4" ry="5" fill={hc}/>)}{[58,62,58].map((x,i)=><ellipse key={i} cx={x} cy={45+i*8} rx="4" ry="5" fill={hc}/>)}</>,
+    long_straight:<><path d="M15 38 Q13 14 40 11 Q67 14 65 38 Q61 18 40 16 Q19 18 15 38Z" fill={hc}/><rect x="13" y="28" width="7" height="46" rx="3.5" fill={hc}/><rect x="60" y="28" width="7" height="46" rx="3.5" fill={hc}/></>,
+    long_curly:<><path d="M15 36 Q13 13 40 11 Q67 13 65 36 Q58 14 48 18 Q40 14 32 18 Q22 14 15 36Z" fill={hc}/>{[14,12,16,14].map((x,i)=><ellipse key={i} cx={x+i*2} cy={44+i*10} rx="5" ry="6" fill={hc}/>)}{[64,66,62,64].map((x,i)=><ellipse key={i} cx={x-i*2} cy={44+i*10} rx="5" ry="6" fill={hc}/>)}</>,
+    afro:<><ellipse cx="40" cy="26" rx="28" ry="24" fill={hc}/><ellipse cx="40" cy="26" rx="24" ry="20" fill={hc}/>{[0,30,60,90,120,150,180,210,240,270,300,330].map((a,i)=>{const r=27,x=40+r*Math.cos(a*Math.PI/180),y=26+r*Math.sin(a*Math.PI/180);return<circle key={i} cx={x} cy={y} r="5" fill={hc}/>})}</>,
+    fade:<><path d="M19 48 Q17 26 40 22 Q63 26 61 48 Q56 30 40 28 Q24 30 19 48Z" fill={hc}/><path d="M19 48 Q17 34 21 30" stroke={hc} strokeWidth="3" fill="none"/><path d="M61 48 Q63 34 59 30" stroke={hc} strokeWidth="3" fill="none"/></>,
+    bun:<><ellipse cx="40" cy="34" rx="22" ry="14" fill={hc}/><circle cx="40" cy="14" r="12" fill={hc}/><circle cx="40" cy="14" r="8" fill={hc} opacity="0.7"/></>,
+    ponytail:<><path d="M17 38 Q15 16 40 13 Q65 16 63 38 Q59 20 40 18 Q21 20 17 38Z" fill={hc}/><path d="M55 22 Q68 30 65 55 Q62 65 58 68" stroke={hc} strokeWidth="8" fill="none" strokeLinecap="round"/></>,
+    braids:<><path d="M17 36 Q15 14 40 12 Q65 14 63 36 Q58 18 40 16 Q22 18 17 36Z" fill={hc}/>{[[14,38],[16,52],[14,66],[18,78]].map(([x,y],i)=><ellipse key={i} cx={x} cy={y} rx="4" ry="6" fill={hc}/>)}{[[64,38],[62,52],[64,66],[60,78]].map(([x,y],i)=><ellipse key={i} cx={x} cy={y} rx="4" ry="6" fill={hc}/>)}</>,
+    locs:<><path d="M16 36 Q14 14 40 12 Q66 14 64 36 Q58 18 40 16 Q22 18 16 36Z" fill={hc}/>{[[13,42],[11,56],[13,70],[15,80]].map(([x,y],i)=><path key={i} d={`M${x} ${y-8} Q${x-3} ${y} ${x} ${y+8}`} stroke={hc} strokeWidth="6" fill="none" strokeLinecap="round"/>)}{[[67,42],[69,56],[67,70],[65,80]].map(([x,y],i)=><path key={i} d={`M${x} ${y-8} Q${x+3} ${y} ${x} ${y+8}`} stroke={hc} strokeWidth="6" fill="none" strokeLinecap="round"/>)}</>,
+  };
+
+  // ── Expressions ─────────────────────────────────────────────────
+  const exprMap={
+    happy:<><path d="M30 52 Q40 60 50 52" stroke={lp} strokeWidth="2.5" fill="none" strokeLinecap="round"/><path d="M30 52 Q40 58 50 52" stroke="none" fill={lp} opacity="0.3"/></>,
+    big_smile:<><path d="M27 50 Q40 63 53 50" stroke={lp} strokeWidth="2.5" fill="none" strokeLinecap="round"/><path d="M29 52 Q40 62 51 52 Q40 65 29 52Z" fill={lp} opacity="0.25"/><path d="M33 53 Q40 57 47 53" stroke="white" strokeWidth="1.5" fill="none" opacity="0.8"/></>,
+    cool:<path d="M31 53 Q40 58 49 53" stroke={lp} strokeWidth="2" fill="none" strokeLinecap="round"/>,
+    surprised:<><ellipse cx="40" cy="54" rx="6" ry="4" fill={lp} opacity="0.4"/><path d="M34 54 Q40 58 46 54" stroke={lp} strokeWidth="2" fill="none"/></>,
+    thoughtful:<path d="M33 54 Q38 52 43 54 Q46 56 48 53" stroke={lp} strokeWidth="2" fill="none" strokeLinecap="round"/>,
+    cheeky:<><path d="M30 52 Q36 58 42 54 Q46 58 52 52" stroke={lp} strokeWidth="2.5" fill="none" strokeLinecap="round"/><circle cx="51" cy="47" r="4" fill="#F9A8D4" opacity="0.5"/></>,
+  };
+
+  // ── Accessories ─────────────────────────────────────────────────
+  const accMap={
     none:null,
-  }[s.hairStyle||"short"];
+    glasses_round:<><circle cx="32" cy="37" r="6" fill="none" stroke="#374151" strokeWidth="1.8"/><circle cx="48" cy="37" r="6" fill="none" stroke="#374151" strokeWidth="1.8"/><line x1="38" y1="37" x2="42" y2="37" stroke="#374151" strokeWidth="1.5"/><line x1="14" y1="36" x2="26" y2="37" stroke="#374151" strokeWidth="1.5"/><line x1="66" y1="36" x2="54" y2="37" stroke="#374151" strokeWidth="1.5"/></>,
+    glasses_square:<><rect x="25" y="32" width="13" height="10" rx="2" fill="none" stroke="#374151" strokeWidth="1.8"/><rect x="42" y="32" width="13" height="10" rx="2" fill="none" stroke="#374151" strokeWidth="1.8"/><line x1="38" y1="37" x2="42" y2="37" stroke="#374151" strokeWidth="1.5"/><line x1="14" y1="35" x2="25" y2="36" stroke="#374151" strokeWidth="1.5"/><line x1="66" y1="35" x2="55" y2="36" stroke="#374151" strokeWidth="1.5"/></>,
+    sunglasses:<><rect x="24" y="33" width="14" height="9" rx="4" fill="#1a1a1a" opacity="0.85"/><rect x="42" y="33" width="14" height="9" rx="4" fill="#1a1a1a" opacity="0.85"/><line x1="38" y1="37" x2="42" y2="37" stroke="#374151" strokeWidth="2"/><line x1="13" y1="35" x2="24" y2="36" stroke="#374151" strokeWidth="1.5"/><line x1="67" y1="35" x2="56" y2="36" stroke="#374151" strokeWidth="1.5"/></>,
+    bow:<><path d="M26 14 Q32 8 34 16 Q36 8 42 14 Q36 20 34 12 Q32 20 26 14Z" fill="#EF4444"/><circle cx="34" cy="14" r="3.5" fill="#DC2626"/></>,
+    cap:<><path d="M16 36 Q16 22 40 20 Q64 22 64 36" fill={a.topColor}/><rect x="10" y="33" width="60" height="7" rx="3.5" fill={a.topColor}/><path d="M10 36 Q8 40 10 40 L14 40 L14 36Z" fill={a.topColor} opacity="0.7"/></>,
+    crown:<><path d="M20 28 L26 14 L33 24 L40 10 L47 24 L54 14 L60 28 Z" fill="#F59E0B"/><rect x="20" y="26" width="40" height="6" rx="2" fill="#F59E0B"/>{[26,40,54].map((x,i)=><circle key={i} cx={x} cy="14" r="3.5" fill={["#EF4444","#3B82F6","#10B981"][i]}/>)}</>,
+    headband:<><rect x="14" y="28" width="52" height="8" rx="4" fill="#8B5CF6"/><circle cx="40" cy="28" r="5" fill="#A78BFA"/></>,
+    earrings:<><circle cx="14" cy="44" r="4" fill="#F59E0B" stroke="#D97706" strokeWidth="1"/><circle cx="66" cy="44" r="4" fill="#F59E0B" stroke="#D97706" strokeWidth="1"/></>,
+    beanie:<><path d="M13 38 Q13 16 40 13 Q67 16 67 38 Q60 20 40 18 Q20 20 13 38Z" fill={hc}/><rect x="13" y="34" width="54" height="8" rx="4" fill={hc} opacity="0.7"/><ellipse cx="40" cy="14" r="6" fill={hc} opacity="0.5"/></>,
+  };
 
-  const accessory={
-    none:null,
-    glasses:<><rect x="26" y="33" width="10" height="8" rx="3" fill="none" stroke="#374151" strokeWidth="1.8"/><rect x="44" y="33" width="10" height="8" rx="3" fill="none" stroke="#374151" strokeWidth="1.8"/><line x1="36" y1="37" x2="44" y2="37" stroke="#374151" strokeWidth="1.5"/></>,
-    sunglasses:<><rect x="25" y="33" width="11" height="8" rx="3" fill="#1a1a1a"/><rect x="43" y="33" width="11" height="8" rx="3" fill="#1a1a1a"/><line x1="36" y1="37" x2="43" y2="37" stroke="#1a1a1a" strokeWidth="2"/></>,
-    bow:<><path d="M28 15 Q34 10 34 18 Q34 10 40 15 Q34 20 34 12 Q34 20 28 15" fill="#EF4444"/><circle cx="34" cy="15" r="3" fill="#DC2626"/></>,
-    cap:<><rect x="20" y="18" width="40" height="14" rx="7" fill={s.topColor}/><rect x="14" y="28" width="52" height="6" rx="3" fill={s.topColor}/></>,
-    crown:<><polygon points="24,24 30,12 36,22 40,10 44,22 50,12 56,24" fill="#F59E0B"/>{[30,40,50].map((x,i)=><circle key={i} cx={x} cy="13" r="3" fill="#EF4444"/>)}</>,
-    headband:<rect x="20" y="26" width="40" height="7" rx="3" fill="#8B5CF6"/>,
-    star:<text x="40" y="18" fontSize="16" textAnchor="middle">⭐</text>,
-  }[s.accessory||"none"];
+  // ── Outfit ──────────────────────────────────────────────────────
+  const topMap={
+    tshirt:<><path d="M14 80 L14 62 Q14 56 22 54 Q28 58 40 58 Q52 58 58 54 Q66 56 66 62 L66 80Z" fill={a.topColor}/><path d="M14 62 Q8 58 6 66 L6 80 L14 80Z" fill={a.topColor}/><path d="M66 62 Q72 58 74 66 L74 80 L66 80Z" fill={a.topColor}/></>,
+    hoodie:<><path d="M13 80 L13 61 Q13 54 22 52 Q30 58 40 58 Q50 58 58 52 Q67 54 67 61 L67 80Z" fill={a.topColor}/><path d="M13 61 Q6 57 4 66 L4 80 L13 80Z" fill={a.topColor}/><path d="M67 61 Q74 57 76 66 L76 80 L67 80Z" fill={a.topColor}/><path d="M30 52 Q40 62 50 52" stroke="rgba(0,0,0,0.2)" strokeWidth="2" fill="none"/><rect x="34" y="58" width="12" height="8" rx="4" fill="rgba(0,0,0,0.1)"/></>,
+    dress:<><path d="M24 56 Q20 64 14 80 L66 80 Q60 64 56 56 Q48 62 40 62 Q32 62 24 56Z" fill={a.topColor}/><path d="M24 56 Q24 50 32 50 Q36 56 40 56 Q44 56 48 50 Q56 50 56 56" fill={a.topColor}/></>,
+    polo:<><path d="M14 80 L14 62 Q14 56 22 54 Q28 58 40 58 Q52 58 58 54 Q66 56 66 62 L66 80Z" fill={a.topColor}/><path d="M14 62 Q8 58 6 66 L6 80 L14 80Z" fill={a.topColor}/><path d="M66 62 Q72 58 74 66 L74 80 L66 80Z" fill={a.topColor}/><rect x="37" y="54" width="6" height="12" rx="3" fill="rgba(255,255,255,0.35)"/><circle cx="40" cy="58" r="1.5" fill="rgba(255,255,255,0.5)"/><circle cx="40" cy="62" r="1.5" fill="rgba(255,255,255,0.5)"/></>,
+    blazer:<><path d="M14 80 L14 60 Q14 54 22 52 Q28 58 40 58 Q52 58 58 52 Q66 54 66 60 L66 80Z" fill={a.topColor}/><path d="M14 60 Q7 56 5 65 L5 80 L14 80Z" fill={a.topColor}/><path d="M66 60 Q73 56 75 65 L75 80 L66 80Z" fill={a.topColor}/><path d="M40 58 L36 80" stroke="rgba(255,255,255,0.25)" strokeWidth="8" fill="none"/><path d="M40 58 L44 80" stroke="rgba(0,0,0,0.15)" strokeWidth="8" fill="none"/><rect x="38" y="62" width="4" height="3" rx="1" fill="rgba(255,255,255,0.4)"/></>,
+    sweater:<><path d="M13 80 L13 61 Q13 55 21 53 Q28 58 40 58 Q52 58 59 53 Q67 55 67 61 L67 80Z" fill={a.topColor}/><path d="M13 61 Q6 57 4 66 L4 80 L13 80Z" fill={a.topColor}/><path d="M67 61 Q74 57 76 66 L76 80 L67 80Z" fill={a.topColor}/>{[62,66,70,74,78].map((y,i)=><line key={i} x1="13" y1={y} x2="67" y2={y} stroke="rgba(0,0,0,0.08)" strokeWidth="2"/>)}</>,
+    tank:<><path d="M20 80 L20 60 Q20 56 28 54 Q32 58 40 58 Q48 58 52 54 Q60 56 60 60 L60 80Z" fill={a.topColor}/></>,
+    uniform:<><path d="M14 80 L14 61 Q14 55 22 53 Q28 58 40 58 Q52 58 58 53 Q66 55 66 61 L66 80Z" fill={a.topColor}/><path d="M14 61 Q7 57 5 66 L5 80 L14 80Z" fill={a.topColor}/><path d="M66 61 Q73 57 75 66 L75 80 L66 80Z" fill={a.topColor}/><rect x="38" y="53" width="4" height="18" fill="white" opacity="0.3"/>{[58,62,66,70].map((y,i)=><rect key={i} x="37" y={y} width="6" height="2" rx="1" fill="rgba(255,215,0,0.6)"/>)}</>,
+  };
 
-  const topShape={
-    tshirt:<><rect x="18" y="60" width="44" height="20" rx="4" fill={s.topColor}/><path d="M18 60 Q18 54 26 54 Q32 58 40 58 Q48 58 54 54 Q62 54 62 60" fill={s.topColor}/><path d="M18 60 Q12 56 12 62" stroke={s.topColor} strokeWidth="8" fill="none" strokeLinecap="round"/><path d="M62 60 Q68 56 68 62" stroke={s.topColor} strokeWidth="8" fill="none" strokeLinecap="round"/></>,
-    hoodie:<><rect x="16" y="60" width="48" height="20" rx="6" fill={s.topColor}/><path d="M16 60 Q16 52 24 52 Q32 58 40 58 Q48 58 56 52 Q64 52 64 60" fill={s.topColor}/><path d="M16 60 Q10 56 10 64" stroke={s.topColor} strokeWidth="10" fill="none" strokeLinecap="round"/><path d="M64 60 Q70 56 70 64" stroke={s.topColor} strokeWidth="10" fill="none" strokeLinecap="round"/><path d="M32 52 Q40 60 48 52" stroke="rgba(0,0,0,0.15)" strokeWidth="2" fill="none"/></>,
-    dress:<><path d="M24 58 L16 80 L64 80 L56 58 Q48 62 40 62 Q32 62 24 58" fill={s.topColor}/><path d="M24 58 Q24 52 32 52 Q36 58 40 58 Q44 58 48 52 Q56 52 56 58" fill={s.topColor}/></>,
-    polo:<><rect x="18" y="60" width="44" height="20" rx="4" fill={s.topColor}/><path d="M18 60 Q18 54 26 54 Q32 58 40 58 Q48 58 54 54 Q62 54 62 60" fill={s.topColor}/><rect x="37" y="54" width="6" height="10" rx="3" fill="rgba(255,255,255,0.3)"/></>,
-    vest:<><rect x="20" y="58" width="40" height="22" rx="4" fill={s.topColor}/><path d="M20 58 Q20 52 28 52 Q34 58 40 58 Q46 58 52 52 Q60 52 60 58" fill={s.topColor}/></>,
-    stripes:<><rect x="18" y="60" width="44" height="20" rx="4" fill={s.topColor}/><path d="M18 60 Q18 54 26 54 Q32 58 40 58 Q48 58 54 54 Q62 54 62 60" fill={s.topColor}/>{[63,68,73].map((y,i)=><line key={i} x1="18" y1={y} x2="62" y2={y} stroke="rgba(255,255,255,0.4)" strokeWidth="2.5"/>)}</>,
-  }[s.top||"tshirt"];
+  const isCurlyStyle=["medium_curly","long_curly","afro","braids","locs"].includes(a.hairStyle||"short_straight");
 
   return(
-    <svg width={size} height={size} viewBox="0 0 80 80" style={{display:"block"}}>
-      {topShape}
-      {hair}
-      <circle cx="40" cy="38" r="20" fill={s.skin}/>
-      <ellipse cx="32" cy="36" rx="4.5" ry="5.5" fill="#1a1a1a"/>
-      <ellipse cx="48" cy="36" rx="4.5" ry="5.5" fill="#1a1a1a"/>
-      <circle cx="33" cy="35" r="1.8" fill="white"/>
-      <circle cx="49" cy="35" r="1.8" fill="white"/>
-      {expr}
-      <ellipse cx="29" cy="44" rx="4" ry="2.5" fill={s.skin} opacity="0.7"/>
-      <ellipse cx="51" cy="44" rx="4" ry="2.5" fill={s.skin} opacity="0.7"/>
-      {accessory}
+    <svg width={size} height={size} viewBox="0 0 80 80" style={{display:"block",borderRadius:"50%",overflow:"hidden"}}>
+      {/* Background */}
+      <rect x="0" y="0" width="80" height="80" fill="#F0FDF4"/>
+      {/* Outfit */}
+      {topMap[a.top||"tshirt"]}
+      {/* Neck */}
+      <rect x="34" y="56" width="12" height="8" rx="4" fill={sc}/>
+      {/* Ears */}
+      <ellipse cx="17" cy="42" rx="5" ry="7" fill={sc}/>
+      <ellipse cx="63" cy="42" rx="5" ry="7" fill={sc}/>
+      <ellipse cx="17" cy="42" rx="3" ry="5" fill={sh} opacity="0.4"/>
+      <ellipse cx="63" cy="42" rx="3" ry="5" fill={sh} opacity="0.4"/>
+      {/* Earrings behind ears */}
+      {a.accessory==="earrings"&&<>
+        <circle cx="14" cy="47" r="3.5" fill="#F59E0B"/>
+        <circle cx="66" cy="47" r="3.5" fill="#F59E0B"/>
+      </>}
+      {/* Head */}
+      <path d="M20 42 Q18 22 40 18 Q62 22 60 42 Q60 62 40 66 Q20 62 20 42Z" fill={sc}/>
+      {/* Face shadow/contour */}
+      <path d="M20 42 Q18 22 40 18 Q62 22 60 42 Q60 62 40 66 Q20 62 20 42Z" fill={sh} opacity="0.08"/>
+      {/* Forehead highlight */}
+      <ellipse cx="40" cy="26" rx="12" ry="6" fill="white" opacity="0.12"/>
+      {/* Hair — behind if long/back styles */}
+      {hairMap[a.hairStyle||"short_straight"]}
+      {/* Eyebrows */}
+      <path d="M25 32 Q30 29 36 31" stroke={hc} strokeWidth="2.2" fill="none" strokeLinecap="round"/>
+      <path d="M44 31 Q50 29 55 32" stroke={hc} strokeWidth="2.2" fill="none" strokeLinecap="round"/>
+      {/* Eye whites */}
+      <ellipse cx="31" cy="38" rx="6.5" ry="5" fill="white"/>
+      <ellipse cx="49" cy="38" rx="6.5" ry="5" fill="white"/>
+      {/* Eye shadow */}
+      <ellipse cx="31" cy="36" rx="6.5" ry="3" fill={sh} opacity="0.15"/>
+      <ellipse cx="49" cy="36" rx="6.5" ry="3" fill={sh} opacity="0.15"/>
+      {/* Irises */}
+      <circle cx="31" cy="38" r="4" fill={ec}/>
+      <circle cx="49" cy="38" r="4" fill={ec}/>
+      {/* Pupils */}
+      <circle cx="31" cy="38" r="2.2" fill="#0a0a0a"/>
+      <circle cx="49" cy="38" r="2.2" fill="#0a0a0a"/>
+      {/* Eye shine */}
+      <circle cx="32.5" cy="36.5" r="1.2" fill="white"/>
+      <circle cx="50.5" cy="36.5" r="1.2" fill="white"/>
+      {/* Upper eyelids */}
+      <path d="M24.5 35 Q31 32 37.5 35" stroke={hc} strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+      <path d="M42.5 35 Q49 32 55.5 35" stroke={hc} strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+      {/* Nose */}
+      <path d="M38 42 Q36 48 38 50 Q40 51 42 50 Q44 48 42 42" stroke={sh} strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.6"/>
+      <ellipse cx="38" cy="50" rx="2.5" ry="1.5" fill={sh} opacity="0.25"/>
+      <ellipse cx="42" cy="50" rx="2.5" ry="1.5" fill={sh} opacity="0.25"/>
+      {/* Cheeks */}
+      <ellipse cx="23" cy="48" rx="6" ry="4" fill="#F9A8D4" opacity="0.3"/>
+      <ellipse cx="57" cy="48" rx="6" ry="4" fill="#F9A8D4" opacity="0.3"/>
+      {/* Mouth */}
+      {exprMap[a.expression||"happy"]}
+      {/* Accessories (on top) */}
+      {a.accessory!=="earrings"&&accMap[a.accessory||"none"]}
     </svg>
   );
 }
 
 function AvatarBuilder({avatar,onSave,onBack,sounds}){
-  const [av,setAv]=useState(avatar||{...DEFAULT_AVATAR});
+  const [step,setStep]=useState(avatar&&avatar.skin!==DEFAULT_AVATAR.skin?"customise":"base");
+  const [av,setAv]=useState(()=>{
+    if(avatar&&avatar.skin){
+      const base=BASE_AVATARS.find(b=>b.skin===avatar.skin&&b.hairStyle===avatar.hairStyle)||null;
+      return{...DEFAULT_AVATAR,...avatar};
+    }
+    return{...DEFAULT_AVATAR};
+  });
   const [name,setName]=useState(av.name||"Explorer");
   const upd=(k,v)=>setAv(a=>({...a,[k]:v}));
 
@@ -990,19 +1089,42 @@ function AvatarBuilder({avatar,onSave,onBack,sounds}){
     </div>
   );
 
+  if(step==="base"){
+    return(
+      <div>
+        <div className="topbar">
+          <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Back</button>
+          <div className="topbar-label" style={{color:"#F6A800"}}>🎨 Choose your look!</div>
+        </div>
+        <div style={{textAlign:"center",padding:"8px 0 12px",fontWeight:700,color:"#6b7280",fontSize:13}}>Pick a starting character, then customise!</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:14}}>
+          {BASE_AVATARS.map(b=>(
+            <div key={b.id} onClick={()=>{sounds.tap();setAv({...b,name:av.name||"Explorer"});setStep("customise");}}
+              style={{cursor:"pointer",borderRadius:16,padding:"8px 4px",textAlign:"center",border:`3px solid ${av.skin===b.skin&&av.hairStyle===b.hairStyle?"#F6A800":"#e5e7eb"}`,background:av.skin===b.skin&&av.hairStyle===b.hairStyle?"#FFFBEB":"white",transition:"all 0.15s"}}>
+              <AvatarSVG av={b} size={60}/>
+              <div style={{fontFamily:"'Boogaloo',cursive",fontSize:12,color:"#374151",marginTop:4}}>{b.label}</div>
+            </div>
+          ))}
+        </div>
+        <button className="next-btn" style={{background:"#F6A800"}} onClick={()=>{sounds.tap();setStep("customise");}}>
+          Customise this one! ✏️
+        </button>
+      </div>
+    );
+  }
+
   return(
     <div>
       <div className="topbar">
-        <button className="back-btn" onClick={()=>{sounds.tap();onBack();}}>← Back</button>
-        <div className="topbar-label" style={{color:"#F6A800"}}>🎨 My Avatar</div>
+        <button className="back-btn" onClick={()=>{sounds.tap();setStep("base");}}>← Choose base</button>
+        <div className="topbar-label" style={{color:"#F6A800"}}>✏️ Customise</div>
       </div>
-
       <div className="av-preview">
-        <AvatarSVG av={av} size={100}/>
-        <div style={{marginTop:8}}>
+        <AvatarSVG av={av} size={110}/>
+        <div style={{marginTop:10}}>
           <input value={name} onChange={e=>setName(e.target.value)} maxLength={14}
             placeholder="Your name"
-            style={{fontFamily:"'Boogaloo',cursive",fontSize:20,textAlign:"center",border:"2.5px solid #e5e7eb",borderRadius:12,padding:"6px 12px",width:"180px",color:"#111",background:"white",outline:"none"}}
+            style={{fontFamily:"'Boogaloo',cursive",fontSize:20,textAlign:"center",border:"2.5px solid #e5e7eb",borderRadius:12,padding:"6px 12px",width:"190px",color:"#111",background:"white",outline:"none"}}
             onFocus={e=>e.target.style.borderColor="#F6A800"}
             onBlur={e=>e.target.style.borderColor="#e5e7eb"}
           />
@@ -1011,27 +1133,36 @@ function AvatarBuilder({avatar,onSave,onBack,sounds}){
 
       <Section title="😄 Expression">
         <div className="av-option-row">
-          {EXPRESSIONS.map(e=>(
-            <button key={e} className={`av-opt${av.expression===e?" selected":""}`} onClick={()=>{sounds.tap();upd("expression",e);}}>
-              {e==="happy"?"😄":e==="cool"?"😎":e==="excited"?"🤩":e==="cheeky"?"😜":"🌟"}
-            </button>
+          {[["happy","😊"],["big_smile","😁"],["cool","😎"],["surprised","😮"],["thoughtful","🤔"],["cheeky","😜"]].map(([e,em])=>(
+            <button key={e} className={`av-opt${av.expression===e?" selected":""}`} onClick={()=>{sounds.tap();upd("expression",e);}}>{em}</button>
           ))}
         </div>
       </Section>
 
       <Section title="🎨 Skin Tone">
         <div className="av-option-row">
-          {SKIN_TONES.map(c=>(
-            <div key={c} className={`av-color-opt${av.skin===c?" selected":""}`} style={{background:c}} onClick={()=>{sounds.tap();upd("skin",c);}}/>
+          {SKIN_TONES.map(s=>(
+            <div key={s.id} className={`av-color-opt${av.skin===s.id?" selected":""}`}
+              style={{background:s.color,width:34,height:34}} onClick={()=>{sounds.tap();upd("skin",s.id);}}/>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="👁️ Eye Colour">
+        <div className="av-option-row">
+          {EYE_COLORS.map(c=>(
+            <div key={c} className={`av-color-opt${av.eye===c?" selected":""}`}
+              style={{background:c,width:30,height:30}} onClick={()=>{sounds.tap();upd("eye",c);}}/>
           ))}
         </div>
       </Section>
 
       <Section title="💇 Hair Style">
-        <div className="av-option-row">
-          {HAIR_STYLES.map(h=>(
-            <button key={h} className={`av-opt${av.hairStyle===h?" selected":""}`} onClick={()=>{sounds.tap();upd("hairStyle",h);}}>
-              {h==="short"?"✂️":h==="curly"?"🌀":h==="long"?"💁":h==="afro"?"✊":h==="bun"?"🎀":h==="spiky"?"⚡":"🙂"}
+        <div className="av-option-row" style={{flexWrap:"wrap"}}>
+          {[["short_straight","✂️ Short"],["short_wave","〜 Wave"],["medium_straight","⬇️ Med"],["medium_curly","🌀 Curly"],["long_straight","📏 Long"],["long_curly","💫 Long Curl"],["afro","✊ Afro"],["fade","▲ Fade"],["bun","🎀 Bun"],["ponytail","🐴 Ponytail"],["braids","🪢 Braids"],["locs","🪨 Locs"]].map(([h,label])=>(
+            <button key={h} className={`av-opt${av.hairStyle===h?" selected":""}`}
+              style={{fontSize:11,padding:"6px 8px",minWidth:60}} onClick={()=>{sounds.tap();upd("hairStyle",h);}}>
+              {label}
             </button>
           ))}
         </div>
@@ -1039,38 +1170,44 @@ function AvatarBuilder({avatar,onSave,onBack,sounds}){
 
       <Section title="🎨 Hair Colour">
         <div className="av-option-row">
-          {HAIR_COLORS.map(c=>(
-            <div key={c} className={`av-color-opt${av.hair===c?" selected":""}`} style={{background:c,border:c==="#ffffff"?"2px solid #e5e7eb":""}} onClick={()=>{sounds.tap();upd("hair",c);}}/>
+          {HAIR_COLORS.map(h=>(
+            <div key={h.id} className={`av-color-opt${av.hair===h.id?" selected":""}`}
+              style={{background:h.color,width:30,height:30,border:h.id==="h8"?"2px solid #e5e7eb":""}}
+              onClick={()=>{sounds.tap();upd("hair",h.id);}}/>
           ))}
         </div>
       </Section>
 
       <Section title="🎩 Accessory">
-        <div className="av-option-row">
-          {ACCESSORIES.map(a=>(
-            <button key={a} className={`av-opt${av.accessory===a?" selected":""}`} onClick={()=>{sounds.tap();upd("accessory",a);}}>
-              {a==="none"?"🚫":a==="glasses"?"👓":a==="sunglasses"?"🕶️":a==="bow"?"🎀":a==="cap"?"🧢":a==="crown"?"👑":a==="headband"?"🌸":"⭐"}
+        <div className="av-option-row" style={{flexWrap:"wrap"}}>
+          {[["none","🚫"],["glasses_round","👓"],["glasses_square","🔲"],["sunglasses","🕶️"],["bow","🎀"],["cap","🧢"],["crown","👑"],["headband","🌸"],["earrings","💛"],["beanie","🧣"]].map(([a_,em])=>(
+            <button key={a_} className={`av-opt${av.accessory===a_?" selected":""}`} onClick={()=>{sounds.tap();upd("accessory",a_);}}>{em}</button>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="👕 Outfit Style">
+        <div className="av-option-row" style={{flexWrap:"wrap"}}>
+          {[["tshirt","👕 T-shirt"],["hoodie","🧥 Hoodie"],["dress","👗 Dress"],["polo","👔 Polo"],["blazer","🤵 Blazer"],["sweater","🧶 Sweater"],["tank","🦺 Tank"],["uniform","⚓ Uniform"]].map(([t,label])=>(
+            <button key={t} className={`av-opt${av.top===t?" selected":""}`}
+              style={{fontSize:11,padding:"6px 8px",minWidth:64}} onClick={()=>{sounds.tap();upd("top",t);}}>
+              {label}
             </button>
           ))}
         </div>
       </Section>
 
-      <Section title="👕 Outfit">
-        <div className="av-option-row" style={{marginBottom:8}}>
-          {TOPS.map(t=>(
-            <button key={t} className={`av-opt${av.top===t?" selected":""}`} onClick={()=>{sounds.tap();upd("top",t);}}>
-              {t==="tshirt"?"👕":t==="hoodie"?"🧥":t==="dress"?"👗":t==="polo"?"🥼":t==="vest"?"🦺":"🎽"}
-            </button>
-          ))}
-        </div>
+      <Section title="🎨 Outfit Colour">
         <div className="av-option-row">
           {TOP_COLORS.map(c=>(
-            <div key={c} className={`av-color-opt${av.topColor===c?" selected":""}`} style={{background:c,border:c==="#ffffff"?"2px solid #e5e7eb":""}} onClick={()=>{sounds.tap();upd("topColor",c);}}/>
+            <div key={c} className={`av-color-opt${av.topColor===c?" selected":""}`}
+              style={{background:c,width:30,height:30,border:c==="#ffffff"?"2px solid #e5e7eb":""}}
+              onClick={()=>{sounds.tap();upd("topColor",c);}}/>
           ))}
         </div>
       </Section>
 
-      <button className="next-btn" style={{background:"#F6A800",marginBottom:20}}
+      <button className="next-btn" style={{background:"#F6A800",marginBottom:24}}
         onClick={()=>{sounds.tap();sounds.fanfare();onSave({...av,name});}}>
         Save my avatar! 🎉
       </button>
