@@ -97,7 +97,7 @@ function createSounds() {
 }
 
 /* ─── TTS ──────────────────────────────────────────────────────────────── */
-function speak(text,onEnd){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=0.88;u.pitch=1.1;u.volume=1;const voices=window.speechSynthesis.getVoices();const preferred=voices.find(v=>v.lang.startsWith("en")&&(v.name.includes("Samantha")||v.name.includes("Karen")||v.name.includes("Daniel")));if(preferred)u.voice=preferred;if(onEnd)u.onend=onEnd;window.speechSynthesis.speak(u);}
+function speak(text,onEnd){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=0.9;u.pitch=1.0;u.volume=1;const voices=window.speechSynthesis.getVoices();const preferred=voices.find(v=>v.name==="Google US English")||voices.find(v=>v.name==="Google UK English Female")||voices.find(v=>v.name==="Samantha")||voices.find(v=>v.name==="Karen")||voices.find(v=>v.lang==="en-US"&&v.localService);if(preferred)u.voice=preferred;if(onEnd)u.onend=onEnd;window.speechSynthesis.speak(u);}
 function stopSpeaking(){if(window.speechSynthesis)window.speechSynthesis.cancel();}
 
 /* ─── Mascots ───────────────────────────────────────────────────────────── */
@@ -4892,7 +4892,7 @@ function Quiz({subjectId,level,seenQs,onBack,onDone,sounds,muted,toggleMute}){
   useEffect(()=>{
     if(isSpelling&&spellPhase==="show"&&qs.length>0&&qs[idx]?.word&&!muted){
       const w=qs[idx].word;
-      setTimeout(()=>speak(`The word is: ${w}. ${w}.`),400);
+      setTimeout(()=>speak(w),400);
     }
   },[idx,spellPhase,qs,isSpelling,muted]);
 
@@ -4913,7 +4913,7 @@ function Quiz({subjectId,level,seenQs,onBack,onDone,sounds,muted,toggleMute}){
     if(reading){stopSpeaking();setReading(false);return;}
     setReading(true);
     let txt;
-    if(isSpelling&&cur?.word) txt=`The word is: ${cur.word}. ${cur.word}. Can you spell it?`;
+    if(isSpelling&&cur?.word) txt=cur.word;
     else if(cur?.passage) txt=`${cur.passage}. Question: ${cur.q}`;
     else txt=`Question ${idx+1}. ${cur?.q||""}`;
     speak(txt,()=>setReading(false));
@@ -4948,7 +4948,6 @@ function Quiz({subjectId,level,seenQs,onBack,onDone,sounds,muted,toggleMute}){
 
   const proceedToSpell=()=>{
     sounds.tap();
-    speak(cur.word,()=>{});
     setSpellPhase("quiz");
   };
 
